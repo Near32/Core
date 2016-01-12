@@ -90,14 +90,14 @@ EXP* F2FDerivate(const EXP* f)
 		case FTasin :
 		{
 			//TODO
-			return (EXP&)f;
+			return (EXP*)f;
 		}
 		break;
 		
 		case FTacos :
 		{
 			//TODO
-			return (EXP&)f;
+			return (EXP*)f;
 		}
 		break;
 		

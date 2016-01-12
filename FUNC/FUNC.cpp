@@ -197,6 +197,144 @@ float FUNC::evaluate()
 	}
 }
 
+std::string FUNC::toString()
+{
+	switch(this->ftype)
+	{
+		case FTzero :
+		
+		return std::string( " 0 ");
+		
+		break;
+		
+		case FTcst :
+		{
+		std::ostringstream ss;
+		ss << this->param;
+		return std::string( " ") + ss.str() + std::string( " " );
+		}
+		break;
+		
+		case FTone :
+		{
+		return std::string( " 1 ");
+		}
+		break;
+		
+		case FTmone :
+		{
+		return std::string( " (-1) " );
+		}
+		break;
+		
+		case FTid :
+		{
+		if(this->arg.size() == 1)
+		{
+			return this->arg[0]->toString();
+		}
+		else
+		{
+			throw;
+		}
+		}
+		break;
+		
+		case FTminus :
+		{
+		if(this->arg.size() == 1)
+		{
+			return std::string( " (-1)*") + std::string( this->arg[0]->toString() );
+		}
+		else
+		{
+			throw;
+		}
+		}
+		break;
+		
+		case FTsquare :
+		{
+		if(this->arg.size() == 1)
+		{
+			std::string r = this->arg[0]->toString();
+			return r+std::string( "*")+r;
+		}
+		else
+		{
+			throw;
+		}
+		}
+		break;
+		
+		case FTinverse :
+		{
+		if(this->arg.size() == 1)
+		{
+			std::string r = this->arg[0]->toString();
+			return std::string( "1/")+r;
+		}
+		else
+		{
+			throw;
+		}
+		}
+		break;
+		
+		case FTsin:
+		{
+		if(this->arg.size() == 1)
+		{
+			return std::string( " sin( ")+this->arg[0]->toString()+std::string( ") ");
+		}
+		else
+		{
+			throw;
+		}
+		}
+		break;
+		
+		case FTasin:
+		{
+		if(this->arg.size() == 1)
+		{
+			return std::string( " asin( ")+this->arg[0]->toString()+std::string( ") ");
+		}
+		else
+		{
+			throw;
+		}
+		}
+		break;
+		
+		case FTcos:
+		{
+		if(this->arg.size() == 1)
+		{
+			return std::string( " cos( ")+this->arg[0]->toString()+std::string( ") ");
+		}
+		else
+		{
+			throw;
+		}
+		}
+		break;
+		
+		case FTacos:
+		{
+		if(this->arg.size() == 1)
+		{
+			return std::string( " acos( ")+this->arg[0]->toString()+std::string( ") ");
+		}
+		else
+		{
+			throw;
+		}
+		}
+		break;
+	}
+}
+
 void FUNC::setParam(float p)
 {
 	this->param = p;

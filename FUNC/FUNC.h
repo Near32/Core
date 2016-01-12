@@ -33,6 +33,7 @@ class FUNC : public EXP
 	~FUNC();
 	
 	virtual float evaluate()	override;
+	virtual std::string toString()	override;
 	FUNC operator=(const FUNC& f);
 	
 	FUNCType getFType()	const	{	return this->ftype;	}

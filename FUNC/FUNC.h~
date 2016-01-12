@@ -44,10 +44,10 @@ class FUNC : public EXP
 
 };
 
-EXP& sin(const EXP& e);
-EXP& asin(const EXP& e);
-EXP& cos(const EXP& e);
-EXP& acos(const EXP& e);
+EXP sin(const EXP& e);
+EXP asin(const EXP& e);
+EXP cos(const EXP& e);
+EXP acos(const EXP& e);
 
 #endif
 

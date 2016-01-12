@@ -49,13 +49,13 @@ int main(int argc, char* argv[])
 	EXP* de1 = derivateREC( e1, x);
 	std::cout << "NEW VALUE de1 = -sin( x ) = " << de1->evaluate() << std::endl;
 	
-	e1 = (EXP&)cos( (EXP&)x ) + (EXP&)sin( (EXP&)x );
+	e1 = cos( x ) + sin( x );
 	std::cout << "NEW VALUE e1 = cos( x ) + sin( x ) = " << e1.evaluate() << std::endl;
 	
 	delete de1;
 	de1 = derivateREC( e1, x);
 	std::cout << "NEW VALUE de1 = -sin( x ) + cos( x ) = " << de1->evaluate() << std::endl;
 	
-	
+	std::cout << de1->toString() << std::endl;;
 	return 0;
 }

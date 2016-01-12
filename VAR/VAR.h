@@ -19,6 +19,8 @@ class VAR : public EXP
 	~VAR();
 	
 	virtual float evaluate()	override;
+	virtual std::string toString()	override;
+	
 	VAR operator=(const VAR& v);
 	
 	

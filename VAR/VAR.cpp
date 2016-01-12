@@ -31,6 +31,20 @@ float VAR::evaluate()
 	return this->value;
 }
 
+std::string VAR::toString()
+{
+	this->value = this->valueREF;
+	std::string r( "X");
+	std::ostringstream ssi;
+	ssi << this->id;
+	r += ssi.str() + std::string( "=");
+	
+	std::ostringstream ss;
+	ss << this->value;
+	
+	return r+ss.str();
+}
+
 VAR VAR::operator=(const VAR& v)
 {
 	//copies of the id :

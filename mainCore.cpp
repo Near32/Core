@@ -56,6 +56,6 @@ int main(int argc, char* argv[])
 	de1 = derivateREC( e1, x);
 	std::cout << "NEW VALUE de1 = -sin( x ) + cos( x ) = " << de1->evaluate() << std::endl;
 	
-	
+	std::cout << de1->toString() << std::endl;
 	return 0;
 }

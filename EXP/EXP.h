@@ -5,6 +5,8 @@
 #include <vector>
 #include <exception>
 #include <math.h>
+#include <string>
+#include <sstream>
 
 enum EXPType {
 	ETEXP,
@@ -38,6 +40,8 @@ class EXP
 	~EXP();
 	
 	virtual float evaluate();
+	virtual std::string toString();
+	
 	void addArg( EXP* arg);
 	void setParent( EXP* p);
 	

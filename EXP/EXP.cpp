@@ -100,6 +100,46 @@ float EXP::evaluate()
 	}
 }
 
+std::string EXP::toString()
+{
+	if(arg.size() >= 1)
+	{
+		std::string r=arg[0]->toString();
+			
+		for(int i=1;i<this->arg.size();i++)
+		{
+			try
+			{
+				switch(this->otype)
+				{
+					case EOId :
+					r=arg[0]->toString();
+					break;
+					
+					case EOSum :
+					r += std::string( " + ") + arg[i]->toString();
+					break;
+					
+					case EOProduct :
+					r += std::string( " * ") + arg[i]->toString();
+					break;
+				}
+				
+			}
+			catch(std::exception& e)
+			{
+				std::cout << e.what() << std::endl;
+			}
+		}
+		
+		return r;
+	}
+	else
+	{
+		throw;
+	}
+}
+
 void EXP::addArg( EXP* arg)
 {
 	arg->setParent(this);
