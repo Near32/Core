@@ -1,2 +1,2 @@
 # Core
-Formel Computation Kernel
+Computer Algebra System
