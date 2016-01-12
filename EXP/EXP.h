@@ -35,6 +35,7 @@ class EXP
 	
 	public :
 	
+	EXP(const int& int_);
 	EXP(const EXPOp& otype_ = EOId);
 	EXP(const EXP& e);
 	~EXP();
@@ -48,6 +49,7 @@ class EXP
 	EXP operator=(const EXP& exp);
 	EXP operator*( const EXP& exp);
 	EXP operator+( const EXP& exp);
+	EXP operator+=(const EXP& exp);
 	EXP operator-( const EXP& exp);
 	EXP operator/( const EXP& exp);
 	

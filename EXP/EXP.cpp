@@ -3,6 +3,13 @@
 #include "../FUNC/FUNC.h"
 #include "../VAR/VAR.h"
 
+EXP::EXP(const int& int_) : otype(EOId), type(ETEXP), parent(NULL)
+{
+	this->arg.clear();
+	this->addArg( new FUNC(FTcst) );
+	//create a Id( Fcst = 0) = ZERO function ... EXP --> Fcst=0;
+}
+
 EXP::EXP(const EXPOp& otype_) : otype(otype_), type(ETEXP), parent(NULL)
 {
 	this->arg.clear();
@@ -262,6 +269,47 @@ EXP EXP::operator+(const EXP& exp)
 	}
 	
 	return r;
+}
+
+EXP EXP::operator+=(const EXP& exp)
+{
+	EXP r(EOSum);
+
+	//r.addArg(this);
+	switch(this->type)
+	{
+		case ETEXP :
+		r.addArg( new EXP(*this) );
+		break;
+		
+		case ETFUNC :
+		r.addArg( (EXP*)new FUNC( *((FUNC*)this) ) );
+		break;
+		
+		case ETVAR :
+		r.addArg( (EXP*)new VAR( *((VAR*)this) ) );
+		break;
+	}
+	
+	//r.addArg(&exp);
+	switch(exp.getType())
+	{
+		case ETEXP :
+		r.addArg( new EXP(exp) );
+		break;
+		
+		case ETFUNC :
+		r.addArg( (EXP*)new FUNC( *((FUNC*)&exp) ) );
+		break;
+		
+		case ETVAR :
+		r.addArg( (EXP*)new VAR( *((VAR*)&exp) ) );
+		break;
+	}
+	
+	*((EXP*)this) = r;
+	
+	return *this;
 }
 
 

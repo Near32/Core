@@ -6,6 +6,7 @@
 #include <exception>
 #include <math.h>
 #include <string>
+#include <sstream>
 
 enum EXPType {
 	ETEXP,
@@ -34,6 +35,7 @@ class EXP
 	
 	public :
 	
+	EXP(const int& int_);
 	EXP(const EXPOp& otype_ = EOId);
 	EXP(const EXP& e);
 	~EXP();
