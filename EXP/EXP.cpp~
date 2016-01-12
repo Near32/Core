@@ -24,8 +24,9 @@ EXP::EXP(const EXP& e)
 		switch(a->getType())
 		{
 			case ETEXP :
-			temp = new EXP;
-			*temp = *a;
+			temp = new EXP( *a );
+			//temp = new EXP;
+			//*temp = *a;
 			break;
 			
 			case ETFUNC :
@@ -144,7 +145,7 @@ EXP EXP::operator=(const EXP& exp)
 }
 
 
-EXP EXP::operator*( EXP& exp)
+EXP EXP::operator*(const EXP& exp)
 {
 	EXP r(EOProduct);
 	
@@ -184,7 +185,7 @@ EXP EXP::operator*( EXP& exp)
 	return r;
 }
 
-EXP EXP::operator+( EXP& exp)
+EXP EXP::operator+(const EXP& exp)
 {
 	EXP r(EOSum);
 
@@ -224,7 +225,7 @@ EXP EXP::operator+( EXP& exp)
 }
 
 
-EXP EXP::operator-( EXP& exp)
+EXP EXP::operator-( const EXP& exp)
 {
 	EXP r(EOSum);
 	
@@ -268,7 +269,7 @@ EXP EXP::operator-( EXP& exp)
 }
 
 
-EXP EXP::operator/( EXP& exp)
+EXP EXP::operator/( const EXP& exp)
 {
 	EXP r(EOProduct);
 	
@@ -311,11 +312,197 @@ EXP EXP::operator/( EXP& exp)
 	return r;
 }
 
+//--------------------------------------------
 
+//--------------------------------------------
+/*
+EXP EXP::operator*( EXP exp)
+{
+	EXP r(EOProduct);
+	
+	//r.addArg(this);
+	switch(this->type)
+	{
+		case ETEXP :
+		r.addArg( new EXP(*this) );
+		break;
+		
+		case ETFUNC :
+		r.addArg( (EXP*)new FUNC( *((FUNC*)this) ) );
+		break;
+		
+		case ETVAR :
+		r.addArg( (EXP*)new VAR( *((VAR*)this) ) );
+		break;
+	}
+	
+	//r.addArg(&exp);
+	switch(exp.getType())
+	{
+		case ETEXP :
+		r.addArg( new EXP(exp) );
+		break;
+		
+		case ETFUNC :
+		r.addArg( (EXP*)new FUNC( *((FUNC*)&exp) ) );
+		break;
+		
+		case ETVAR :
+		r.addArg( (EXP*)new VAR( *((VAR*)&exp) ) );
+		break;
+	}
+	
+	
+	return r;
+}
+
+EXP EXP::operator+( EXP exp)
+{
+	EXP r(EOSum);
+
+	//r.addArg(this);
+	switch(this->type)
+	{
+		case ETEXP :
+		r.addArg( new EXP(*this) );
+		break;
+		
+		case ETFUNC :
+		r.addArg( (EXP*)new FUNC( *((FUNC*)this) ) );
+		break;
+		
+		case ETVAR :
+		r.addArg( (EXP*)new VAR( *((VAR*)this) ) );
+		break;
+	}
+	
+	//r.addArg(&exp);
+	switch(exp.getType())
+	{
+		case ETEXP :
+		r.addArg( new EXP(exp) );
+		break;
+		
+		case ETFUNC :
+		r.addArg( (EXP*)new FUNC( *((FUNC*)&exp) ) );
+		break;
+		
+		case ETVAR :
+		r.addArg( (EXP*)new VAR( *((VAR*)&exp) ) );
+		break;
+	}
+	
+	return r;
+}
+
+
+EXP EXP::operator-( EXP exp)
+{
+	EXP r(EOSum);
+	
+	//r.addArg(this);
+	switch(this->type)
+	{
+		case ETEXP :
+		r.addArg( new EXP(*this) );
+		break;
+		
+		case ETFUNC :
+		r.addArg( (EXP*)new FUNC( *((FUNC*)this) ) );
+		break;
+		
+		case ETVAR :
+		r.addArg( (EXP*)new VAR( *((VAR*)this) ) );
+		break;
+	}
+	
+	FUNC temp(FTminus);
+	
+	//temp->setArg(&exp);
+	switch(exp.getType())
+	{
+		case ETEXP :
+		temp.setArg( new EXP(exp) );
+		break;
+		
+		case ETFUNC :
+		temp.setArg( (EXP*)new FUNC( *((FUNC*)&exp) ) );
+		break;
+		
+		case ETVAR :
+		temp.setArg( (EXP*)new VAR( *((VAR*)&exp) ) );
+		break;
+	}
+	
+	r.addArg( (EXP*)new FUNC(temp) );
+	
+	return r;
+}
+
+
+EXP EXP::operator/( EXP exp)
+{
+	EXP r(EOProduct);
+	
+	//r.addArg(this);
+	switch(this->type)
+	{
+		case ETEXP :
+		r.addArg( new EXP(*this) );
+		break;
+		
+		case ETFUNC :
+		r.addArg( (EXP*)new FUNC( *((FUNC*)this) ) );
+		break;
+		
+		case ETVAR :
+		r.addArg( (EXP*)new VAR( *((VAR*)this) ) );
+		break;
+	}
+	
+	FUNC temp(FTinverse);
+	
+	//temp->setArg(&exp);
+	switch(exp.getType())
+	{
+		case ETEXP :
+		temp.setArg( new EXP(exp) );
+		break;
+		
+		case ETFUNC :
+		temp.setArg( (EXP*)new FUNC( *((FUNC*)&exp) ) );
+		break;
+		
+		case ETVAR :
+		temp.setArg( (EXP*)new VAR( *((VAR*)&exp) ) );
+		break;
+	}
+	
+	r.addArg( (EXP*)new FUNC(temp) );
+	
+	return r;
+}
+*/
+//--------------------------------------------
+
+//--------------------------------------------
 
 void attach(EXP& parent, EXP& node)
 {
-	parent.addArg(&node);
+	switch(node.getType())
+	{
+		case ETEXP :
+		parent.addArg( new EXP(node) );
+		break;
+		
+		case ETFUNC :
+		parent.addArg( (EXP*)new FUNC( *((FUNC*)&node) ) );
+		break;
+		
+		case ETVAR :
+		parent.addArg( (EXP*)new VAR( *((VAR*)&node) ) );
+		break;
+	}
 }
 
 

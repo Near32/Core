@@ -5,6 +5,9 @@
 #include "../FUNC/FUNC.h"
 #include "../VAR/VAR.h"
 
-EXP derivateREC(const EXP& exp);
+FType FT2FTDerivate(const FType& ft);
+EXP* derivateREC(const EXP& exp, const VAR& var);
+EXP derivateFUNCREC(const EXP& exp, const VAR& var);
+EXP derivateEXPREC(const EXP& exp, const VAR& var);
 
 #endif

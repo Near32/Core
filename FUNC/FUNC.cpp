@@ -2,7 +2,7 @@
 
 #include "../VAR/VAR.h"
 
-FUNC::FUNC(const FUNCType& ftype_) : EXP(), ftype(ftype_)
+FUNC::FUNC(const FUNCType& ftype_, const float param_) : EXP(), ftype(ftype_), param(param_)
 {
 	this->type = ETFUNC;
 }
@@ -13,6 +13,7 @@ FUNC::FUNC(const FUNC* f)
 	this->ftype = f->getFType();
 	
 	this->parent = f->getParent();
+	this->param = f->getParam();
 	
 	//f has only one arg node :
 	EXP* a = f->getArg(0);
@@ -57,14 +58,25 @@ float FUNC::evaluate()
 	{
 		case FTzero :
 		
-		if(this->arg.size() == 1)
-		{
-			return 0.0f;
-		}
-		else
-		{
-			throw;
-		}
+		return 0.0f;
+		
+		break;
+		
+		case FTcst :
+		
+		return this->param;
+		
+		break;
+		
+		case FTone :
+		
+		return 1.0f;
+		
+		break;
+		
+		case FTmone :
+		
+		return -1.0f;
 		
 		break;
 		
@@ -94,6 +106,19 @@ float FUNC::evaluate()
 		
 		break;
 		
+		case FTsquare :
+		
+		if(this->arg.size() == 1)
+		{
+			float r = this->arg[0]->evaluate();
+			return r*r;
+		}
+		else
+		{
+			throw;
+		}
+		
+		break;
 		
 		case FTinverse :
 		
@@ -170,6 +195,11 @@ float FUNC::evaluate()
 		
 		break;
 	}
+}
+
+void FUNC::setParam(float p)
+{
+	this->param = p;
 }
 
 FUNC FUNC::operator=(const FUNC& f)

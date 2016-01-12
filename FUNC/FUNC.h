@@ -1,12 +1,16 @@
 #ifndef FUNC_H
-#define FUN_H
+#define FUNC_H
 
 #include "../EXP/EXP.h"
 
 enum FUNCType{
 	FTzero,
+	FTcst,
+	FTone,
+	FTmone,
 	FTid,
 	FTminus,
+	FTsquare,
 	FTinverse,
 	FTsin,
 	FTcos,
@@ -20,10 +24,11 @@ class FUNC : public EXP
 	
 	protected :
 	FUNCType ftype;
+	float param;
 	
 	public :
 	
-	FUNC(const FUNCType& ftype_ = FTid);
+	FUNC(const FUNCType& ftype_ = FTid, const float param_ = 0.0f);
 	FUNC(const FUNC* f);
 	~FUNC();
 	
@@ -31,8 +36,11 @@ class FUNC : public EXP
 	FUNC operator=(const FUNC& f);
 	
 	FUNCType getFType()	const	{	return this->ftype;	}
+	float getParam()	const	{	return this->param;	}
 	
 	void setArg(EXP* exp);
+	void setParam(float p);
+	
 
 };
 

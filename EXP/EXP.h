@@ -42,16 +42,25 @@ class EXP
 	void setParent( EXP* p);
 	
 	EXP operator=(const EXP& exp);
-	EXP operator*( EXP& exp);
-	EXP operator+( EXP& exp);
-	EXP operator-( EXP& exp);
-	EXP operator/( EXP& exp);
+	EXP operator*( const EXP& exp);
+	EXP operator+( const EXP& exp);
+	EXP operator-( const EXP& exp);
+	EXP operator/( const EXP& exp);
+	
+	/*
+	EXP operator*( EXP exp);
+	EXP operator+( EXP exp);
+	EXP operator-( EXP exp);
+	EXP operator/( EXP exp);
+	*/
 	
 	//--------------------------
 	EXP* getParent()	const	{	return this->parent;	}
-	EXP* getArg(int idx)	const	{	return (idx<arg.size()? arg[idx] : NULL);	}
+	EXP* getArg(int idx)	const	{	return (idx<arg.size()? arg[idx] : NULL);	}	
 	EXPType getType()	const	{	return type;	}
 	EXPOp getOType()	const	{	return otype;	}
+	
+	int getNBRArg()	const	{	return arg.size();	}
 	
 };
 

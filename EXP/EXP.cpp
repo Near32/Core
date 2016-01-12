@@ -145,7 +145,7 @@ EXP EXP::operator=(const EXP& exp)
 }
 
 
-EXP EXP::operator*( EXP& exp)
+EXP EXP::operator*(const EXP& exp)
 {
 	EXP r(EOProduct);
 	
@@ -185,7 +185,7 @@ EXP EXP::operator*( EXP& exp)
 	return r;
 }
 
-EXP EXP::operator+( EXP& exp)
+EXP EXP::operator+(const EXP& exp)
 {
 	EXP r(EOSum);
 
@@ -225,7 +225,7 @@ EXP EXP::operator+( EXP& exp)
 }
 
 
-EXP EXP::operator-( EXP& exp)
+EXP EXP::operator-( const EXP& exp)
 {
 	EXP r(EOSum);
 	
@@ -269,7 +269,7 @@ EXP EXP::operator-( EXP& exp)
 }
 
 
-EXP EXP::operator/( EXP& exp)
+EXP EXP::operator/( const EXP& exp)
 {
 	EXP r(EOProduct);
 	
@@ -313,10 +313,22 @@ EXP EXP::operator/( EXP& exp)
 }
 
 
-
 void attach(EXP& parent, EXP& node)
 {
-	parent.addArg(&node);
+	switch(node.getType())
+	{
+		case ETEXP :
+		parent.addArg( new EXP(node) );
+		break;
+		
+		case ETFUNC :
+		parent.addArg( (EXP*)new FUNC( *((FUNC*)&node) ) );
+		break;
+		
+		case ETVAR :
+		parent.addArg( (EXP*)new VAR( *((VAR*)&node) ) );
+		break;
+	}
 }
 
 
