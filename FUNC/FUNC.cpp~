@@ -1,0 +1,318 @@
+#include "FUNC.h"
+
+#include "../VAR/VAR.h"
+
+FUNC::FUNC(const FUNCType& ftype_) : EXP(), ftype(ftype_)
+{
+	this->type = ETFUNC;
+}
+
+FUNC::FUNC(const FUNC* f)
+{
+	this->type = ETFUNC;
+	this->ftype = f->getFType();
+	
+	this->parent = f->getParent();
+	
+	//f has only one arg node :
+	EXP* a = f->getArg(0);
+	
+	EXP* temp;
+		
+	switch(a->getType())
+	{
+	
+		case ETEXP :
+		temp = new EXP();
+		*temp = *a;
+		break;
+		
+		case ETFUNC :
+		temp = (EXP*)new FUNC();
+		*((FUNC*)temp) = *((FUNC*)a);
+		break;
+		
+		case ETVAR :
+		temp = (EXP*)new VAR();
+		*((VAR*)temp) = *((VAR*)a);
+		break;
+	}
+	
+	temp->setParent(this);
+	//we attach this arg node to *this.
+	
+	this->arg.clear();		
+	this->arg.insert( this->arg.end(), temp); 
+}
+
+
+FUNC::~FUNC()
+{
+
+}
+
+float FUNC::evaluate()
+{
+	switch(this->ftype)
+	{
+		case FTzero :
+		
+		if(this->arg.size() == 1)
+		{
+			return 0.0f;
+		}
+		else
+		{
+			throw;
+		}
+		
+		break;
+		
+		case FTid :
+		
+		if(this->arg.size() == 1)
+		{
+			return this->arg[0]->evaluate();
+		}
+		else
+		{
+			throw;
+		}
+		
+		break;
+		
+		case FTminus :
+		
+		if(this->arg.size() == 1)
+		{
+			return (-1.0f)*(this->arg[0]->evaluate());
+		}
+		else
+		{
+			throw;
+		}
+		
+		break;
+		
+		
+		case FTinverse :
+		
+		if(this->arg.size() == 1)
+		{
+			float r = this->arg[0]->evaluate();
+			if (r!=0.0f)
+			{
+				return 1.0f/r;
+			}
+			else
+			{
+				r=1e-20f;
+				std::cerr << "DIVISION PAR ZERO .... " << std::endl;
+				return 1.0f/r;
+			} 
+		}
+		else
+		{
+			throw;
+		}
+		
+		break;
+		
+		case FTsin:
+		
+		if(this->arg.size() == 1)
+		{
+			return sin(this->arg[0]->evaluate());
+		}
+		else
+		{
+			throw;
+		}
+		
+		break;
+		
+		case FTasin:
+		
+		if(this->arg.size() == 1)
+		{
+			return asin(this->arg[0]->evaluate());
+		}
+		else
+		{
+			throw;
+		}
+		
+		break;
+		
+		case FTcos:
+		
+		if(this->arg.size() == 1)
+		{
+			return cos(this->arg[0]->evaluate());
+		}
+		else
+		{
+			throw;
+		}
+		
+		break;
+		
+		case FTacos:
+		
+		if(this->arg.size() == 1)
+		{
+			return acos(this->arg[0]->evaluate());
+		}
+		else
+		{
+			throw;
+		}
+		
+		break;
+	}
+}
+
+FUNC FUNC::operator=(const FUNC& f)
+{
+	//FUNCType :
+	this->ftype = f.getFType();
+	
+	
+	this->parent = f.getParent();
+	this->arg.clear();
+	
+	EXP* a = f.getArg(0);
+	//f has only one arg node :
+	
+	switch(a->getType())
+	{
+		case ETEXP :
+		this->arg.insert( this->arg.end(), new EXP(*a) );
+		break;
+		
+		case ETFUNC :
+		this->arg.insert( this->arg.end(), (EXP*)new FUNC( *((FUNC*)a) ) );  
+		break;
+		
+		case ETVAR :
+		this->arg.insert( this->arg.end(), (EXP*)new VAR( *((VAR*)a) ) );
+		break; 
+		
+	}
+	
+	return *this;
+}
+
+
+void FUNC::setArg(EXP* exp)
+{
+	// can only have one argument :
+	for(int i=this->arg.size();i--;)	delete this->arg[i];
+	this->arg.clear();
+	
+	//--------------------
+	this->addArg(exp);
+}
+
+
+EXP sin(const EXP& e)
+{
+	EXP r(EOId);
+	FUNC sin(FTsin);
+	
+	//sin.setArg(&e);
+	switch(e.getType())
+	{
+		case ETEXP :
+		sin.setArg( new EXP(e) );
+		break;
+		
+		case ETFUNC :
+		sin.setArg( (EXP*)new FUNC( *((FUNC*)&e) ) );
+		break;
+		
+		case ETVAR :
+		sin.setArg( (EXP*)new VAR( *((VAR*)&e) ) );
+		break;
+	}
+	
+	r.addArg( (EXP*)new FUNC( sin) );
+	return r;
+}
+
+EXP asin(const EXP& e)
+{
+	EXP r(EOId);
+	FUNC asin(FTasin);
+	
+	//sin.setArg(&e);
+	switch(e.getType())
+	{
+		case ETEXP :
+		asin.setArg( new EXP(e) );
+		break;
+		
+		case ETFUNC :
+		asin.setArg( (EXP*)new FUNC( *((FUNC*)&e) ) );
+		break;
+		
+		case ETVAR :
+		asin.setArg( (EXP*)new VAR( *((VAR*)&e) ) );
+		break;
+	}
+	
+	r.addArg( (EXP*)new FUNC( asin) );
+	return r;
+}
+
+EXP cos(const EXP& e)
+{
+	EXP r(EOId);
+	FUNC cos(FTcos);
+	
+	//sin.setArg(&e);
+	switch(e.getType())
+	{
+		case ETEXP :
+		cos.setArg( new EXP(e) );
+		break;
+		
+		case ETFUNC :
+		cos.setArg( (EXP*)new FUNC( *((FUNC*)&e) ) );
+		break;
+		
+		case ETVAR :
+		cos.setArg( (EXP*)new VAR( *((VAR*)&e) ) );
+		break;
+	}
+	
+	r.addArg( (EXP*)new FUNC( cos) );
+	return r;
+}
+
+EXP acos(const EXP& e)
+{
+	EXP r(EOId);
+	FUNC acos(FTacos);
+	
+	//sin.setArg(&e);
+	switch(e.getType())
+	{
+		case ETEXP :
+		acos.setArg( new EXP(e) );
+		break;
+		
+		case ETFUNC :
+		acos.setArg( (EXP*)new FUNC( *((FUNC*)&e) ) );
+		break;
+		
+		case ETVAR :
+		acos.setArg( (EXP*)new VAR( *((VAR*)&e) ) );
+		break;
+	}
+	
+	r.addArg( (EXP*)new FUNC( acos) );
+	return r;
+}
+
+
