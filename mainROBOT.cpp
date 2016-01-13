@@ -3,47 +3,6 @@
 #include "VAR/VAR.h"
 #include "Operations/Operations.h"
 
-#include "MAT/Mat.h"
-
-void toString(const Mat<EXP>& m)
-{
-	std::cout << "Matrice : " << std::endl;
-	
-	for(int i=1;i<=m.getLine();i++)
-	{
-		std::cout << "\t";
-		
-		for(int j=1;j<=m.getColumn();j++)
-		{
-			std::cout << m.get(i,j).toString() << "\t"; 
-		}
-		
-		std::cout << std::endl;
-	}
-	
-	std::cout << std::endl;
-	
-}
-
-void evaluate(const Mat<EXP>& m)
-{
-	std::cout << "Matrice : " << std::endl;
-	
-	for(int i=1;i<=m.getLine();i++)
-	{
-		std::cout << "\t";
-		
-		for(int j=1;j<=m.getColumn();j++)
-		{
-			std::cout << m.get(i,j).evaluate() << "\t"; 
-		}
-		
-		std::cout << std::endl;
-	}
-	
-	std::cout << std::endl;
-	
-}
 
 int main(int argc, char* argv[])
 {

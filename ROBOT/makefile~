@@ -1,0 +1,2 @@
+#!/bin/bash
+g++ mainHARO.cpp ./HARO/HAROLegs.cpp ./HARO/HARO.cpp ./PE/PE.cpp ./Servo/Servo.cpp ./Frame/Frame.cpp ./MVG/MVG.cpp ./Quaternion/Quaternion.cpp -o HARO -lSDL -lSDLmain -lwiringPi -pthread -std=c++0x

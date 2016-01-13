@@ -1,0 +1,20 @@
+#include <iostream>
+#include "Mat/Mat.h"
+
+using namespace std;
+
+int main(int argc, char* argv[])
+{
+	Mat<float> A(10.0f,10,10);
+	Mat<float> B(10,10,(char)1);
+	
+	clock_t timer = clock();
+	for(int i=10;i--;)
+	{
+		A*=B;
+	}
+	
+	cout << (float)(clock()-timer)/CLOCKS_PER_SEC << " seconds." << endl;
+	
+	
+};

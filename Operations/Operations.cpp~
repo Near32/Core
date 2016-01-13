@@ -115,8 +115,8 @@ EXP* derivateREC(const EXP& exp, const VAR& var)
 		if( ((VAR*)&exp)->id == var.id)
 		{
 			//then the derivation is done with respect to that variable :
-			FUNC* r = new FUNC(FTid);
-			r->setArg( (EXP*)new VAR( *((VAR*)&exp) ) );
+			FUNC* r = new FUNC(FTone);
+			//r->setArg( (EXP*)new VAR( *((VAR*)&exp) ) );
 			return (EXP*)r;
 		}
 		else

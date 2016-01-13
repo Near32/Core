@@ -71,6 +71,7 @@ int main(int argc, char* argv[])
 	x2.setValue(tempx2);
 	
 	evaluate(m);
+	toString(m);
 	
 	return 0;
 }
