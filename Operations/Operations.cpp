@@ -40,6 +40,46 @@ void evaluate(const Mat<EXP>& m)
 	
 }
 
+Mat<EXP> rotation(const EXP& expvar, int axis)
+{
+	EXP zero1(EOId);
+	zero1.addArg( (EXP&)(FUNC(FTzero)) );
+	Mat<EXP> r( (EXP&)zero1, 3,3);
+	
+	EXP one1(EOId);
+	one1.addArg( (EXP&)(FUNC(FTone)) );
+	
+	switch(axis)
+	{
+		case 1 :	//X axis		
+		r.set(cos(expvar), 2,2);
+		r.set(cos(expvar), 3,3);
+		r.set(sin(expvar), 2,3);
+		r.set(-sin(expvar), 3,2);
+		r.set( one1, 1,1);
+		return r;
+		break;
+		
+		case 2 : 	//Y axis
+		r.set(cos(expvar), 1,1);
+		r.set(cos(expvar), 3,3);
+		r.set(sin(expvar), 1,3);
+		r.set(-sin(expvar), 3,1);
+		r.set( one1, 2,2);
+		return r;
+		break;
+		
+		case 3 :	//Z axis
+		r.set(cos(expvar), 1,1);
+		r.set(cos(expvar), 2,2);
+		r.set(-sin(expvar), 1,2);
+		r.set(sin(expvar), 2,1);
+		r.set( one1, 3,3);
+		return r;
+		break;
+	}
+}
+
 
 EXP* F2FDerivate(const EXP* f)
 {

@@ -8,6 +8,7 @@
 
 void toString(const Mat<EXP>& m);
 void evaluate(const Mat<EXP>& m);
+Mat<EXP> rotation(const EXP& expvar, int axis);
 
 EXP* F2FDerivate(const EXP* f);
 EXP* derivateREC(const EXP& exp, const VAR& var);

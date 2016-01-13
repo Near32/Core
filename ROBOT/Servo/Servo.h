@@ -7,7 +7,7 @@
 
 class Servo 
 {
-	private :
+	protected :
 	Frame* frame;
 	float min;
 	float max;
