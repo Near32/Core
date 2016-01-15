@@ -50,5 +50,7 @@ EXP asin(const EXP& e);
 EXP cos(const EXP& e);
 EXP acos(const EXP& e);
 
+EXP regularize(EXP& e);
+
 #endif
 

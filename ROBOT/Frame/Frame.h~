@@ -37,7 +37,7 @@ class Frame
 	void setParam(float param);
 	float getParam();
 	//-----------------------------
-	static Mat<float> Euler2Rot(float nux, float nuy, float nuz);
+	static Mat<float> Euler2Rot(const float& roll, const float& pitch, const float& yaw);
 	
 };
 #endif

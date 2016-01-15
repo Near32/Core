@@ -36,19 +36,19 @@ void FrameEXP::setVAR(const VAR& v)
 
 void FrameEXP::generateT()
 {
-	Mat<EXP> se3EXP;
+	Mat<EXP> se3EXP(se3.getLine(),se3.getColumn());
 	for(int i = this->se3.getLine();i--;)
 	{
 		if(i+1 == this->idxParameter)
 		{
-			se3EXP.set( this->variable, i+1,1);
+			se3EXP.set( *(this->variable), i+1,1);
 		}
 		else
 		{
 			EXP temp(EOId);
 			FUNC ftemp(FTcst);
 			ftemp.setParam( this->se3.get(i+1,1) );
-			temp.addArg( (EXP&)ftemp);
+			attach( temp, (EXP&)ftemp);
 			
 			se3EXP.set( temp, i+1,1);
 		}
@@ -60,11 +60,14 @@ void FrameEXP::generateT()
 	Mat<EXP> te( extract( &se3EXP,4,1,6,1) );
 	
 	EXP zero3(EOId);
-	zero3.addArg( (EXP&)(FUNC(FTzero)) );
-	EXP one1(EOId);
-	one1.addArg( (EXP&)(FUNC(FTone)) );
+	FUNC fzero(FTzero);
+	attach( zero3, (EXP&)fzero );
 	
-	T = operatorL( operatorC( Rze*Rye*Rxe, Mat<EXP>( zero3,1,3) ), operatorC( te ,Mat<EXP>( one1,1,1) ) );
+	EXP one1(EOId);
+	FUNC fone(FTone);
+	attach( one1, (EXP&)fone );
+	
+	T =  new Mat<EXP>( operatorL( operatorC( Rze*Rye*Rxe, Mat<EXP>( zero3,1,3) ), operatorC( te ,Mat<EXP>( one1,1,1) ) ) );
 }
 
 

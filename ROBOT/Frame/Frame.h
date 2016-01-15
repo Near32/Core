@@ -6,7 +6,7 @@
 
 class Frame
 {
-	private :
+	protected :
 	Mat<float> se3;
 	
 	int idxParameter;

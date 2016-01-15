@@ -1,5 +1,28 @@
 #include "Operations.h"
 
+/*
+Mat<EXP> product(const Mat<EXP>& a, const Mat<EXP>& b)
+{
+	if(a.getColumn() == b.getLine() )
+	{
+		Mat<EXP> r(a.getLine(), b.getColumn());
+		
+		for(int i=1;i<=a.getLine();i++)
+		{
+			for(int j=1;j<=b.getColumn();j++)
+			{
+				
+			}
+		}
+	}
+	else
+	{
+		std::cerr "MATRICES SIZE DO NOT MATCHES... ABORDING." << std::endl;
+		throw;
+	}
+};
+*/
+
 void toString(const Mat<EXP>& m)
 {
 	std::cout << "Matrice : " << std::endl;
@@ -43,11 +66,15 @@ void evaluate(const Mat<EXP>& m)
 Mat<EXP> rotation(const EXP& expvar, int axis)
 {
 	EXP zero1(EOId);
-	zero1.addArg( (EXP&)(FUNC(FTzero)) );
+	FUNC fzero(FTzero);
+	attach( zero1, (EXP&)(fzero) );
 	Mat<EXP> r( (EXP&)zero1, 3,3);
 	
 	EXP one1(EOId);
-	one1.addArg( (EXP&)(FUNC(FTone)) );
+	FUNC fone(FTone);
+	attach( one1, (EXP&)(fone) );
+	
+	FUNC fmone(FTmone);
 	
 	switch(axis)
 	{
@@ -55,7 +82,7 @@ Mat<EXP> rotation(const EXP& expvar, int axis)
 		r.set(cos(expvar), 2,2);
 		r.set(cos(expvar), 3,3);
 		r.set(sin(expvar), 2,3);
-		r.set(-sin(expvar), 3,2);
+		r.set( fmone*sin(expvar), 3,2);
 		r.set( one1, 1,1);
 		return r;
 		break;
@@ -64,7 +91,7 @@ Mat<EXP> rotation(const EXP& expvar, int axis)
 		r.set(cos(expvar), 1,1);
 		r.set(cos(expvar), 3,3);
 		r.set(sin(expvar), 1,3);
-		r.set(-sin(expvar), 3,1);
+		r.set( fmone*sin(expvar), 3,1);
 		r.set( one1, 2,2);
 		return r;
 		break;
@@ -72,7 +99,7 @@ Mat<EXP> rotation(const EXP& expvar, int axis)
 		case 3 :	//Z axis
 		r.set(cos(expvar), 1,1);
 		r.set(cos(expvar), 2,2);
-		r.set(-sin(expvar), 1,2);
+		r.set( fmone*sin(expvar), 1,2);
 		r.set(sin(expvar), 2,1);
 		r.set( one1, 3,3);
 		return r;

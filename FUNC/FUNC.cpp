@@ -484,3 +484,57 @@ EXP acos(const EXP& e)
 }
 
 
+EXP regularize(EXP& e)
+{
+	if( e.getType() == ETFUNC && ((FUNC&)e).getFType() == FTzero)
+	{
+		return e;
+	}
+	
+	std::vector<EXP*> file;
+	std::vector<int> fileIDX;
+	file.insert( file.end(), &e);
+	fileIDX.insert( fileIDX.end(), -1);
+	EXP* p = NULL;
+	
+	while( file.size() )
+	{
+		p=file[0];
+		
+		//------------------------------
+		
+		switch(p->getType())
+		{
+			case ETEXP :
+			{
+				if(p->getOType() == EOId)
+				{
+					
+				}
+			}
+			break;
+		}
+		
+		//------------------------------
+		
+		EXP* temp = p->getArg(0);
+		int idxArg = 1;
+		while( temp != NULL)
+		{
+			file.insert( file.end(), temp);
+			fileIDX.insert( fileIDX.end(), idxArg-1);
+			
+			temp = p->getArg(idxArg);
+			idxArg++;
+		}
+		//parcour en profondeur.
+		
+		//------------------------------		
+		//------------------------------
+		
+		file.erase(file.begin());
+		fileIDX.erase(fileIDX.begin());
+	}
+	
+	return e;
+}

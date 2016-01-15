@@ -112,7 +112,8 @@ std::string EXP::toString()
 	if(arg.size() >= 1)
 	{
 		std::string r=arg[0]->toString();
-			
+		bool parenthesis = true;
+		
 		for(int i=1;i<this->arg.size();i++)
 		{
 			try
@@ -120,6 +121,7 @@ std::string EXP::toString()
 				switch(this->otype)
 				{
 					case EOId :
+					parenthesis = false;
 					r=arg[0]->toString();
 					break;
 					
@@ -128,6 +130,7 @@ std::string EXP::toString()
 					break;
 					
 					case EOProduct :
+					//parenthesis = false;
 					r += std::string( " * ") + arg[i]->toString();
 					break;
 				}
@@ -139,7 +142,14 @@ std::string EXP::toString()
 			}
 		}
 		
-		return r;
+		if(parenthesis)	
+		{
+			return std::string( "(")+r+std::string(")");
+		}
+		else
+		{
+			return r;
+		}
 	}
 	else
 	{
@@ -194,6 +204,14 @@ EXP EXP::operator=(const EXP& exp)
 
 EXP EXP::operator*(const EXP& exp)
 {
+	if( (this->type == ETFUNC && ((FUNC*)this)->getFType() == FTzero ) || (this->type == ETEXP && this->otype == EOId && this->arg[0]->getType() == ETFUNC && ((FUNC*)(this->arg[0]))->getFType() == FTzero ) || ( exp.getType() == ETFUNC && ((FUNC&)(exp)).getFType() == FTzero) || (exp.getType() == ETEXP && exp.getOType() == EOId && exp.getArg(0)->getType() == ETFUNC && ((FUNC*)(exp.getArg(0)))->getFType() == FTzero ) )
+	{
+		EXP r(EOId);
+		FUNC fzero(FTzero);
+		attach(r, (EXP&)fzero);
+		return r;
+	}
+		
 	EXP r(EOProduct);
 	
 	//r.addArg(this);
@@ -235,15 +253,33 @@ EXP EXP::operator*(const EXP& exp)
 EXP EXP::operator+(const EXP& exp)
 {
 	EXP r(EOSum);
-
+	int zeroFOUND = 0;
+	
 	//r.addArg(this);
 	switch(this->type)
 	{
 		case ETEXP :
-		r.addArg( new EXP(*this) );
+		if( this->otype == EOId )
+		{
+			EXP* temp = this->arg[0];
+			if( temp->getType() == ETFUNC && ((FUNC*)(temp))->getFType() == FTzero )
+			{
+				zeroFOUND++;
+				break;
+			}
+		}
+		
+		r.addArg( new EXP(*this) );		
 		break;
 		
 		case ETFUNC :
+		
+		if( ((FUNC*)(this))->getFType() == FTzero )
+		{
+			zeroFOUND++;
+			break;
+		}
+		
 		r.addArg( (EXP*)new FUNC( *((FUNC*)this) ) );
 		break;
 		
@@ -256,16 +292,53 @@ EXP EXP::operator+(const EXP& exp)
 	switch(exp.getType())
 	{
 		case ETEXP :
+		if( exp.getOType() == EOId )
+		{
+			EXP* temp = exp.getArg(0);
+			if( temp->getType() == ETFUNC && ((FUNC*)(temp))->getFType() == FTzero )
+			{
+				zeroFOUND++;
+				break;
+			}
+		}
+		
+		//if we go on, it means that we didn't find a zero in exp :
+		if(zeroFOUND == 1)
+		{
+			r=EXP(EOId);
+		}
+		
 		r.addArg( new EXP(exp) );
 		break;
 		
 		case ETFUNC :
+		
+		if( ((FUNC&)(exp)).getFType() == FTzero )
+		{
+			zeroFOUND++;
+			break;
+		}
+		
+		//if we go on, it means that we didn't find a zero in exp :
+		if(zeroFOUND == 1)
+		{
+			r=EXP(EOId);
+		}
+		
 		r.addArg( (EXP*)new FUNC( *((FUNC*)&exp) ) );
 		break;
 		
 		case ETVAR :
 		r.addArg( (EXP*)new VAR( *((VAR*)&exp) ) );
 		break;
+	}
+	
+	if(zeroFOUND == 2)
+	{
+		//entering here means that none of this or exp was interesting in this sum :
+		r=EXP(EOId);
+		FUNC fzero(FTzero);
+		attach(r, (EXP&)fzero);
 	}
 	
 	return r;
@@ -274,15 +347,33 @@ EXP EXP::operator+(const EXP& exp)
 EXP EXP::operator+=(const EXP& exp)
 {
 	EXP r(EOSum);
-
+	int zeroFOUND = 0;
+	
 	//r.addArg(this);
 	switch(this->type)
 	{
 		case ETEXP :
-		r.addArg( new EXP(*this) );
+		if( this->otype == EOId )
+		{
+			EXP* temp = this->arg[0];
+			if( temp->getType() == ETFUNC && ((FUNC*)(temp))->getFType() == FTzero )
+			{
+				zeroFOUND++;
+				break;
+			}
+		}
+		
+		r.addArg( new EXP(*this) );		
 		break;
 		
 		case ETFUNC :
+		
+		if( ((FUNC*)(this))->getFType() == FTzero )
+		{
+			zeroFOUND++;
+			break;
+		}
+		
 		r.addArg( (EXP*)new FUNC( *((FUNC*)this) ) );
 		break;
 		
@@ -295,10 +386,39 @@ EXP EXP::operator+=(const EXP& exp)
 	switch(exp.getType())
 	{
 		case ETEXP :
+		if( exp.getOType() == EOId )
+		{
+			EXP* temp = exp.getArg(0);
+			if( temp->getType() == ETFUNC && ((FUNC*)(temp))->getFType() == FTzero )
+			{
+				zeroFOUND++;
+				break;
+			}
+		}
+		
+		//if we go on, it means that we didn't find a zero in exp :
+		if(zeroFOUND == 1)
+		{
+			r=EXP(EOId);
+		}
+		
 		r.addArg( new EXP(exp) );
 		break;
 		
 		case ETFUNC :
+		
+		if( ((FUNC&)(exp)).getFType() == FTzero )
+		{
+			zeroFOUND++;
+			break;
+		}
+		
+		//if we go on, it means that we didn't find a zero in exp :
+		if(zeroFOUND == 1)
+		{
+			r=EXP(EOId);
+		}
+		
 		r.addArg( (EXP*)new FUNC( *((FUNC*)&exp) ) );
 		break;
 		
@@ -307,7 +427,17 @@ EXP EXP::operator+=(const EXP& exp)
 		break;
 	}
 	
-	return r;
+	if(zeroFOUND == 2)
+	{
+		//entering here means that none of this or exp was interesting in this sum :
+		r=EXP(EOId);
+		FUNC fzero(FTzero);
+		attach(r, (EXP&)fzero);
+	}
+	
+	*((EXP*)this) = r;
+	
+	return *this;
 }
 
 
@@ -357,6 +487,14 @@ EXP EXP::operator-( const EXP& exp)
 
 EXP EXP::operator/( const EXP& exp)
 {
+	if( this->type == ETFUNC && ((FUNC*)this)->getFType() == FTzero )
+	{
+		EXP r(EOId);
+		FUNC fzero(FTzero);
+		attach(r, (EXP&)fzero);
+		return r;
+	}
+	
 	EXP r(EOProduct);
 	
 	//r.addArg(this);

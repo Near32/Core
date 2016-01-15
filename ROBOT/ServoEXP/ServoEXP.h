@@ -16,6 +16,10 @@ class ServoEXP : public Servo
 	
 	ServoEXP(const VAR& variable_, int pin_, int idx, const Mat<float>& se3Init, float zerooffset_ = 0.0f, float min = -120.0f, float max = 120.0f);
 	~ServoEXP();
+	
+	
+	int getVARid()	const	{	return (frameEXP!=NULL? frameEXP->getVARid() : 0);	}
+	Mat<EXP> getT()	const	{	return (frameEXP!=NULL? frameEXP->getT() : Mat<EXP>(1,1) );	}
 };
 
 #endif
