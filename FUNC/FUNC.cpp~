@@ -605,6 +605,8 @@ EXP regularize(EXP* e, bool& goOn)
 					// we do not need to advance on the list of argument :
 					i--;
 				}
+				
+				nbrarg = e->getNBRArg();
 			}
 			
 			//-------------------------------------
@@ -636,8 +638,8 @@ EXP regularize(EXP* e, bool& goOn)
 							//attach( *eParent, (EXP&)( *(e->getArg(0)) ) );
 							//eParent->deleteArg( (EXP*)e);
 							EXP* targ = e->getArg(0);
-							std::cout << "EOID : " << e->toString() << std::endl;
-							std::cout << "PARENT :" << eParent->toString() << std::endl;
+							//std::cout << "EOID : " << e->toString() << std::endl;
+							//std::cout << "PARENT :" << eParent->toString() << std::endl;
 							switch(targ->getType())
 							{
 								
@@ -660,7 +662,7 @@ EXP regularize(EXP* e, bool& goOn)
 								break;
 								
 							}
-							std::cout << "PARENT after replace :" << eParent->toString() << std::endl;
+							//std::cout << "PARENT after replace :" << eParent->toString() << std::endl;
 							//replacement --> do not advance in the list, at parent level... :
 							goOn = false;
 							
@@ -685,6 +687,8 @@ EXP regularize(EXP* e, bool& goOn)
 									// we do not need to advance on the list of argument :
 									i--;
 								}
+								
+								nbrarg = e->getNBRArg();
 							}
 			
 							//-------------------------------------
@@ -697,6 +701,37 @@ EXP regularize(EXP* e, bool& goOn)
 								//then we have to delete this node and NULLed the pointer :
 								eParent->deleteArg( (EXP*)e);
 								//deletion --> do not advance in the list, at parent level... :
+								goOn = false;
+							}
+							else if( e->getNBRArg() == 1)
+							{
+								//there can be only one argument, so we have to raise it up : 
+								EXP* targ = e->getArg(0);
+								
+								switch(targ->getType())
+								{
+								
+									case ETEXP :
+									{
+										eParent->replaceArg( e, (EXP*)new EXP(*targ) );
+									}
+									break;
+								
+									case ETFUNC :
+									{
+										eParent->replaceArg( e, (EXP*)new FUNC( (FUNC&)(*targ) ) );
+									}
+									break;
+								
+									case ETVAR :
+									{
+										eParent->replaceArg( e, (EXP*)new VAR( (VAR&)(*targ) ) );
+									}
+									break;
+								
+								}
+								//std::cout << "PARENT after replace :" << eParent->toString() << std::endl;
+								//replacement --> do not advance in the list, at parent level... :
 								goOn = false;
 							}
 							else
@@ -735,6 +770,8 @@ EXP regularize(EXP* e, bool& goOn)
 									// we do not need to advance on the list of argument :
 									i--;
 								}
+								
+								nbrarg = e->getNBRArg();
 							}
 			
 							//-------------------------------------
@@ -768,8 +805,9 @@ EXP regularize(EXP* e, bool& goOn)
 								{
 									//there is at least one zero argument :
 									// Therefore this node can be replaced by a zero.
+									//std::cout << "PARENT before replace :" << eParent->toString() << std::endl;
 									eParent->replaceArg( e, (EXP*)new FUNC(FTzero) );
-									std::cout << "PARENT after replace :" << eParent->toString() << std::endl;
+									//std::cout << "PARENT after replace :" << eParent->toString() << std::endl;
 									//replacement --> we can advance in the list, at parent level... :
 									goOn = true;
 								}
@@ -800,6 +838,8 @@ EXP regularize(EXP* e, bool& goOn)
 							// we do not need to advance on the list of argument :
 							i--;
 						}
+						
+						nbrarg = e->getNBRArg();
 					}
 	
 					//-------------------------------------
@@ -837,7 +877,7 @@ EXP regularize(EXP* e, bool& goOn)
 	{
 		//we have no arguments... :
 		// what to do ?
-		/*
+		
 		//the type can only be VAR-->nothing to do,  or FUNC-->case of 1 or 0 to handle in parent = sum or product...
 		EXP* eParent = e->getParent();
 		switch(e->getType())
@@ -848,10 +888,14 @@ EXP regularize(EXP* e, bool& goOn)
 				{
 					case FTzero :
 					{
-						if( eParent->getType() == ETEXP && eParent->getOType() == EOSum )
+						if( eParent->getOType() == EOSum )
 						{
 							//then we can delete this argument :
+							//std::cout << "BEFORE DELETION :" << eParent->toString() << std::endl;
 							eParent->deleteArg(e);
+							//std::cout << "PARENT after deletion :" << eParent->toString() << std::endl;
+							
+							
 							//deletion->do not advance in the parent node list :
 							goOn = false;
 						}
@@ -860,7 +904,17 @@ EXP regularize(EXP* e, bool& goOn)
 					
 					case FTone :
 					{
-					
+						if( eParent->getOType() == EOProduct )
+						{
+							//then we can delete this argument :
+							//std::cout << "BEFORE DELETION :" << eParent->toString() << std::endl;
+							eParent->deleteArg(e);
+							//std::cout << "PARENT after deletion :" << eParent->toString() << std::endl;
+							
+							
+							//deletion->do not advance in the parent node list :
+							goOn = false;
+						}
 					}
 					break;
 					
@@ -872,6 +926,7 @@ EXP regularize(EXP* e, bool& goOn)
 					
 					case FTcst :
 					{
+						/*
 						if( ((FUNC*)e)->getParam() == 0.0f)
 						{
 							//then it is like a FTzero funciton... :
@@ -883,7 +938,7 @@ EXP regularize(EXP* e, bool& goOn)
 								//deletion->do not advance in the parent node list :
 								goOn = false;
 							}
-						}
+						}*/
 					}
 					break;
 				}
@@ -894,7 +949,7 @@ EXP regularize(EXP* e, bool& goOn)
 			//do nothing...
 			break;
 		}
-		*/
+		
 		//no modification --> we can advance in the list, at parent level... :
 		goOn = true;
 		//-------------------------------------
@@ -925,7 +980,7 @@ bool seek4Zeros(EXP* e)
 		}
 	}
 	
-	std::cout << "SEEK AND DESTROY ZEROS = " << r << std::endl;
+	//std::cout << "SEEK AND DESTROY ZEROS = " << r << std::endl;
 	
 	return r;
 }
