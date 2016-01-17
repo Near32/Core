@@ -18,6 +18,7 @@ VAR::VAR(const VAR& v) : EXP(), id(v.id), valueREF( v.valueREF)
 	this->arg.clear();
 	
 	this->type = ETVAR;
+	this->otype = v.getOType();
 }
 
 VAR::~VAR()
@@ -37,7 +38,7 @@ std::string VAR::toString()
 	std::string r( "X");
 	std::ostringstream ssi;
 	ssi << this->id;
-	r += ss.str() + std::string( "=");
+	r += ssi.str() + std::string( "=");
 	
 	std::ostringstream ss;
 	ss << this->value;

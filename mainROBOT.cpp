@@ -32,5 +32,10 @@ int main(int argc, char* argv[])
 	evaluate(m);
 	toString(m);
 	
+	EXP* df = derivateREC( cos(x1), x1);
+	std::cout << " df = " << df->toString() << std::endl;
+	std::cout << " df = " << df->evaluate() << std::endl;
+	
+	
 	return 0;
 }

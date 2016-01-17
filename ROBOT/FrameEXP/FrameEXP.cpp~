@@ -36,7 +36,8 @@ void FrameEXP::setVAR(const VAR& v)
 
 void FrameEXP::generateT()
 {
-	Mat<EXP> se3EXP;
+	Mat<EXP> se3EXP(se3.getLine(),se3.getColumn());
+	
 	for(int i = this->se3.getLine();i--;)
 	{
 		if(i+1 == this->idxParameter)
@@ -54,6 +55,7 @@ void FrameEXP::generateT()
 		}
 	}
 	
+	
 	Mat<EXP> Rxe( rotation( se3EXP.get(1,1), 1) );
 	Mat<EXP> Rye( rotation( se3EXP.get(2,1), 2) );
 	Mat<EXP> Rze( rotation( se3EXP.get(3,1), 3) );
@@ -67,6 +69,7 @@ void FrameEXP::generateT()
 	FUNC fone(FTone);
 	attach( one1, (EXP&)fone );
 	
+	std::cout << "Construction of T..." << std::endl;
 	T =  new Mat<EXP>( operatorL( operatorC( Rze*Rye*Rxe, Mat<EXP>( zero3,1,3) ), operatorC( te ,Mat<EXP>( one1,1,1) ) ) );
 }
 

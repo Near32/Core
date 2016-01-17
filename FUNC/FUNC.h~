@@ -30,6 +30,7 @@ class FUNC : public EXP
 	
 	FUNC(const FUNCType& ftype_ = FTid, const float param_ = 0.0f);
 	FUNC(const FUNC* f);
+	FUNC(const FUNC& f);
 	~FUNC();
 	
 	virtual float evaluate()	override;
@@ -49,6 +50,9 @@ EXP sin(const EXP& e);
 EXP asin(const EXP& e);
 EXP cos(const EXP& e);
 EXP acos(const EXP& e);
+
+EXP regularize(EXP*& e, bool& goOn);
+bool seek4Zeros(EXP* e);
 
 #endif
 

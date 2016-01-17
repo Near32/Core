@@ -47,7 +47,31 @@ int main(int argc, char* argv[])
 	
 	tW2R.insert( tW2R.end(), new FrameEXP( x2,3,finalse3) );
 	
-	tW2R[1]->getT()*tW2R[0]->getT();
+	Mat<EXP> f(tW2R[0]->getT());
+	
+	evaluate( f);
+	toString( f);
+	
+	EXP* df = derivateREC( f.get(1,1), x1) ;
+	//df = operatorL( df, derivateV(pos, x2) );
+	
+	std::cout << " df = " << df->evaluate() << std::endl;
+	std::cout << " df = " << df->toString() << std::endl;
+	
+	delete df;
+	bool dummy = true;
+	EXP fnr( f.get(1,1) );
+	std::cout << " f = " << fnr.toString() << std::endl;
+	EXP fr( regularize( &fnr, dummy ) );
+	
+	std::cout << " f = " << fnr.toString() << std::endl;
+	std::cout << "regul f = " << fr.toString() << std::endl;
+	
+	df = derivateREC( fr, x1 );
+	std::cout << " dfr = " << df->evaluate() << std::endl;
+	std::cout << " dfr = " << df->toString() << std::endl;
+	
+	std::cout << " reg dfr = " << regularize( df, dummy).toString() << std::endl;
 	//evaluate(tW2R[1]->getT()*tW2R[0]->getT());
 	//toString(tW2R[1]->getT()*tW2R[0]->getT());
 	

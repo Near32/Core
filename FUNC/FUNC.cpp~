@@ -17,33 +17,72 @@ FUNC::FUNC(const FUNC* f)
 	
 	//f has only one arg node :
 	EXP* a = f->getArg(0);
+	this->arg.clear();		
 	
-	EXP* temp;
-		
-	switch(a->getType())
+	if(a != NULL)
 	{
+		EXP* temp;	
+		switch(a->getType())
+		{
 	
-		case ETEXP :
-		temp = new EXP();
-		*temp = *a;
-		break;
+			case ETEXP :
+			temp = new EXP( *a );
+			break;
 		
-		case ETFUNC :
-		temp = (EXP*)new FUNC();
-		*((FUNC*)temp) = *((FUNC*)a);
-		break;
+			case ETFUNC :
+			temp = (EXP*)new FUNC( *((FUNC*)a) );
+			break;
 		
-		case ETVAR :
-		temp = (EXP*)new VAR();
-		*((VAR*)temp) = *((VAR*)a);
-		break;
+			case ETVAR :
+			temp = (EXP*)new VAR( *((VAR*)a) );
+			break;
+		}
+	
+		temp->setParent(this);
+		//we attach this arg node to *this.
+	
+	
+		this->arg.insert( this->arg.end(), temp); 
 	}
 	
-	temp->setParent(this);
-	//we attach this arg node to *this.
+}
+
+FUNC::FUNC(const FUNC& f)
+{
+	this->type = ETFUNC;
+	this->ftype = f.getFType();
 	
+	this->parent = f.getParent();
+	this->param = f.getParam();
+	
+	//f has only one arg node :
+	EXP* a = f.getArg(0);
 	this->arg.clear();		
-	this->arg.insert( this->arg.end(), temp); 
+	
+	if(a != NULL)
+	{
+		EXP* temp;	
+		switch(a->getType())
+		{
+	
+			case ETEXP :
+			temp = new EXP( *a );
+			break;
+		
+			case ETFUNC :
+			temp = (EXP*)new FUNC( *((FUNC*)a) );
+			break;
+		
+			case ETVAR :
+			temp = (EXP*)new VAR( *((VAR*)a) );
+			break;
+		}
+	
+		temp->setParent(this);
+		//we attach this arg node to *this.
+	
+		this->arg.insert( this->arg.end(), temp); 
+	}
 }
 
 
@@ -352,20 +391,23 @@ FUNC FUNC::operator=(const FUNC& f)
 	EXP* a = f.getArg(0);
 	//f has only one arg node :
 	
-	switch(a->getType())
+	if(a != NULL)
 	{
-		case ETEXP :
-		this->arg.insert( this->arg.end(), new EXP(*a) );
-		break;
+		switch(a->getType())
+		{
+			case ETEXP :
+			this->arg.insert( this->arg.end(), new EXP(*a) );
+			break;
 		
-		case ETFUNC :
-		this->arg.insert( this->arg.end(), (EXP*)new FUNC( *((FUNC*)a) ) );  
-		break;
+			case ETFUNC :
+			this->arg.insert( this->arg.end(), (EXP*)new FUNC( *((FUNC*)a) ) );  
+			break;
 		
-		case ETVAR :
-		this->arg.insert( this->arg.end(), (EXP*)new VAR( *((VAR*)a) ) );
-		break; 
+			case ETVAR :
+			this->arg.insert( this->arg.end(), (EXP*)new VAR( *((VAR*)a) ) );
+			break; 
 		
+		}
 	}
 	
 	return *this;
@@ -484,6 +526,7 @@ EXP acos(const EXP& e)
 }
 
 
+/*
 EXP regularize(EXP& e)
 {
 	if( e.getType() == ETFUNC && ((FUNC&)e).getFType() == FTzero)
@@ -509,7 +552,7 @@ EXP regularize(EXP& e)
 			{
 				if(p->getOType() == EOId)
 				{
-				
+					
 				}
 			}
 			break;
@@ -538,3 +581,353 @@ EXP regularize(EXP& e)
 	
 	return e;
 }
+*/
+
+EXP regularize(EXP* e, bool& goOn)
+{
+	if( e->getNBRArg() )
+	{
+		if( e->getParent() == NULL)
+		{
+			//we are at the root.
+			//let us work on the arguments in the right order :
+			unsigned int nbrarg = e->getNBRArg();
+			
+			for(int i=0;i < nbrarg;i++)
+			{
+				EXP* temp = e->getArg(i);
+				bool tGoOn = true;
+				regularize( temp, tGoOn);
+				
+				if( !tGoOn )
+				{
+					//it means that a replacement/deletion have taken place.
+					// we do not need to advance on the list of argument :
+					i--;
+				}
+			}
+			
+			//-------------------------------------
+			//now, what can we assume on our arguments... ?
+			//what to do on the root ?
+			
+			//done nothing --> we can advance in the list, at parent level... :
+			goOn = true;
+			
+			//let us return the now corrected EXP :
+			return *e;
+			//-------------------------------------
+		}
+		else
+		{
+			//we are not on the root and we have arguments :
+			EXP* eParent = e->getParent();
+			
+			switch( e->getType() )
+			{
+				case ETEXP :
+				{
+					switch( e->getOType() )
+					{
+						case EOId :
+						{
+							//obviously, there is only one argument and we have to make it raise within the tree,
+							// deleting this node and adding its only argument at the end of its parent list so that it will be treated after all...
+							//attach( *eParent, (EXP&)( *(e->getArg(0)) ) );
+							//eParent->deleteArg( (EXP*)e);
+							EXP* targ = e->getArg(0);
+							std::cout << "EOID : " << e->toString() << std::endl;
+							std::cout << "PARENT :" << eParent->toString() << std::endl;
+							switch(targ->getType())
+							{
+								
+								case ETEXP :
+								{
+									eParent->replaceArg( e, (EXP*)new EXP(*targ) );
+								}
+								break;
+								
+								case ETFUNC :
+								{
+									eParent->replaceArg( e, (EXP*)new FUNC( (FUNC&)(*targ) ) );
+								}
+								break;
+								
+								case ETVAR :
+								{
+									eParent->replaceArg( e, (EXP*)new VAR( (VAR&)(*targ) ) );
+								}
+								break;
+								
+							}
+							std::cout << "PARENT after replace :" << eParent->toString() << std::endl;
+							//replacement --> do not advance in the list, at parent level... :
+							goOn = false;
+							
+						}
+						break;
+						
+						case EOSum :
+						{
+							//obviously, there is at least two arguments.
+							//let us work on the arguments in the right order :
+							unsigned int nbrarg = e->getNBRArg();
+							
+							for(int i=0;i < nbrarg;i++)
+							{
+								EXP* temp = e->getArg(i);
+								bool tGoOn = true;
+								regularize( temp, tGoOn);
+								
+								if( !tGoOn )
+								{
+									//it means that a replacement/deletion have taken place.
+									// we do not need to advance on the list of argument :
+									i--;
+								}
+							}
+			
+							//-------------------------------------
+							//now, what can we assume on our arguments... ?
+							//what to do on this summing node ?
+							
+							//there can be no argument left anymore :
+							if( e->getNBRArg() == 0)
+							{
+								//then we have to delete this node and NULLed the pointer :
+								eParent->deleteArg( (EXP*)e);
+								//deletion --> do not advance in the list, at parent level... :
+								goOn = false;
+							}
+							else
+							{
+								//if there are remaining arguments, those are obviously none zero arguments
+								// for they have been handled in the right order.
+								// therefore, this node needs to be reattached to its parent.
+								// This reattaching has to take place here, and not at its parent level.
+								// Otherwise, it would be treated again and again.
+								
+								//don't have to delete it then...
+								//nothing done --> we can advance in the list, at parent level... :
+								goOn = true;
+							}
+							
+							//-------------------------------------
+						}
+						break;
+						
+						case EOProduct :
+						{
+							//obviously, there is at least two arguments.
+							//let us work on the arguments in the right order :
+							unsigned int nbrarg = e->getNBRArg();
+							//std::cout << "nbr Arg : " << nbrarg << std::endl;
+							
+							for(int i=0;i < nbrarg;i++)
+							{
+								EXP* temp = e->getArg(i);
+								bool tGoOn = true;
+								regularize( temp, tGoOn);
+
+								if( !tGoOn )
+								{
+									//it means that a replacement/deletion have taken place.
+									// we do not need to advance on the list of argument :
+									i--;
+								}
+							}
+			
+							//-------------------------------------
+							//now, what can we assume on our arguments... ?
+							//what to do on this product node ?
+							
+							//there can be no argument left anymore : ??
+							if( e->getNBRArg() == 0)
+							{
+								//the we have to delete this node and NULLed the pointer :
+								eParent->deleteArg( (EXP*)e);								
+								//deletion --> do not advance in the list, at parent level... :
+								goOn = false;
+							}
+							else
+							{
+								//if there are remaining arguments, those may obviously comprised zero arguments
+								// therefore, this node needs to be reattached to its parent only if there are no zero argument nodes attached.
+								
+								bool zeros = seek4Zeros( e);
+								
+								if( !zeros)
+								{
+									//there is no zero argument :
+									// This reattaching has to take place here, and not at its parent level.
+									// Otherwise, it would be treated again and again.
+									//nothing done --> we can advance in the list, at parent level... :
+									goOn = true;
+								}
+								else
+								{
+									//there is at least one zero argument :
+									// Therefore this node can be replaced by a zero.
+									eParent->replaceArg( e, (EXP*)new FUNC(FTzero) );
+									//replacement --> we can advance in the list, at parent level... :
+									goOn = true;
+								}
+							}
+							
+							//-------------------------------------
+						}
+						break;
+					}
+				}
+				break;
+				
+				case ETFUNC :
+				{
+					//if we are here, it means that this FUNC has at least one argument.
+					// let us deal with it/those :
+					int nbrarg = e->getNBRArg();
+					
+					for(int i=0;i<nbrarg;i++)
+					{
+						EXP* temp = e->getArg(i);
+						bool tGoOn = true;
+						regularize( temp, tGoOn);
+						
+						if( !tGoOn )
+						{
+							//it means that a replacement/deletion have taken place.
+							// we do not need to advance on the list of argument :
+							i--;
+						}
+					}
+	
+					//-------------------------------------
+					//now, what can we assume on our arguments... ?
+					//what to do on this FUNC node ?
+					//there is at least one argument that remained.
+					
+					//no modification --> we can advance in the list, at parent level... :
+					goOn = true;
+					//-------------------------------------
+				}
+				break;
+				
+				case ETVAR :
+				{
+					//------------------------------------------------------------------------------------
+					//Since it is a VAR node, there are no arguments so, this case will never appears....
+					//------------------------------------------------------------------------------------
+					
+					
+					//Nothing to do here.
+					
+					//But here's what will be done on the rigt case :
+					//-------------------------------------
+					//no modification --> we can advance in the list, at parent level... :
+					goOn = true;
+					//-------------------------------------
+				}
+				break;
+			}
+
+		}		
+	}
+	else
+	{
+		//we have no arguments... :
+		// what to do ?
+		
+		//the type can only be VAR-->nothing to do,  or FUNC-->case of 1 or 0 to handle in parent = sum or product...
+		EXP* eParent = e->getParent();
+		switch(e->getType())
+		{
+			case ETFUNC :
+			{
+				switch( ((FUNC*)e)->getFType())
+				{
+					case FTzero :
+					{
+						if( eParent->getType() == ETEXP && eParent->getOType() == EOSum )
+						{
+							//then we can delete this argument :
+							eParent->deleteArg(e);
+							//deletion->do not advance in the parent node list :
+							goOn = false;
+						}
+					}
+					break;
+					
+					case FTone :
+					{
+					
+					}
+					break;
+					
+					case FTmone :
+					{
+					
+					}
+					break;
+					
+					case FTcst :
+					{
+						if( ((FUNC*)e)->getParam() == 0.0f)
+						{
+							//then it is like a FTzero funciton... :
+							
+							if( eParent->getType() == ETEXP && eParent->getOType() == EOSum )
+							{
+								//then we can delete this argument :
+								eParent->deleteArg(e);
+								//deletion->do not advance in the parent node list :
+								goOn = false;
+							}
+						}
+					}
+					break;
+				}
+			}
+			break;
+			
+			default :
+			//do nothing...
+			break;
+		}
+		
+		//no modification --> we can advance in the list, at parent level... :
+		goOn = true;
+		//-------------------------------------
+	
+	}
+	
+	//we have to return something...
+	return EXP();
+}
+
+
+bool seek4Zeros(EXP* e)
+{
+	bool r = false;
+	
+	//we assume that the zeros have been raised within the tree and so on,
+	// so than we only have to check for the given arguments :
+	for(int i=e->getNBRArg();i--;)
+	{
+		EXP* targ = e->getArg(i);
+		if( targ->getType() == ETFUNC)
+		{
+			if( ((FUNC*)targ)->getFType() == FTzero || ( ((FUNC*)targ)->getFType() == FTcst && ((FUNC*)targ)->getParam() == 0.0f ) )
+			{
+				r = true;
+				break;
+			}
+		}
+	}
+	
+	std::cout << "SEEK AND DESTROY ZEROS = " << r << std::endl;
+	
+	return r;
+}
+
+
+

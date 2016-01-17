@@ -44,11 +44,15 @@ class EXP
 	virtual std::string toString();
 	
 	void addArg( EXP* arg);
+	void deleteArg( int idx);
+	void deleteArg( EXP* pe);
+	void replaceArg( EXP* pe2delete, EXP* pe2insert);
 	void setParent( EXP* p);
 	
 	EXP operator=(const EXP& exp);
 	EXP operator*( const EXP& exp);
 	EXP operator+( const EXP& exp);
+	EXP operator+=(const EXP& exp);
 	EXP operator-( const EXP& exp);
 	EXP operator/( const EXP& exp);
 	
@@ -65,7 +69,7 @@ class EXP
 	EXPType getType()	const	{	return type;	}
 	EXPOp getOType()	const	{	return otype;	}
 	
-	int getNBRArg()	const	{	return arg.size();	}
+	unsigned int getNBRArg()	const	{	return this->arg.size();	}
 	
 };
 

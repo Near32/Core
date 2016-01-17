@@ -107,6 +107,24 @@ Mat<EXP> rotation(const EXP& expvar, int axis)
 	}
 }
 
+Mat<EXP> derivateV(const Mat<EXP>& v, const VAR& var)
+{
+	Mat<EXP> r(v.getLine(), v.getColumn() );
+	
+	for(int i=1;i<=v.getLine();i++)
+	{
+		for(int j=1;j<=v.getColumn();j++)
+		{
+			EXP* temp = derivateREC( v.get(i,j), var);
+			std::cout << " exp : " << v.get(i,j).toString() << " derivates in : " << temp->toString() << std::endl;
+			r.set( *temp, i,j);
+			delete temp;
+		}
+	}
+	
+	return r;
+}
+
 
 EXP* F2FDerivate(const EXP* f)
 {
@@ -248,12 +266,14 @@ EXP* derivateREC(const EXP& exp, const VAR& var)
 	}
 }
 
+/*
 EXP derivateFUNCREC(const EXP& exp, const VAR& var)
 {
 	//if we enter here, it means that exp is a FUNC...
 	EXP* dexp = (EXP*)new FUNC( (FUNC&)exp);
 	EXP* attachPoint = F2FDerivate( dexp);
 	
+	if(
 	//there is only one argument to that function...
 	//attach : make a copy of the node and take care of its EXPType :
 	attach( *attachPoint, (EXP&)(*(exp.getArg(0))) );
@@ -268,6 +288,45 @@ EXP derivateFUNCREC(const EXP& exp, const VAR& var)
 	delete temp;
 	
 	return r;
+}
+*/
+//doesn't take care of the case where attachPoint == NULL or exp.getArg(0) == NULL...
+EXP derivateFUNCREC(const EXP& exp, const VAR& var)
+{
+	//if we enter here, it means that exp is a FUNC...
+	EXP* dexp = (EXP*)new FUNC( (FUNC&)exp);
+	EXP* attachPoint = F2FDerivate( dexp);
+	//careful : attachPoint can be NULL...
+	
+	//there is only one argument to that function, or none...
+	//attach : make a copy of the node and take care of its EXPType :
+	EXP* tempnode = exp.getArg(0);
+	if(tempnode != NULL)
+	{
+		if(attachPoint != NULL)
+			attach( *attachPoint, (EXP&)(*tempnode) );
+	
+		EXP r(EOProduct);
+		attach( r, *dexp);
+		//the copy being done and attached, we can delete it :
+		delete dexp;
+	
+		EXP* temp = derivateREC( (EXP&)(*(exp.getArg(0))), var); 
+		attach( r, *temp  );
+		delete temp;
+	
+		return r;
+	}
+	else
+	{
+		//no need for a product, it is only valuable for constant function...
+		EXP r(EOId);
+		attach( r, *dexp);
+		//the copy being done and attached, we can delete it :
+		delete dexp;
+		
+		return r;
+	}
 }
 
 EXP derivateEXPREC(const EXP& exp, const VAR& var)

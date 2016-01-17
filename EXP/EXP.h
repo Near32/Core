@@ -44,6 +44,9 @@ class EXP
 	virtual std::string toString();
 	
 	void addArg( EXP* arg);
+	void deleteArg( int idx);
+	void deleteArg( EXP* pe);
+	void replaceArg( EXP* pe2delete, EXP* pe2insert);
 	void setParent( EXP* p);
 	
 	EXP operator=(const EXP& exp);
@@ -61,12 +64,12 @@ class EXP
 	*/
 	
 	//--------------------------
-	EXP* getParent()	const	{	return this->parent;	}
-	EXP* getArg(int idx)	const	{	return (idx<arg.size()? arg[idx] : NULL);	}	
-	EXPType getType()	const	{	return type;	}
-	EXPOp getOType()	const	{	return otype;	}
+	EXP* getParent()	const;
+	EXP* getArg(int idx)	const;
+	EXPType getType()	const;
+	EXPOp getOType()	const;
 	
-	int getNBRArg()	const	{	return arg.size();	}
+	unsigned int getNBRArg()	const;
 	
 };
 

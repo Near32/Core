@@ -61,7 +61,8 @@ EXP::~EXP()
 {
 	if(this->type != ETVAR)
 	{
-		for(int i=this->arg.size();i--;)	delete this->arg[i];	
+		int nbrArg = this->arg.size();
+		for(int i=0;i<nbrArg;i++)	delete this->arg[i];	
 	}
 }
 
@@ -121,7 +122,7 @@ std::string EXP::toString()
 				switch(this->otype)
 				{
 					case EOId :
-					//parenthesis = false;
+					parenthesis = false;
 					r=arg[0]->toString();
 					break;
 					
@@ -162,6 +163,46 @@ void EXP::addArg( EXP* arg)
 {
 	arg->setParent(this);
 	this->arg.insert( this->arg.end(), arg);
+}
+
+void EXP::deleteArg( int idx)
+{
+	if( arg.size() > idx && idx >= 0)
+	{
+		delete arg[idx];
+		arg.erase(arg.begin()+idx);
+	}
+	else
+	{
+		throw;
+	}
+}
+
+void EXP::deleteArg( EXP* pe)
+{
+	for(int i=this->arg.size();i--;)
+	{
+		if( pe == this->arg[i] )
+		{
+			delete this->arg[i];
+			this->arg.erase(this->arg.begin()+i);
+			break;
+		}
+	}
+}
+
+void EXP::replaceArg( EXP* pe2delete, EXP* pe2insert)
+{
+	for(int i=this->arg.size();i--;)
+	{
+		if( pe2delete == this->arg[i] )
+		{
+			delete this->arg[i];
+			pe2insert->setParent(this);
+			this->arg[i] = pe2insert;
+			break;
+		}
+	}
 }
 
 void EXP::setParent( EXP* p)
@@ -537,6 +578,39 @@ EXP EXP::operator/( const EXP& exp)
 	return r;
 }
 
+
+EXP* EXP::getParent()	const
+{
+	return this->parent;
+}
+
+EXP* EXP::getArg(int idx)	const	
+{
+	int nbrArg = this->arg.size();
+	EXP* r = NULL;
+	
+	if( idx < nbrArg && idx >= 0)
+	{
+		r = this->arg[idx];
+	}
+	return r;	
+}
+	
+EXPType EXP::getType()	const
+{
+	return this->type;
+}
+
+EXPOp EXP::getOType()	const	
+{
+	return this->otype;	
+}
+
+
+unsigned int EXP::getNBRArg()	const
+{
+	return this->arg.size();	
+}
 
 void attach(EXP& parent, EXP& node)
 {
