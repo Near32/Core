@@ -72,6 +72,8 @@ int main(int argc, char* argv[])
 	std::cout << " dfr = " << df->toString() << std::endl;
 	
 	std::cout << " reg dfr = " << regularize( df, dummy).toString() << std::endl;
+	std::cout << " reg dfr 2 = " << regularize( df, dummy).toString() << std::endl;
+	std::cout << " reg dfr = " << regularize( df, dummy).evaluate() << std::endl;
 	//evaluate(tW2R[1]->getT()*tW2R[0]->getT());
 	//toString(tW2R[1]->getT()*tW2R[0]->getT());
 	

@@ -671,7 +671,7 @@ EXP regularize(EXP* e, bool& goOn)
 						{
 							//obviously, there is at least two arguments.
 							//let us work on the arguments in the right order :
-							unsigned int nbrarg = e->getNBRArg();
+							int nbrarg = e->getNBRArg();
 							
 							for(int i=0;i < nbrarg;i++)
 							{
@@ -720,7 +720,7 @@ EXP regularize(EXP* e, bool& goOn)
 						{
 							//obviously, there is at least two arguments.
 							//let us work on the arguments in the right order :
-							unsigned int nbrarg = e->getNBRArg();
+							int nbrarg = e->getNBRArg();
 							//std::cout << "nbr Arg : " << nbrarg << std::endl;
 							
 							for(int i=0;i < nbrarg;i++)
@@ -768,7 +768,9 @@ EXP regularize(EXP* e, bool& goOn)
 								{
 									//there is at least one zero argument :
 									// Therefore this node can be replaced by a zero.
+									std::cout << "PARENT before replace :" << eParent->toString() << std::endl;
 									eParent->replaceArg( e, (EXP*)new FUNC(FTzero) );
+									std::cout << "PARENT after replace :" << eParent->toString() << std::endl;
 									//replacement --> we can advance in the list, at parent level... :
 									goOn = true;
 								}
@@ -836,7 +838,7 @@ EXP regularize(EXP* e, bool& goOn)
 	{
 		//we have no arguments... :
 		// what to do ?
-		
+		/*
 		//the type can only be VAR-->nothing to do,  or FUNC-->case of 1 or 0 to handle in parent = sum or product...
 		EXP* eParent = e->getParent();
 		switch(e->getType())
@@ -893,7 +895,7 @@ EXP regularize(EXP* e, bool& goOn)
 			//do nothing...
 			break;
 		}
-		
+		*/
 		//no modification --> we can advance in the list, at parent level... :
 		goOn = true;
 		//-------------------------------------

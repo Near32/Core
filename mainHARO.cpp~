@@ -70,6 +70,9 @@ int main(int argc, char* argv[])
 	df = derivateREC( fr, x1 );
 	std::cout << " dfr = " << df->evaluate() << std::endl;
 	std::cout << " dfr = " << df->toString() << std::endl;
+	
+	std::cout << " reg dfr = " << regularize( df, dummy).toString() << std::endl;
+	std::cout << " reg dfr 2 = " << regularize( df, dummy).toString() << std::endl;
 	//evaluate(tW2R[1]->getT()*tW2R[0]->getT());
 	//toString(tW2R[1]->getT()*tW2R[0]->getT());
 	
