@@ -1,6 +1,6 @@
 #include "Operations.h"
 
-/*
+
 Mat<EXP> product(const Mat<EXP>& a, const Mat<EXP>& b)
 {
 	if(a.getColumn() == b.getLine() )
@@ -11,17 +11,42 @@ Mat<EXP> product(const Mat<EXP>& a, const Mat<EXP>& b)
 		{
 			for(int j=1;j<=b.getColumn();j++)
 			{
-				
+				EXP temp( a.get(i,1)*b.get(1,j) );
+				temp = regw( temp );
+				for(int k=2;k<=a.getColumn();k++)
+				{
+					EXP t( a.get(i,k)*b.get(k,j) );
+					temp += t ;
+				}
+				r.set(  temp, i,j);
 			}
 		}
+		
+		return r;
 	}
 	else
 	{
-		std::cerr "MATRICES SIZE DO NOT MATCHES... ABORDING." << std::endl;
+		std::cerr << "MATRICES SIZE DO NOT MATCHES... ABORDING." << std::endl;
 		throw;
 	}
-};
-*/
+}
+
+
+Mat<EXP> regwM(const Mat<EXP>& m)
+{
+	Mat<EXP> r(m);
+	
+	for(int i=1;i<=r.getLine();i++)
+	{
+		for(int j=1;j<=r.getColumn();j++)
+		{
+			EXP temp( r.get(i,j) );
+			r.set( regw( temp ), i,j);
+		}
+	}	
+	
+	return r;
+}
 
 void toString(const Mat<EXP>& m)
 {

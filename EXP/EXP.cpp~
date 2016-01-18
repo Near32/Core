@@ -6,7 +6,8 @@
 EXP::EXP(const int& int_) : otype(EOId), type(ETEXP), parent(NULL)
 {
 	this->arg.clear();
-	this->addArg( new FUNC(FTcst) );
+	EXP* temp = new FUNC(FTcst);
+	this->arg.insert( this->arg.begin(), temp );
 	//create a Id( Fcst = 0) = ZERO function ... EXP --> Fcst=0;
 }
 
@@ -32,20 +33,14 @@ EXP::EXP(const EXP& e)
 		{
 			case ETEXP :
 			temp = new EXP( *a );
-			//temp = new EXP;
-			//*temp = *a;
 			break;
 			
 			case ETFUNC :
 			temp = (EXP*)new FUNC( *((FUNC*)a) );
-			//temp = (EXP*)new FUNC;
-			//*((FUNC*)temp) = *((FUNC*)a);
 			break;
 			
 			case ETVAR :
 			temp = (EXP*)new VAR( *((VAR*)a) );
-			//temp = (EXP*)new VAR;
-			//*((VAR*)temp) = *((VAR*)a);
 			break;
 		}
 		
@@ -57,12 +52,41 @@ EXP::EXP(const EXP& e)
 	}
 }
 
+EXP::EXP(const FUNC& f)
+{
+	this->type = ETEXP;
+	this->otype = EOId;
+	this->parent = f.getParent();
+	
+	EXP* temp = (EXP*)new FUNC(f); 
+	temp->setParent(this);
+	//we attach this arg node to *this.
+		
+	this->arg.insert( this->arg.end(), temp); 
+}
+
+EXP::EXP(const VAR& v)
+{
+	this->type = ETEXP;
+	this->otype = EOId;
+	this->parent = v.getParent();
+	
+	EXP* temp = (EXP*)new VAR(v); 
+	temp->setParent(this);
+	//we attach this arg node to *this.
+		
+	this->arg.insert( this->arg.end(), temp); 
+}
+
 EXP::~EXP()
 {
 	if(this->type != ETVAR)
 	{
-		int nbrArg = this->arg.size();
-		for(int i=0;i<nbrArg;i++)	delete this->arg[i];	
+		unsigned int nbrArg = this->arg.size();
+		for(int i=0;i<nbrArg;i++)	
+		{
+			delete this->arg[i];	
+		}
 	}
 }
 
@@ -155,12 +179,13 @@ std::string EXP::toString()
 	}
 	else
 	{
-		throw;
+		return std::string( " [NO ARG] " );
 	}
 }
 
 void EXP::addArg( EXP* arg)
 {
+	//arg is a pointer to a EXP that will now be entirely handled by this.
 	arg->setParent(this);
 	this->arg.insert( this->arg.end(), arg);
 }
@@ -193,6 +218,9 @@ void EXP::deleteArg( EXP* pe)
 
 void EXP::replaceArg( EXP* pe2delete, EXP* pe2insert)
 {
+	//pe2delete is a pointer that is already being handled by this, assumingly...
+	//pe2insert is a pointer that will be entirely handled by this for the futur.
+	//no copy are being done...
 	for(int i=this->arg.size();i--;)
 	{
 		if( pe2delete == this->arg[i] )
@@ -217,22 +245,34 @@ EXP EXP::operator=(const EXP& exp)
 	this->parent = exp.getParent();
 	this->arg.clear();
 	int idx = 0;
-	EXP* a;
+	EXP* a = NULL;
 	
 	while( (a = exp.getArg(idx)) != NULL)
 	{
 		switch(a->getType())
 		{
 			case ETEXP :
-			this->arg.insert( this->arg.end(), new EXP( *a) );
+			{
+				EXP* temp = new EXP( *a);
+				temp->setParent(this);
+				this->arg.insert( this->arg.end(), temp );
+			}
 			break;
 			
 			case ETFUNC :
-			this->arg.insert( this->arg.end(), (EXP*)new FUNC( *((FUNC*)a) ) );  
+			{
+				FUNC* temp = new FUNC( *((FUNC*)a) );
+				temp->setParent(this);
+				this->arg.insert( this->arg.end(), (EXP*)temp );
+			}  
 			break;
 			
 			case ETVAR :
-			this->arg.insert( this->arg.end(), (EXP*)new VAR( *((VAR*)a) ) );
+			{
+				VAR* temp = new VAR( *((VAR*)a) );
+				temp->setParent(this);
+				this->arg.insert( this->arg.end(), (EXP*)temp );
+			}
 			break; 
 			
 		}
@@ -289,6 +329,7 @@ EXP EXP::operator*(const EXP& exp)
 	}
 	
 	
+	//return regw(r);
 	return r;
 }
 
@@ -383,6 +424,7 @@ EXP EXP::operator+(const EXP& exp)
 		attach(r, (EXP&)fzero);
 	}
 	
+	//return regw(r);
 	return r;
 }
 
@@ -477,6 +519,7 @@ EXP EXP::operator+=(const EXP& exp)
 		attach(r, (EXP&)fzero);
 	}
 	
+	//*((EXP*)this) = regw(r);
 	*((EXP*)this) = r;
 	
 	return *this;
@@ -523,6 +566,7 @@ EXP EXP::operator-( const EXP& exp)
 	
 	r.addArg( (EXP*)new FUNC(temp) );
 	
+	//return regw(r);
 	return r;
 }
 
@@ -575,6 +619,7 @@ EXP EXP::operator/( const EXP& exp)
 	
 	r.addArg( (EXP*)new FUNC(temp) );
 	
+	//return regw(r);
 	return r;
 }
 
@@ -586,7 +631,7 @@ EXP* EXP::getParent()	const
 
 EXP* EXP::getArg(int idx)	const	
 {
-	int nbrArg = this->arg.size();
+	unsigned int nbrArg = this->arg.size();
 	EXP* r = NULL;
 	
 	if( idx < nbrArg && idx >= 0)
@@ -607,11 +652,14 @@ EXPOp EXP::getOType()	const
 }
 
 
-unsigned int getNBRArg()	const	{	return this->arg.size();	}
-
+unsigned int EXP::getNBRArg()	const
+{
+	return this->arg.size();	
+}
 
 void attach(EXP& parent, EXP& node)
 {
+	//copy are being done and then entirely handled by the parent, there is no problem.
 	switch(node.getType())
 	{
 		case ETEXP :

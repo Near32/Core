@@ -2,6 +2,8 @@
 
 #include "../VAR/VAR.h"
 
+//#define debuglvl1
+
 FUNC::FUNC(const FUNCType& ftype_, const float param_) : EXP(), ftype(ftype_), param(param_)
 {
 	this->type = ETFUNC;
@@ -583,7 +585,7 @@ EXP regularize(EXP& e)
 }
 */
 
-EXP regularize(EXP* e, bool& goOn)
+EXP& regularize(EXP* e, bool& goOn)
 {
 	if( e->getNBRArg() )
 	{
@@ -591,7 +593,7 @@ EXP regularize(EXP* e, bool& goOn)
 		{
 			//we are at the root.
 			//let us work on the arguments in the right order :
-			unsigned int nbrarg = e->getNBRArg();
+			int nbrarg = e->getNBRArg();
 			
 			for(int i=0;i < nbrarg;i++)
 			{
@@ -603,6 +605,9 @@ EXP regularize(EXP* e, bool& goOn)
 				{
 					//it means that a replacement/deletion have taken place.
 					// we do not need to advance on the list of argument :
+#ifdef debuglvl1
+std::cout << "REENTERING." << std::endl;
+#endif
 					i--;
 				}
 				
@@ -612,6 +617,14 @@ EXP regularize(EXP* e, bool& goOn)
 			//-------------------------------------
 			//now, what can we assume on our arguments... ?
 			//what to do on the root ?
+			
+			if(nbrarg == 0)
+			{
+				//assert the will of having EOId whenever we begin an expression...
+				*e = EXP(EOId);
+				FUNC fzero(FTzero);
+				attach( *e, (EXP&)fzero);
+			}
 			
 			//done nothing --> we can advance in the list, at parent level... :
 			goOn = true;
@@ -638,8 +651,10 @@ EXP regularize(EXP* e, bool& goOn)
 							//attach( *eParent, (EXP&)( *(e->getArg(0)) ) );
 							//eParent->deleteArg( (EXP*)e);
 							EXP* targ = e->getArg(0);
-							//std::cout << "EOID : " << e->toString() << std::endl;
-							//std::cout << "PARENT :" << eParent->toString() << std::endl;
+#ifdef debuglvl1
+std::cout << "EOID : " << e->toString() << std::endl;
+std::cout << "PARENT :" << eParent->toString() << std::endl;
+#endif
 							switch(targ->getType())
 							{
 								
@@ -662,7 +677,9 @@ EXP regularize(EXP* e, bool& goOn)
 								break;
 								
 							}
-							//std::cout << "PARENT after replace :" << eParent->toString() << std::endl;
+#ifdef debuglvl1
+std::cout << "PARENT after replace :" << eParent->toString() << std::endl;
+#endif
 							//replacement --> do not advance in the list, at parent level... :
 							goOn = false;
 							
@@ -911,6 +928,7 @@ EXP regularize(EXP* e, bool& goOn)
 		
 		//the type can only be VAR-->nothing to do,  or FUNC-->case of 1 or 0 to handle in parent = sum or product...
 		EXP* eParent = e->getParent();
+		
 		switch(e->getType())
 		{
 			case ETFUNC :
@@ -922,10 +940,13 @@ EXP regularize(EXP* e, bool& goOn)
 						if( eParent->getOType() == EOSum )
 						{
 							//then we can delete this argument :
-							//std::cout << "BEFORE DELETION :" << eParent->toString() << std::endl;
+#ifdef debuglvl1
+std::cout << "BEFORE DELETION :" << eParent->toString() << std::endl;
+#endif
 							eParent->deleteArg(e);
-							//std::cout << "PARENT after deletion :" << eParent->toString() << std::endl;
-							
+#ifdef debuglvl1
+std::cout << "PARENT after deletion :" << eParent->toString() << std::endl;
+#endif							
 							
 							//deletion->do not advance in the parent node list :
 							goOn = false;
@@ -935,7 +956,7 @@ EXP regularize(EXP* e, bool& goOn)
 					
 					case FTone :
 					{
-						if( eParent->getOType() == EOProduct )
+						if( eParent->getOType() == EOProduct && eParent->getNBRArg() != 1 )
 						{
 							//then we can delete this argument :
 							//std::cout << "BEFORE DELETION :" << eParent->toString() << std::endl;
@@ -957,19 +978,27 @@ EXP regularize(EXP* e, bool& goOn)
 					
 					case FTcst :
 					{
-						/*
+#ifdef debuglvl1
+std::cout << "CAS FTCST.!!!!" << std::endl;
+std::cout << "BEFORE DELETION :" << eParent->toString() << std::endl;
+#endif
 						if( ((FUNC*)e)->getParam() == 0.0f)
 						{
 							//then it is like a FTzero funciton... :
 							
-							if( eParent->getType() == ETEXP && eParent->getOType() == EOSum )
+							//if( eParent->getType() == ETEXP && eParent->getOType() == EOSum )
+							if(eParent->getOType() == EOSum )
 							{
 								//then we can delete this argument :
 								eParent->deleteArg(e);
+#ifdef debuglvl1								
+std::cout << "PARENT after deletion :" << eParent->toString() << std::endl;
+#endif
 								//deletion->do not advance in the parent node list :
 								goOn = false;
 							}
-						}*/
+						}
+						
 					}
 					break;
 				}
@@ -988,9 +1017,14 @@ EXP regularize(EXP* e, bool& goOn)
 	}
 	
 	//we have to return something...
-	return EXP();
+	return *(e->getParent());
 }
 
+EXP regw( EXP& exp)
+{
+	bool dummy = false;
+	return regularize( &exp, dummy);
+}
 
 bool seek4Zeros(EXP* e)
 {

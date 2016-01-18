@@ -1296,7 +1296,16 @@ Mat<T> operatorC(const Mat<T>& a, const Mat<T>& b)
 {
     if(a.getColumn()==b.getColumn())
     {
-        Mat<T> r(a, (T)0, (int)1, (int)1, a.getLine()+b.getLine(), a.getColumn());
+        //Mat<T> r(a, T(0), (int)1, (int)1, a.getLine()+b.getLine(), a.getColumn());
+        Mat<T> r(a.getLine()+b.getLine(), a.getColumn());
+        
+        for(int i=1;i<=a.getLine();i++)
+        {
+        	for(int j=1;j<=a.getColumn();j++)
+        	{
+        		r.set( a.get(i,j), i,j);
+        	}
+        }
 
         for(int i=a.getLine()+1;i<=r.getLine();i++)
         {
@@ -1325,8 +1334,16 @@ Mat<T> operatorC(const Mat<T>* a, const Mat<T>& b)
 {
     if(a->getColumn()==b.getColumn())
     {
-        Mat<T> r(*a, (T)0, (int)1, (int)1, a->getLine()+b.getLine(), a->getColumn());
-
+        //Mat<T> r(*a, T(0), (int)1, (int)1, a->getLine()+b.getLine(), a->getColumn());
+		Mat<T> r(a->getLine()+b->getLine(), a->getColumn());
+        for(int i=1;i<=a->getLine();i++)
+        {
+        	for(int j=1;j<=a->getColumn();j++)
+        	{
+        		r.set( a->get(i,j), i,j);
+        	}
+        }
+        
         for(int i=a->getLine()+1;i<=r.getLine();i++)
         {
             for(int j=1;j<=r.getColumn();j++)

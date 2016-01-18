@@ -20,6 +20,9 @@ enum EXPOp{
 	EOProduct
 };
 
+class FUNC;
+class VAR;
+
 class EXP
 {
 	private :
@@ -38,6 +41,10 @@ class EXP
 	EXP(const int& int_);
 	EXP(const EXPOp& otype_ = EOId);
 	EXP(const EXP& e);
+	EXP(const FUNC& f);
+	EXP(const VAR& v);
+	EXP( FUNC f);
+	EXP( VAR v);
 	~EXP();
 	
 	virtual float evaluate();
@@ -64,12 +71,12 @@ class EXP
 	*/
 	
 	//--------------------------
-	EXP* getParent()	const	{	return this->parent;	}
-	EXP* getArg(int idx)	const	{	return (idx<arg.size()? arg[idx] : NULL);	}	
-	EXPType getType()	const	{	return type;	}
-	EXPOp getOType()	const	{	return otype;	}
+	EXP* getParent()	const;
+	EXP* getArg(int idx)	const;
+	EXPType getType()	const;
+	EXPOp getOType()	const;
 	
-	unsigned int getNBRArg()	const	{	return this->arg.size();	}
+	unsigned int getNBRArg()	const;
 	
 };
 

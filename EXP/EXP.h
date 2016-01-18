@@ -20,6 +20,9 @@ enum EXPOp{
 	EOProduct
 };
 
+class FUNC;
+class VAR;
+
 class EXP
 {
 	private :
@@ -38,6 +41,10 @@ class EXP
 	EXP(const int& int_);
 	EXP(const EXPOp& otype_ = EOId);
 	EXP(const EXP& e);
+	EXP(const FUNC& f);
+	EXP(const VAR& v);
+	/*EXP( FUNC f);
+	EXP( VAR v);*/
 	~EXP();
 	
 	virtual float evaluate();

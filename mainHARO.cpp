@@ -47,6 +47,7 @@ int main(int argc, char* argv[])
 	
 	tW2R.insert( tW2R.end(), new FrameEXP( x2,3,finalse3) );
 	
+	/*
 	Mat<EXP> f(tW2R[0]->getT());
 	
 	evaluate( f);
@@ -80,6 +81,37 @@ int main(int argc, char* argv[])
 	
 	for(int i=tW2R.size();i--;)	delete tW2R[i];
 	return 1;
+	*/
+	
+	/* test for fzero deletion */
+	/*
+	FUNC fzero(FTzero);
+	EXP e( fzero+fzero*fzero+(cos(x1)+fzero)*cos(x1) );
+	//Mat<EXP> t( EXP(fzero), 2,1);
+	Mat<EXP> t( 2,1);
+	EXP efzero(EOId);
+	attach( efzero, (EXP&)fzero);
+	t.set( efzero, 1,1);
+	t.set( e, 2,1);
+	t = t*transpose(t);
+	 
+	std::cout << "EXP before reg : " << e.toString() << std::endl;
+	
+	regw(e);
+	
+	std::cout << "EXP after reg : " << e.toString() << std::endl;
+	
+	evaluate(t);
+	toString(t);
+	t = regwM(t);
+	toString( t );
+	t = regwM(t);
+	toString( t );
+	
+	
+	for(int i=tW2R.size();i--;)	delete tW2R[i];
+	return 1;
+	*/
 	
 	//idx++;
 	//tW2R.insert( tW2R.end(), expM(finalse3)*tW2R[1] );
@@ -116,8 +148,19 @@ int main(int argc, char* argv[])
 	tW2R.insert( tW2R.end(), new FrameEXP(ankle2foot,3,finalse3) );	
 	//tW2R.insert( tW2R.end(), expM(finalse3)*tW2R[5] );
 	
-	Mat<EXP> T( tW2R[0]->getT() );
-	for(int i=1;i<tW2R.size();i++)	T = tW2R[i]->getT()*T;
+	Mat<EXP> T( regwM( tW2R[0]->getT() ) );
+	toString( regwM( T ) );	
+	
+	clock_t time = clock();
+	for(int i=1;i<5;i++)
+	{
+		//evaluate(tW2R[i]->getT());
+		//toString( regwM( tW2R[i]->getT() ) );
+		Mat<EXP> temp( regwM(tW2R[i]->getT()) );
+		//toString( temp); 
+		T = product( temp, regwM(T) );
+	}
+	std::cout << "THE MULTIPLICATIONS TOOK : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
 	
 	bool continuer = true;
 	while(continuer)

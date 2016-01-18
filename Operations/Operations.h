@@ -7,6 +7,9 @@
 #include "../MAT/Mat.h"
 
 //Mat<EXP> product(const Mat<EXP>& a, const Mat<EXP>& b);
+
+Mat<EXP> product(const Mat<EXP>& a, const Mat<EXP>& b);
+Mat<EXP> regwM(const Mat<EXP>& m);
 void toString(const Mat<EXP>& m);
 void evaluate(const Mat<EXP>& m);
 Mat<EXP> rotation(const EXP& expvar, int axis);

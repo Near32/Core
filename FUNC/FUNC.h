@@ -51,7 +51,9 @@ EXP asin(const EXP& e);
 EXP cos(const EXP& e);
 EXP acos(const EXP& e);
 
-EXP regularize(EXP* e, bool& goOn);
+EXP& regularize(EXP* e, bool& goOn);
+EXP regw(EXP& exp);
+
 bool seek4Zeros(EXP* e);
 
 #endif
