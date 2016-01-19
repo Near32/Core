@@ -4,6 +4,12 @@
 #include "Operations/Operations.h"
 #include "ROBOT/FrameEXP/FrameEXP.h"
 
+//constexpr float PI = 3.141596f;
+
+float toRad(const float& deg)
+{
+	return (deg*PI)/180.0f;
+}
 
 int main(int argc, char* argv[])
 {	
@@ -29,8 +35,8 @@ int main(int argc, char* argv[])
 	// add in the class + check in reality ...
 	//right hip : nuz, 80 at least offset
 	finalse3.set( W2hY, 5,1);
-	finalse3.set( -90, 1,1);
-	finalse3.set( 90, 2,1);
+	finalse3.set( toRad(-90), 1,1);
+	finalse3.set( toRad(90), 2,1);
 	tW2R.insert( tW2R.end(), new FrameEXP( x1,3,finalse3) );
 	
 	std::cout << "TEST : " << std::endl;
@@ -42,8 +48,8 @@ int main(int argc, char* argv[])
 	//right hip low  : nuz, offset : half
 	finalse3 *= 0.0f;
 	finalse3.set( h2hlY, 5,1);
-	finalse3.set( -90, 1,1);
-	finalse3.set( -90, 2,1);
+	finalse3.set( toRad(-90), 1,1);
+	finalse3.set( toRad(-90), 2,1);
 	
 	tW2R.insert( tW2R.end(), new FrameEXP( x2,3,finalse3) );
 	
@@ -136,7 +142,7 @@ int main(int argc, char* argv[])
 	//right heel to heel low : nuz, offset : half
 	finalse3 *= 0.0f;
 	finalse3.set( a2alX, 4,1);
-	finalse3.set( 90, 1,1);
+	finalse3.set( toRad(90), 1,1);
 	tW2R.insert( tW2R.end(), new FrameEXP(x5,3,finalse3) );
 	//idx++;
 	//tW2R.insert( tW2R.end(), expM(finalse3)*tW2R[4] );
@@ -152,11 +158,11 @@ int main(int argc, char* argv[])
 	toString( regwM( T ) );	
 	
 	clock_t time = clock();
-	for(int i=1;i<5;i++)
+	for(int i=1;i<2;i++)
 	{
 		//evaluate(tW2R[i]->getT());
 		//toString( regwM( tW2R[i]->getT() ) );
-		//Mat<EXP> temp( regwM(tW2R[i]->getT()) );
+		Mat<EXP> temp( regwM(tW2R[i]->getT()) );
 		//toString( temp); 
 		T = product( temp, regwM(T) );
 	}

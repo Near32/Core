@@ -40,26 +40,30 @@ Mat<float> rotation(float angle, int axis)
 		case 1 :	//X axis		
 		r.set(cos(angle), 2,2);
 		r.set(cos(angle), 3,3);
-		r.set(sin(angle), 2,3);
-		r.set(-sin(angle), 3,2);
+		r.set(-sin(angle), 2,3);
+		r.set(sin(angle), 3,2);
 		r.set( 1.0f, 1,1);
 		return r;
 		break;
 		
 		case 2 : 	//Y axis
 		r.set(cos(angle), 1,1);
+		r.set(-sin(angle), 3,1);
+		
 		r.set(cos(angle), 3,3);
 		r.set(sin(angle), 1,3);
-		r.set(-sin(angle), 3,1);
+		
 		r.set( 1.0f, 2,2);
 		return r;
 		break;
 		
 		case 3 :	//Z axis
 		r.set(cos(angle), 1,1);
+		r.set(sin(angle), 2,1);
+		
 		r.set(cos(angle), 2,2);
 		r.set(-sin(angle), 1,2);
-		r.set(sin(angle), 2,1);
+		
 		r.set( 1.0f, 3,3);
 		return r;
 		break;
@@ -70,9 +74,11 @@ Mat<float> logMEuler( const Mat<float>& m)
 {
 	Mat<float> angles(3,1);
 	Rot2Euler( m, angles);
-	
+
+#ifdef debuglvl1	
 	cout << " Angles Euler : " << endl;
 	angles.afficher();
+#endif	
 	
 	Mat<float> r1( rotation(angles.get(1,1),1) );
 	Mat<float> r2( rotation(angles.get(2,1),2) );

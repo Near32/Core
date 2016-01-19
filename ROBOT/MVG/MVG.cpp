@@ -39,27 +39,33 @@ Mat<float> rotation(float angle, int axis)
 	{
 		case 1 :	//X axis		
 		r.set(cos(angle), 2,2);
+		r.set(sin(angle), 3,2);
+		
 		r.set(cos(angle), 3,3);
-		r.set(sin(angle), 2,3);
-		r.set(-sin(angle), 3,2);
+		r.set(-sin(angle), 2,3);
+		
 		r.set( 1.0f, 1,1);
 		return r;
 		break;
 		
 		case 2 : 	//Y axis
 		r.set(cos(angle), 1,1);
+		r.set(-sin(angle), 3,1);
+		
 		r.set(cos(angle), 3,3);
 		r.set(sin(angle), 1,3);
-		r.set(-sin(angle), 3,1);
+		
 		r.set( 1.0f, 2,2);
 		return r;
 		break;
 		
 		case 3 :	//Z axis
 		r.set(cos(angle), 1,1);
+		r.set(sin(angle), 2,1);
+		
 		r.set(cos(angle), 2,2);
 		r.set(-sin(angle), 1,2);
-		r.set(sin(angle), 2,1);
+		
 		r.set( 1.0f, 3,3);
 		return r;
 		break;
