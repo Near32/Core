@@ -155,17 +155,25 @@ int main(int argc, char* argv[])
 	//tW2R.insert( tW2R.end(), expM(finalse3)*tW2R[5] );
 	
 	Mat<EXP> T( regwM( tW2R[0]->getT() ) );
-	toString( regwM( T ) );	
+	//Mat<EXP> T( tW2R[0]->getT() );
+	//evaluate(T);
+	//T = regwM( T );
+	evaluate( T );	
+	//toString( regwM(T));
 	
 	clock_t time = clock();
-	for(int i=1;i<2;i++)
+	for(int i=1;i<6;i++)
 	{
 		evaluate(tW2R[i]->getT());
 		//toString( regwM( tW2R[i]->getT() ) );
 		Mat<EXP> temp( regwM(tW2R[i]->getT()) );
+		//Mat<EXP> temp( tW2R[i]->getT() );
 		//toString( temp); 
-		T = product( temp, regwM(T) );
+		T = product( regwM(T), temp );
+		//T = product( temp, T );
 	}
+	
+	evaluate( T);
 	std::cout << "THE MULTIPLICATIONS TOOK : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
 	
 	bool continuer = true;

@@ -696,10 +696,10 @@ Mat<T> operator*(const Mat<T>& a, const Mat<T>& b)
         return Mat<T>(1,1);
     }
 
-    if( a.getLine() == b.getLine() && a.getColumn() == b.getColumn())
+    if( false && a.getLine() == b.getLine() && a.getColumn() == b.getColumn())
     {
     	Mat<T> aa(a),bb(b);
-	return product(&aa,&bb);
+		return product(&aa,&bb);
     }
     else
     {
@@ -1298,6 +1298,7 @@ Mat<T> operatorC(const Mat<T>& a, const Mat<T>& b)
     {
         //Mat<T> r(a, T(0), (int)1, (int)1, a.getLine()+b.getLine(), a.getColumn());
         Mat<T> r(a.getLine()+b.getLine(), a.getColumn());
+        
         for(int i=1;i<=a.getLine();i++)
         {
         	for(int j=1;j<=a.getColumn();j++)

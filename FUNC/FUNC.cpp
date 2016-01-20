@@ -692,6 +692,43 @@ std::cout << "PARENT after replace :" << eParent->toString() << std::endl;
 							//let us work on the arguments in the right order :
 							int nbrarg = e->getNBRArg();
 							
+							if( e->getNBRArg() == 1)
+							{
+								//there can be only one argument, so we have to raise it up : 
+								//cause we check it first it might be deleted due to its parents properties
+								//whereas it should have been raised up.
+								EXP* targ = e->getArg(0);
+								
+								switch(targ->getType())
+								{
+								
+									case ETEXP :
+									{
+										eParent->replaceArg( e, (EXP*)new EXP(*targ) );
+									}
+									break;
+								
+									case ETFUNC :
+									{
+										eParent->replaceArg( e, (EXP*)new FUNC( (FUNC&)(*targ) ) );
+									}
+									break;
+								
+									case ETVAR :
+									{
+										eParent->replaceArg( e, (EXP*)new VAR( (VAR&)(*targ) ) );
+									}
+									break;
+								
+								}
+								//std::cout << "PARENT after replace :" << eParent->toString() << std::endl;
+								//replacement --> do not advance in the list, at parent level... :
+								goOn = false;
+								
+								//we have to return something...
+								return *(e->getParent());
+							}
+							
 							for(int i=0;i < nbrarg;i++)
 							{
 								EXP* temp = e->getArg(i);
@@ -774,6 +811,43 @@ std::cout << "PARENT after replace :" << eParent->toString() << std::endl;
 							//let us work on the arguments in the right order :
 							int nbrarg = e->getNBRArg();
 							//std::cout << "nbr Arg : " << nbrarg << std::endl;
+							
+							if( e->getNBRArg() == 1)
+							{
+								//there can be only one argument, so we have to raise it up : 
+								//cause we check it first it might be deleted due to its parents properties
+								//whereas it should have been raised up.
+								EXP* targ = e->getArg(0);
+								
+								switch(targ->getType())
+								{
+								
+									case ETEXP :
+									{
+										eParent->replaceArg( e, (EXP*)new EXP(*targ) );
+									}
+									break;
+								
+									case ETFUNC :
+									{
+										eParent->replaceArg( e, (EXP*)new FUNC( (FUNC&)(*targ) ) );
+									}
+									break;
+								
+									case ETVAR :
+									{
+										eParent->replaceArg( e, (EXP*)new VAR( (VAR&)(*targ) ) );
+									}
+									break;
+								
+								}
+								//std::cout << "PARENT after replace :" << eParent->toString() << std::endl;
+								//replacement --> do not advance in the list, at parent level... :
+								goOn = false;
+								
+								//we have to return something...
+								return *(e->getParent());
+							}
 							
 							for(int i=0;i < nbrarg;i++)
 							{
@@ -972,15 +1046,36 @@ std::cout << "PARENT after deletion :" << eParent->toString() << std::endl;
 					
 					case FTmone :
 					{
-					
+#ifdef debuglvl1
+std::cout << "CAS FT -1 : nothing to do : parent :" << eParent->toString() << std::endl;
+#endif					
+						/* WATCH OUT : there is nothing to do here !!!!! */
+						
+						
+						/*if( eParent->getOType() == EOProduct && eParent->getNBRArg() != 1 )
+						{
+						
+#ifdef debuglvl1
+std::cout << "CAS FT -1 : entering for DELETION." << std::endl;
+#endif											
+							//then we can delete this argument :
+							//std::cout << "BEFORE DELETION :" << eParent->toString() << std::endl;
+							eParent->deleteArg(e);
+							//std::cout << "PARENT after deletion :" << eParent->toString() << std::endl;
+#ifdef debuglvl1								
+std::cout << "CAS FT -1 : PARENT after deletion :" << eParent->toString() << std::endl;
+#endif							
+							
+							//deletion->do not advance in the parent node list :
+							goOn = false;
+						}*/
 					}
 					break;
 					
 					case FTcst :
 					{
 #ifdef debuglvl1
-std::cout << "CAS FTCST.!!!!" << std::endl;
-std::cout << "BEFORE DELETION :" << eParent->toString() << std::endl;
+std::cout << "CAS FTCST 0 : BEFORE DELETION :" << eParent->toString() << std::endl;
 #endif
 						if( ((FUNC*)e)->getParam() == 0.0f)
 						{
@@ -992,7 +1087,7 @@ std::cout << "BEFORE DELETION :" << eParent->toString() << std::endl;
 								//then we can delete this argument :
 								eParent->deleteArg(e);
 #ifdef debuglvl1								
-std::cout << "PARENT after deletion :" << eParent->toString() << std::endl;
+std::cout << "CAS FTCST 0: PARENT after deletion :" << eParent->toString() << std::endl;
 #endif
 								//deletion->do not advance in the parent node list :
 								goOn = false;

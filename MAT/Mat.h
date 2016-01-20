@@ -699,7 +699,7 @@ Mat<T> operator*(const Mat<T>& a, const Mat<T>& b)
     if( a.getLine() == b.getLine() && a.getColumn() == b.getColumn())
     {
     	Mat<T> aa(a),bb(b);
-	return product(&aa,&bb);
+		return product(&aa,&bb);
     }
     else
     {

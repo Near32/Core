@@ -17,8 +17,11 @@ Mat<EXP> product(const Mat<EXP>& a, const Mat<EXP>& b)
 				{
 					EXP t( a.get(i,k)*b.get(k,j) );
 					temp += regw(t );
+					//temp += t;
 				}
+				
 				r.set( regw( temp), i,j);
+				//r.set( temp, i,j);
 			}
 		}
 		
@@ -105,27 +108,33 @@ Mat<EXP> rotation(const EXP& expvar, int axis)
 	{
 		case 1 :	//X axis		
 		r.set(cos(expvar), 2,2);
+		r.set(sin(expvar), 3,2);
+		
 		r.set(cos(expvar), 3,3);
-		r.set(sin(expvar), 2,3);
-		r.set( fmone*sin(expvar), 3,2);
+		r.set(fmone*sin(expvar), 2,3);
+		
 		r.set( one1, 1,1);
 		return r;
 		break;
 		
 		case 2 : 	//Y axis
 		r.set(cos(expvar), 1,1);
+		r.set( fmone*sin(expvar), 3,1);
+		
 		r.set(cos(expvar), 3,3);
 		r.set(sin(expvar), 1,3);
-		r.set( fmone*sin(expvar), 3,1);
+		
 		r.set( one1, 2,2);
 		return r;
 		break;
 		
 		case 3 :	//Z axis
 		r.set(cos(expvar), 1,1);
+		r.set(sin(expvar), 2,1);
+
 		r.set(cos(expvar), 2,2);
 		r.set( fmone*sin(expvar), 1,2);
-		r.set(sin(expvar), 2,1);
+
 		r.set( one1, 3,3);
 		return r;
 		break;
