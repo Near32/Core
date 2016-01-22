@@ -6,12 +6,14 @@ int idVARCOUNT = 0;
 
 VAR::VAR(float val)	: EXP(), id(idVARCOUNT), value(val), valueREF(value) 
 {
+	this->containsVAR = true;
 	this->type = ETVAR;
 	idVARCOUNT++;
 }
 
 VAR::VAR(const VAR& v) : EXP(), id(v.id), valueREF( v.valueREF)
 {	
+	this->containsVAR = true;
 	this->parent = v.getParent();
 
 	//v has no arg node :
@@ -47,6 +49,7 @@ std::string VAR::toString()
 
 VAR VAR::operator=(const VAR& v)
 {
+	this->containsVAR = true;
 	//copies of the id :
 	this->id = v.id;
 	//make a copy of the VAR v and v.valueREF.
@@ -69,6 +72,12 @@ void VAR::setValue(const float val)
 	// are copies/references of itself in circulation.
 	// copies are made thanks to the operator= or the copy constructor.
 }
+
+bool VAR::doesContainVAR()
+{
+	return true;
+}
+
 
 
 

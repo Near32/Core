@@ -20,6 +20,7 @@ class VAR : public EXP
 	
 	virtual float evaluate()	override;
 	virtual std::string toString()	override;
+	virtual bool doesContainVAR()	override;
 	
 	VAR operator=(const VAR& v);
 	

@@ -30,6 +30,8 @@ class EXP
 	
 	protected :
 	
+	bool hasChanged;
+	bool containsVAR;
 	EXPType type;
 	
 	//liste doublement chainee.
@@ -43,12 +45,13 @@ class EXP
 	EXP(const EXP& e);
 	EXP(const FUNC& f);
 	EXP(const VAR& v);
-	EXP( FUNC f);
-	EXP( VAR v);
+	/*EXP( FUNC f);
+	EXP( VAR v);*/
 	~EXP();
 	
 	virtual float evaluate();
 	virtual std::string toString();
+	virtual bool doesContainVAR();
 	
 	void addArg( EXP* arg);
 	void deleteArg( int idx);

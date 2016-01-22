@@ -3,7 +3,7 @@
 #include "../FUNC/FUNC.h"
 #include "../VAR/VAR.h"
 
-EXP::EXP(const int& int_) : otype(EOId), type(ETEXP), parent(NULL)
+EXP::EXP(const int& int_) : otype(EOId), hasChanged(false), containsVAR(false), type(ETEXP), parent(NULL)
 {
 	this->arg.clear();
 	EXP* temp = new FUNC(FTcst);
@@ -18,6 +18,9 @@ EXP::EXP(const EXPOp& otype_) : otype(otype_), type(ETEXP), parent(NULL)
 
 EXP::EXP(const EXP& e)
 {
+	this->hasChanged = true;
+	this->containsVAR = e.getContainsVAR();
+	
 	this->type = e.getType();
 	this->otype = e.getOType();
 	this->parent = e.getParent();
@@ -54,6 +57,9 @@ EXP::EXP(const EXP& e)
 
 EXP::EXP(const FUNC& f)
 {
+	this->hasChanged = true;
+	this->containsVAR = f.getContainsVAR();
+	
 	this->type = ETEXP;
 	this->otype = EOId;
 	this->parent = f.getParent();
@@ -67,6 +73,9 @@ EXP::EXP(const FUNC& f)
 
 EXP::EXP(const VAR& v)
 {
+	this->hasChanged = false;
+	this->containsVAR = true;
+	
 	this->type = ETEXP;
 	this->otype = EOId;
 	this->parent = v.getParent();
@@ -138,6 +147,7 @@ std::string EXP::toString()
 	{
 		std::string r=arg[0]->toString();
 		bool parenthesis = true;
+		bool bracket = false;
 		
 		for(int i=1;i<this->arg.size();i++)
 		{
@@ -151,11 +161,13 @@ std::string EXP::toString()
 					break;
 					
 					case EOSum :
+					bracket = true;
 					parenthesis = false;
 					r += std::string( " + ") + arg[i]->toString();
 					break;
 					
 					case EOProduct :
+					bracket = true;
 					parenthesis = false;
 					r += std::string( " * ") + arg[i]->toString();
 					break;
@@ -170,12 +182,15 @@ std::string EXP::toString()
 		
 		if(parenthesis)	
 		{
-			return std::string( "(")+r+std::string(")");
+			r = std::string( "(")+r+std::string(")");
 		}
-		else
+		
+		if(bracket)
 		{
-			return r;
+			r = std::string( "[")+r+std::string("]");
 		}
+		
+		return r;
 	}
 	else
 	{
@@ -188,6 +203,8 @@ void EXP::addArg( EXP* arg)
 	//arg is a pointer to a EXP that will now be entirely handled by this.
 	arg->setParent(this);
 	this->arg.insert( this->arg.end(), arg);
+	
+	this->hasChanged = true;
 }
 
 void EXP::deleteArg( int idx)
@@ -196,6 +213,8 @@ void EXP::deleteArg( int idx)
 	{
 		delete arg[idx];
 		arg.erase(arg.begin()+idx);
+		
+		this->hasChanged = true;
 	}
 	else
 	{
@@ -205,21 +224,32 @@ void EXP::deleteArg( int idx)
 
 void EXP::deleteArg( EXP* pe)
 {
+	bool deleted = false;
+	
 	for(int i=this->arg.size();i--;)
 	{
 		if( pe == this->arg[i] )
 		{
 			delete this->arg[i];
 			this->arg.erase(this->arg.begin()+i);
+			
+			this->hasChanged = true;
+			deleted = true;
+			
 			break;
 		}
+	}
+	
+	if(deleted == false)
+	{
+		std::cerr << "DELETION : unable to localize the given node...." << std::endl;
 	}
 }
 
 void EXP::replaceArg( EXP* pe2delete, EXP* pe2insert)
 {
 	//pe2delete is a pointer that is already being handled by this, assumingly...
-	//pe2insert is a pointer that will be entirely handled by this for the futur.
+	//pe2insert is a pointer that will be entirely handled by this, in the futur.
 	//no copy are being done...
 	for(int i=this->arg.size();i--;)
 	{
@@ -228,6 +258,9 @@ void EXP::replaceArg( EXP* pe2delete, EXP* pe2insert)
 			delete this->arg[i];
 			pe2insert->setParent(this);
 			this->arg[i] = pe2insert;
+			
+			this->hasChanged = true;
+			
 			break;
 		}
 	}
@@ -240,6 +273,9 @@ void EXP::setParent( EXP* p)
 
 EXP EXP::operator=(const EXP& exp)
 {
+	this->hasChanged = true;
+	this->containsVAR = exp.getContainsVAR();
+	
 	this->type = exp.getType();
 	this->otype = exp.getOType();
 	this->parent = exp.getParent();
@@ -655,6 +691,41 @@ EXPOp EXP::getOType()	const
 unsigned int EXP::getNBRArg()	const
 {
 	return this->arg.size();	
+}
+
+bool EXP::getContainsVAR()	const
+{
+	return this->containsVAR;
+}
+
+
+bool EXP::doesContainVAR()
+{
+	if(this->hasChanged)
+	{
+		int nbrarg = this->arg.size();
+		
+		if( nbrarg != 0)
+		{
+			for(int i=nbrarg;i--;)
+			{
+				if( arg[i]->doesContainVAR() )
+				{
+					this->containsVAR = true;
+					break;
+				}
+			}
+		}
+		else
+		{
+			//TODO:assume no problem for now on...
+			this->containsVAR = false;
+		}
+		
+		this->hasChanged = false;
+	}
+	
+	return this->containsVAR;
 }
 
 void attach(EXP& parent, EXP& node)

@@ -25,11 +25,11 @@ int main(int argc, char* argv[])
 	std::vector<FrameEXP*> tW2R;
 	Mat<float> finalse3((float)0,6,1);
 		
-	float W2hY = -0.1f;//-10 centimeters.
-	float h2hlY = 0.075f;	//7.5 centimeters.
-	float hl2kX = 0.1f;
-	float k2aX = 0.05f;
-	float a2alX = 0.075f;
+	float W2hY = -0.08f;//-10 centimeters.
+	float h2hlY = 0.08f;	//7.5 centimeters.
+	float hl2kX = 0.08f;
+	float k2aX = 0.08f;
+	float a2alX = 0.08f;
 	float al2fX = 0.075f;
 	
 	// add in the class + check in reality ...
@@ -170,11 +170,43 @@ int main(int argc, char* argv[])
 		//Mat<EXP> temp( tW2R[i]->getT() );
 		//toString( temp); 
 		T = product( regwM(T), temp );
-		//T = product( temp, T );
+		//T = product( T, temp );
 	}
 	
 	evaluate( T);
 	std::cout << "THE MULTIPLICATIONS TOOK : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
+	time = clock();
+	
+	Mat<EXP> poseRF( extract( T, 1,4, 4,4) );
+	
+	/*
+	evaluate(poseRF);
+	EXP t( poseRF.get(1,1) );
+	regw(t);
+	
+	std::cout << "THE regularization TOOK : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
+	std::cout << " ///////////////// \t /////////////////////// \t ///////////////////////" << std::endl;
+	std::cout << " ///////////////// \t /////////////////////// \t ///////////////////////" << std::endl;	
+	std::cout << " ///////////////// \t /////////////////////// \t ///////////////////////" << std::endl;	
+	
+	
+	std::cout << t.toString() << std::endl;
+	std::cout << "Evaluation : " << t.evaluate() << " and originally : " << poseRF.get(1,1).evaluate() << std::endl;
+	
+	FUNC fone(FTone);
+	FUNC fmone(FTmone);
+	EXP f( fone*sin(x2) * ( cos(x1)*( ( cos(x2) * fmone ) * sin(x3) ) * x1 * fone ) );
+	regw(f);
+	std::cout << f.toString() << std::endl;
+	*/
+	//toString( regwM(poseRF) );
+
+	
+	Mat<EXP> dPoseRFdX1( derivateV( regwM(poseRF), x1) );
+	
+	dPoseRFdX1 = regwM(dPoseRFdX1);
+	std::cout << dPoseRFdX1.get(1,1).toString() << std::endl;
+	evaluate(dPoseRFdX1);
 	
 	bool continuer = true;
 	while(continuer)
@@ -197,8 +229,8 @@ int main(int argc, char* argv[])
 		x4.setValue(tempx4);
 		x5.setValue(tempx5);
 	
-		evaluate(T);
-		toString(T);
+		evaluate(poseRF);
+		//toString(poseRF);
 		
 		std::cout << "Quit ? (y/N) : " ;
 		char quit = 0;

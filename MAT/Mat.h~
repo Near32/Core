@@ -13,6 +13,7 @@
 #endif
 
 #define PI 3.1415926535
+#define PI 3.14159265358979323846
 #define maxi 10
 
 using namespace std;
@@ -696,7 +697,7 @@ Mat<T> operator*(const Mat<T>& a, const Mat<T>& b)
         return Mat<T>(1,1);
     }
 
-    if( false && a.getLine() == b.getLine() && a.getColumn() == b.getColumn())
+    if( a.getLine() == b.getLine() && a.getColumn() == b.getColumn())
     {
     	Mat<T> aa(a),bb(b);
 		return product(&aa,&bb);

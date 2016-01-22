@@ -35,6 +35,8 @@ class FUNC : public EXP
 	
 	virtual float evaluate()	override;
 	virtual std::string toString()	override;
+	virtual bool doesContainVAR()	override;
+	
 	FUNC operator=(const FUNC& f);
 	
 	FUNCType getFType()	const	{	return this->ftype;	}
@@ -55,6 +57,10 @@ EXP& regularize(EXP* e, bool& goOn);
 EXP regw(EXP& exp);
 
 bool seek4Zeros(EXP* e);
+void raiseUpPRODUCT( EXP* prod);
+void raiseUpSUM( EXP* sum);
+void deleteIdentity( EXP* exp);
+void replaceCST( EXP* exp);
 
 #endif
 

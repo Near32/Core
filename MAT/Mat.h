@@ -12,7 +12,8 @@
 #include <opencv2/opencv.hpp>
 #endif
 
-#define PI 3.1415926535
+//#define PI 3.1415926535
+#define PI 3.14159265358979323846
 #define maxi 10
 
 using namespace std;

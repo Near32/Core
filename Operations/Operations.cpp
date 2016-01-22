@@ -12,16 +12,17 @@ Mat<EXP> product(const Mat<EXP>& a, const Mat<EXP>& b)
 			for(int j=1;j<=b.getColumn();j++)
 			{
 				EXP temp( a.get(i,1)*b.get(1,j) );
-				temp = regw( temp );
+				//temp = regw( temp );
+				
 				for(int k=2;k<=a.getColumn();k++)
 				{
 					EXP t( a.get(i,k)*b.get(k,j) );
-					temp += regw(t );
-					//temp += t;
+					//temp += regw(t );
+					temp += t;
 				}
 				
-				r.set( regw( temp), i,j);
-				//r.set( temp, i,j);
+				//r.set( regw( temp), i,j);
+				r.set( temp, i,j);
 			}
 		}
 		
@@ -29,7 +30,7 @@ Mat<EXP> product(const Mat<EXP>& a, const Mat<EXP>& b)
 	}
 	else
 	{
-		std::cerr << "MATRICES SIZE DO NOT MATCHES... ABORDING." << std::endl;
+		std::cerr << "MATRICES SIZE DO NOT MATCHES... ABORTING." << std::endl;
 		throw;
 	}
 }
@@ -150,7 +151,7 @@ Mat<EXP> derivateV(const Mat<EXP>& v, const VAR& var)
 		for(int j=1;j<=v.getColumn();j++)
 		{
 			EXP* temp = derivateREC( v.get(i,j), var);
-			std::cout << " exp : " << v.get(i,j).toString() << " derivates in : " << temp->toString() << std::endl;
+			//std::cout << " exp : " << v.get(i,j).toString() << " derivates in : " << temp->toString() << std::endl;
 			r.set( *temp, i,j);
 			delete temp;
 		}
