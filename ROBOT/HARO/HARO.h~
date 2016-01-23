@@ -1,8 +1,8 @@
 #ifndef HARO_H
 #define HARO_H
 
-#include "HAROLegs.h"
-#include "SDL.h"
+#include "HAROLegsEXP.h"
+#include "SDL/SDL.h"
 
 #include <thread>
 #include <mutex>
@@ -11,7 +11,7 @@
 class HARO
 {
 	private :
-	HAROLegs* harolegs;
+	HAROLegsEXP* harolegs;
 	
 	//------------
 	SDL_Surface* ecran;

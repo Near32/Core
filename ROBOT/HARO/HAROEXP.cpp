@@ -21,7 +21,7 @@ HAROEXP::~HAROEXP()
 
 void HAROEXP::loop()
 {
-    thread tLegs( &HAROLegs::loop, std::ref(*harolegs) );
+    thread tLegs( &HAROLegsEXP::loop, std::ref(*harolegs) );
     
     SDL_Event event;
     Uint32 last_time = SDL_GetTicks();
