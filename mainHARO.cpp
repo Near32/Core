@@ -162,7 +162,7 @@ int main(int argc, char* argv[])
 	//toString( regwM(T));
 	
 	clock_t time = clock();
-	for(int i=1;i<6;i++)
+	for(int i=1;i<3;i++)
 	{
 		evaluate(tW2R[i]->getT());
 		//toString( regwM( tW2R[i]->getT() ) );
@@ -177,7 +177,7 @@ int main(int argc, char* argv[])
 	std::cout << "THE MULTIPLICATIONS TOOK : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
 	time = clock();
 	
-	Mat<EXP> poseRF( extract( T, 1,4, 4,4) );
+	Mat<EXP> poseRF( extract( T, 1,4, 3,4) );
 	
 	/*
 	evaluate(poseRF);
@@ -201,12 +201,41 @@ int main(int argc, char* argv[])
 	*/
 	//toString( regwM(poseRF) );
 
+	poseRF = regwM(poseRF);
+	Mat<EXP> dPoseRFdX1( regwM( derivateV( poseRF, x1) ) );
+	Mat<EXP> dPoseRFdX2( regwM( derivateV( poseRF, x2) ) );
+	Mat<EXP> dPoseRFdX3( regwM( derivateV( poseRF, x3) ) );
+	Mat<EXP> dPoseRFdX4( regwM( derivateV( poseRF, x4) ) );
+	Mat<EXP> dPoseRFdX5( regwM( derivateV( poseRF, x5) ) );
 	
-	Mat<EXP> dPoseRFdX1( derivateV( regwM(poseRF), x1) );
+	Mat<EXP> dPoseRFdQ( operatorL( dPoseRFdX1, dPoseRFdX2) );
+	//Mat<EXP> dPoseRFdQ( operatorL( dPoseRFdX2, dPoseRFdX3) );
+	dPoseRFdQ = operatorL( dPoseRFdQ, dPoseRFdX3);
+	dPoseRFdQ = operatorL( dPoseRFdQ, dPoseRFdX5);
+	dPoseRFdQ = operatorL( dPoseRFdQ, dPoseRFdX5);
 	
-	dPoseRFdX1 = regwM(dPoseRFdX1);
-	std::cout << dPoseRFdX1.get(1,1).toString() << std::endl;
-	evaluate(dPoseRFdX1);
+	
+	//std::cout << dPoseRFdX1.get(1,1).toString() << std::endl;
+	evaluate(dPoseRFdQ);
+	//dPoseRFdQ = extract( dPoseRFdQ, 1,1, 3,3);
+	
+	FUNC vfzx(FTcst);
+	vfzx.setParam(0.1f);
+	//5cm/s 
+	FUNC fzero(FTzero);
+	Mat<EXP> v(fzero,3,1);
+	//v.set( vfzx, 3,1);
+	v.set( vfzx, 1,1);
+	//go forward and up at 5cm/sec on each axis = sqrt(50) cm/s on 45°.
+	Mat<float> dpdq( EXP2floatM( dPoseRFdQ ) );
+	Mat<float> invdpdq( invGJ( transpose(dpdq)*dpdq ) );
+	Mat<float> vfloat( EXP2floatM( v ) );
+	
+	Mat<float> dq( invdpdq*(transpose(dpdq)*vfloat) );
+	dpdq.afficher();
+	invdpdq.afficher();
+	vfloat.afficher();
+	dq.afficher();
 	
 	bool continuer = true;
 	while(continuer)

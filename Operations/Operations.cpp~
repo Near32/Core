@@ -1,5 +1,19 @@
 #include "Operations.h"
 
+Mat<float> EXP2float( Mat<EXP>& m)
+{
+	Mat<float> r(m.getLine(),m.getColumn());
+	
+	for(int i=1;i<=m.getLine();i++)
+	{
+		for(int j=1;j<=m.getColumn();j++)
+		{
+			r.set( m.get(i,j).evaluate(), i,j);
+		}
+	}
+	
+	return r;
+}
 
 Mat<EXP> product(const Mat<EXP>& a, const Mat<EXP>& b)
 {
@@ -12,7 +26,7 @@ Mat<EXP> product(const Mat<EXP>& a, const Mat<EXP>& b)
 			for(int j=1;j<=b.getColumn();j++)
 			{
 				EXP temp( a.get(i,1)*b.get(1,j) );
-				temp = regw( temp );
+				//temp = regw( temp );
 				
 				for(int k=2;k<=a.getColumn();k++)
 				{
