@@ -1008,8 +1008,7 @@ std::cout << "PRODUCT RAISE UP : before : " << e->toString() << std::endl;
 								raiseUpPRODUCT( e );
 #ifdef debuglvl3
 std::cout << "PRODUCT RAISE UP : after : " << e->toString() << std::endl;
-#endif								
-										
+#endif										
 								replaceCST(e);
 								deleteIdentity(e);						
 							}

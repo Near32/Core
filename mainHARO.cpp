@@ -13,16 +13,24 @@ float toRad(const float& deg)
 
 int main(int argc, char* argv[])
 {	
-	VAR x1;
-	VAR x2;
-	VAR x3;
-	VAR x4;
-	VAR x5;
-	VAR ankle2foot(0.0f);
+	VAR x1r;
+	VAR x2r;
+	VAR x3r;
+	VAR x4r;
+	VAR x5r;
+	VAR ankle2footr(0.0f);
+	
+	VAR x1l;
+	VAR x2l;
+	VAR x3l;
+	VAR x4l;
+	VAR x5l;
+	VAR ankle2footl(0.0f);
 	//fixed value...
 	
 	//in relative manner : from frame n-1 to frame n.
 	std::vector<FrameEXP*> tW2R;
+	std::vector<FrameEXP*> tW2L;
 	Mat<float> finalse3((float)0,6,1);
 		
 	float W2hY = -0.08f;//-10 centimeters.
@@ -37,7 +45,13 @@ int main(int argc, char* argv[])
 	finalse3.set( W2hY, 5,1);
 	finalse3.set( toRad(-90), 1,1);
 	finalse3.set( toRad(90), 2,1);
-	tW2R.insert( tW2R.end(), new FrameEXP( x1,3,finalse3) );
+	tW2R.insert( tW2R.end(), new FrameEXP( x1r,3,finalse3) );
+	
+	finalse3 *= 0.0f;
+	finalse3.set( -W2hY, 5,1);
+	finalse3.set( toRad(90), 1,1);
+	finalse3.set( toRad(90), 2,1);
+	tW2L.insert( tW2L.end(), new FrameEXP( x1l,3,finalse3) );
 	
 	std::cout << "TEST : " << std::endl;
 	//evaluate(tW2R[0]->getT());
@@ -51,7 +65,15 @@ int main(int argc, char* argv[])
 	finalse3.set( toRad(-90), 1,1);
 	finalse3.set( toRad(-90), 2,1);
 	
-	tW2R.insert( tW2R.end(), new FrameEXP( x2,3,finalse3) );
+	tW2R.insert( tW2R.end(), new FrameEXP( x2r,3,finalse3) );
+	
+	
+	finalse3 *= 0.0f;
+	finalse3.set( -h2hlY, 5,1);
+	finalse3.set( toRad(90), 1,1);
+	finalse3.set( toRad(-90), 2,1);
+	
+	tW2L.insert( tW2L.end(), new FrameEXP( x2l,3,finalse3) );
 	
 	/*
 	Mat<EXP> f(tW2R[0]->getT());
@@ -126,40 +148,50 @@ int main(int argc, char* argv[])
 	//right hl to knee : nuz, offset : half
 	finalse3 *= 0.0f;
 	finalse3.set( hl2kX, 4,1);
-	tW2R.insert( tW2R.end(), new FrameEXP(x3,3,finalse3) );
-	//idx++;
-	//tW2R.insert( tW2R.end(), expM(finalse3)*tW2R[2] );
+	tW2R.insert( tW2R.end(), new FrameEXP(x3r,3,finalse3) );
+	
+	finalse3 *= 0.0f;
+	finalse3.set( hl2kX, 4,1);
+	tW2L.insert( tW2L.end(), new FrameEXP(x3l,3,finalse3) );
 	
 	
 	//right knee to heel : nuz, offset : half
 	finalse3 *= 0.0f;
 	finalse3.set( k2aX, 4,1);
-	tW2R.insert( tW2R.end(), new FrameEXP(x4,3,finalse3) );
-	//idx++;
-	//tW2R.insert( tW2R.end(), expM(finalse3)*tW2R[3] );
+	tW2R.insert( tW2R.end(), new FrameEXP(x4r,3,finalse3) );
+	
+	
+	finalse3 *= 0.0f;
+	finalse3.set( k2aX, 4,1);
+	tW2L.insert( tW2L.end(), new FrameEXP(x4l,3,finalse3) );
 	
 	
 	//right heel to heel low : nuz, offset : half
 	finalse3 *= 0.0f;
 	finalse3.set( a2alX, 4,1);
 	finalse3.set( toRad(90), 1,1);
-	tW2R.insert( tW2R.end(), new FrameEXP(x5,3,finalse3) );
-	//idx++;
-	//tW2R.insert( tW2R.end(), expM(finalse3)*tW2R[4] );
+	tW2R.insert( tW2R.end(), new FrameEXP(x5r,3,finalse3) );
+
+	finalse3 *= 0.0f;
+	finalse3.set( a2alX, 4,1);
+	finalse3.set( toRad(90), 1,1);
+	tW2L.insert( tW2L.end(), new FrameEXP(x5l,3,finalse3) );
 	
 	
 	//right heel low to foot : nuz, offset : half
 	finalse3 *= 0.0f;
 	finalse3.set( al2fX, 4,1);
-	tW2R.insert( tW2R.end(), new FrameEXP(ankle2foot,3,finalse3) );	
-	//tW2R.insert( tW2R.end(), expM(finalse3)*tW2R[5] );
+	tW2R.insert( tW2R.end(), new FrameEXP(ankle2footr,3,finalse3) );	
+
+	finalse3 *= 0.0f;
+	finalse3.set( al2fX, 4,1);
+	tW2L.insert( tW2L.end(), new FrameEXP(ankle2footl,3,finalse3) );	
 	
-	Mat<EXP> T( regwM( tW2R[0]->getT() ) );
-	//Mat<EXP> T( tW2R[0]->getT() );
-	//evaluate(T);
-	//T = regwM( T );
-	evaluate( T );	
-	//toString( regwM(T));
+	Mat<EXP> Tr( regwM( tW2R[0]->getT() ) );
+	Mat<EXP> Tl( regwM( tW2L[0]->getT() ) );
+
+	evaluate( Tr );
+	evaluate( Tr );
 	
 	clock_t time = clock();
 	for(int i=1;i<3;i++)
@@ -169,15 +201,31 @@ int main(int argc, char* argv[])
 		Mat<EXP> temp( regwM(tW2R[i]->getT()) );
 		//Mat<EXP> temp( tW2R[i]->getT() );
 		//toString( temp); 
-		T = product( regwM(T), temp );
+		Tr = product( regwM(Tr), temp );
 		//T = product( T, temp );
 	}
 	
-	evaluate( T);
+	evaluate( Tr);
 	std::cout << "THE MULTIPLICATIONS TOOK : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
 	time = clock();
 	
-	Mat<EXP> poseRF( extract( T, 1,4, 3,4) );
+	for(int i=1;i<6;i++)
+	{
+		evaluate(tW2L[i]->getT());
+		//toString( regwM( tW2R[i]->getT() ) );
+		Mat<EXP> temp( regwM(tW2L[i]->getT()) );
+		//Mat<EXP> temp( tW2R[i]->getT() );
+		//toString( temp); 
+		Tl = product( regwM(Tl), temp );
+		//T = product( T, temp );
+	}
+	
+	evaluate( Tl);
+	std::cout << "THE MULTIPLICATIONS TOOK : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
+	
+	
+	Mat<EXP> poseRFr( extract( Tr, 1,4, 3,4) );
+	Mat<EXP> poseRFl( extract( Tl, 1,4, 3,4) );
 	
 	/*
 	evaluate(poseRF);
@@ -201,22 +249,36 @@ int main(int argc, char* argv[])
 	*/
 	//toString( regwM(poseRF) );
 
-	poseRF = regwM(poseRF);
-	Mat<EXP> dPoseRFdX1( regwM( derivateV( poseRF, x1) ) );
-	Mat<EXP> dPoseRFdX2( regwM( derivateV( poseRF, x2) ) );
-	Mat<EXP> dPoseRFdX3( regwM( derivateV( poseRF, x3) ) );
-	Mat<EXP> dPoseRFdX4( regwM( derivateV( poseRF, x4) ) );
-	Mat<EXP> dPoseRFdX5( regwM( derivateV( poseRF, x5) ) );
+	poseRFr = regwM(poseRFr);
+	Mat<EXP> dPoseRFrdX1( regwM( derivateV( poseRFr, x1r) ) );
+	Mat<EXP> dPoseRFrdX2( regwM( derivateV( poseRFr, x2r) ) );
+	Mat<EXP> dPoseRFrdX3( regwM( derivateV( poseRFr, x3r) ) );
+	Mat<EXP> dPoseRFrdX4( regwM( derivateV( poseRFr, x4r) ) );
+	Mat<EXP> dPoseRFrdX5( regwM( derivateV( poseRFr, x5r) ) );
 	
-	Mat<EXP> dPoseRFdQ( operatorL( dPoseRFdX1, dPoseRFdX2) );
-	//Mat<EXP> dPoseRFdQ( operatorL( dPoseRFdX2, dPoseRFdX3) );
-	dPoseRFdQ = operatorL( dPoseRFdQ, dPoseRFdX3);
-	dPoseRFdQ = operatorL( dPoseRFdQ, dPoseRFdX5);
-	dPoseRFdQ = operatorL( dPoseRFdQ, dPoseRFdX5);
+	poseRFl = regwM(poseRFl);
+	Mat<EXP> dPoseRFldX1( regwM( derivateV( poseRFl, x1l) ) );
+	Mat<EXP> dPoseRFldX2( regwM( derivateV( poseRFl, x2l) ) );
+	Mat<EXP> dPoseRFldX3( regwM( derivateV( poseRFl, x3l) ) );
+	Mat<EXP> dPoseRFldX4( regwM( derivateV( poseRFl, x4l) ) );
+	Mat<EXP> dPoseRFldX5( regwM( derivateV( poseRFl, x5l) ) );
+	
+	Mat<EXP> dPoseRFrdQ( operatorL( dPoseRFrdX1, dPoseRFrdX2) );
+	//Mat<EXP> dPoseRFrdQ( operatorL( dPoseRFrdX2, dPoseRFrdX3) );
+	dPoseRFrdQ = operatorL( dPoseRFrdQ, dPoseRFrdX3);
+	dPoseRFrdQ = operatorL( dPoseRFrdQ, dPoseRFrdX4);
+	dPoseRFrdQ = operatorL( dPoseRFrdQ, dPoseRFrdX5);
+	
+	Mat<EXP> dPoseRFldQ( operatorL( dPoseRFldX1, dPoseRFldX2) );
+	//Mat<EXP> dPoseRFldQ( operatorL( dPoseRFldX2, dPoseRFldX3) );
+	dPoseRFldQ = operatorL( dPoseRFldQ, dPoseRFldX3);
+	dPoseRFldQ = operatorL( dPoseRFldQ, dPoseRFldX4);
+	dPoseRFldQ = operatorL( dPoseRFldQ, dPoseRFldX5);
 	
 	
 	//std::cout << dPoseRFdX1.get(1,1).toString() << std::endl;
-	evaluate(dPoseRFdQ);
+	evaluate(dPoseRFrdQ);
+	evaluate(dPoseRFldQ);
 	//dPoseRFdQ = extract( dPoseRFdQ, 1,1, 3,3);
 	
 	FUNC vfzx(FTcst);
@@ -227,15 +289,15 @@ int main(int argc, char* argv[])
 	//v.set( vfzx, 3,1);
 	v.set( vfzx, 1,1);
 	//go forward and up at 5cm/sec on each axis = sqrt(50) cm/s on 45°.
-	Mat<float> dpdq( EXP2floatM( dPoseRFdQ ) );
-	Mat<float> invdpdq( invGJ( transpose(dpdq)*dpdq ) );
+	Mat<float> dprdq( EXP2floatM( dPoseRFrdQ ) );
+	Mat<float> invdprdq( invGJ( transpose(dprdq)*dprdq ) );
 	Mat<float> vfloat( EXP2floatM( v ) );
 	
-	Mat<float> dq( invdpdq*(transpose(dpdq)*vfloat) );
-	dpdq.afficher();
-	invdpdq.afficher();
+	Mat<float> dqr( invdprdq*(transpose(dprdq)*vfloat) );
+	dprdq.afficher();
+	invdprdq.afficher();
 	vfloat.afficher();
-	dq.afficher();
+	dqr.afficher();
 	
 	bool continuer = true;
 	while(continuer)
@@ -246,19 +308,19 @@ int main(int argc, char* argv[])
 		float tempx4;
 		float tempx5;
 	
-		std::cout << "X1 : "; std::cin >> tempx1;
-		std::cout << "X2 : "; std::cin >> tempx2;
-		std::cout << "X3 : "; std::cin >> tempx3;
-		std::cout << "X4 : "; std::cin >> tempx4;
-		std::cout << "X5 : "; std::cin >> tempx5;
+		std::cout << "X1r : "; std::cin >> tempx1;
+		std::cout << "X2r : "; std::cin >> tempx2;
+		std::cout << "X3r : "; std::cin >> tempx3;
+		std::cout << "X4r : "; std::cin >> tempx4;
+		std::cout << "X5r : "; std::cin >> tempx5;
 	
-		x1.setValue(tempx1);
-		x2.setValue(tempx2);
-		x3.setValue(tempx3);
-		x4.setValue(tempx4);
-		x5.setValue(tempx5);
+		x1r.setValue(tempx1);
+		x2r.setValue(tempx2);
+		x3r.setValue(tempx3);
+		x4r.setValue(tempx4);
+		x5r.setValue(tempx5);
 	
-		evaluate(poseRF);
+		evaluate(poseRFr);
 		//toString(poseRF);
 		
 		std::cout << "Quit ? (y/N) : " ;

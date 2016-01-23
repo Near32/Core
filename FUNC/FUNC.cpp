@@ -5,7 +5,7 @@
 //#define debuglvl1
 //#define debuglvl2
 //#define debuglvl3
-#define debuglvl4
+//#define debuglvl4
 
 FUNC::FUNC(const FUNCType& ftype_, const float param_) : EXP(), ftype(ftype_), param(param_)
 {
