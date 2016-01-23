@@ -28,8 +28,8 @@ class HAROLegsEXP
 	
 	std::vector<ServoEXP*> servosR;
 	std::vector<ServoEXP*> servosL;
-	std::vector<Mat<EXP> > tW2R;
-	std::vector<Mat<EXP> > tW2L;
+	std::vector<FrameEXP*> > tW2R;
+	std::vector<FrameEXP*> > tW2L;
 	
 	Mat<float> velocitiesR;
 	Mat<float> velocitiesL;

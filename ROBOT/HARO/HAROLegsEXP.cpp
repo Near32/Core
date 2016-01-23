@@ -35,6 +35,9 @@ HAROLegsEXP::~HAROLegsEXP()
 	for(int i=servosR.size();i--;)	delete servosR[i];
 	for(int i=servosL.size();i--;)	delete servosL[i];
 	
+	for(int i=tW2R.size();i--;)	delete tW2R[i];
+	for(int i=tW2L.size();i--;)	delete tW2L[i];
+	
 	delete pe;
 }
 	

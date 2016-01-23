@@ -6,6 +6,7 @@
 #include "../../FUNC/FUNC.h"
 #include "../../VAR/VAR.h"
 #include "../../Operations/Operations.h"
+#include "../FrameEXP/FrameEXP.h"
 
 class ServoEXP : public Servo
 {

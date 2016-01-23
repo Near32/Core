@@ -79,6 +79,8 @@ void HAROLegsEXP::loop()
 	evaluate( Tl);
 	std::cout << "THE MULTIPLICATIONS TOOK : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
 	
+	
+	
 	while(continuer)
 	{
 		
