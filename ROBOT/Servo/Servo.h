@@ -5,6 +5,11 @@
 #include <wiringPi.h>
 #include <softPwm.h>
 
+
+float toRad( float deg);
+
+
+
 class Servo 
 {
 	protected :
@@ -20,7 +25,9 @@ class Servo
 	
 	public :
 	
-	Servo(int pin_, int idx, const Mat<float>& se3Init, float zerooffset_ = 0.0f, float min = -120.0f, float max = 120.0f);
+	bool inversed;
+	
+	Servo(int pin_, int idx, const Mat<float>& se3Init, float zerooffset_ = 120.0f, float min = 0.0f, float max = 240.0f);
 	~Servo();
 	
 	//---------------------

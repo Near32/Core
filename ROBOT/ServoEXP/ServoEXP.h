@@ -15,7 +15,7 @@ class ServoEXP : public Servo
 	
 	public :
 	
-	ServoEXP(const VAR& variable_, int pin_, int idx, const Mat<float>& se3Init, float zerooffset_ = 0.0f, float min = -120.0f, float max = 120.0f);
+	ServoEXP(const VAR& variable_, int pin_, int idx, const Mat<float>& se3Init, float zerooffset_ = 120.0f, float min = 0.0f, float max = 240.0f);
 	~ServoEXP();
 	
 	
