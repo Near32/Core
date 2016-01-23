@@ -5,6 +5,8 @@
 #include <vector>
 #include "../PE/PE.h"
 
+float toRad(const float& deg);
+
 class HAROLegsEXP
 {
 	private :

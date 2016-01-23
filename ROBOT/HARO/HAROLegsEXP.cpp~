@@ -1,5 +1,10 @@
 #include "HAROLegsEXP.h"
 
+float toRad(const float& deg)
+{
+	return (deg*PI)/180.0f;
+}
+
 HAROLegsEXP::HAROLegsEXP()
 {
 	pe = new PE();
@@ -34,6 +39,9 @@ HAROLegsEXP::~HAROLegsEXP()
 {
 	for(int i=servosR.size();i--;)	delete servosR[i];
 	for(int i=servosL.size();i--;)	delete servosL[i];
+	
+	for(int i=tW2R.size();i--;)	delete tW2R[i];
+	for(int i=tW2L.size();i--;)	delete tW2L[i];
 	
 	delete pe;
 }
@@ -352,7 +360,7 @@ Mat<EXP> HAROLegsEXP::getSE3_one2next( int numero, bool right)
 	
 	if(numero < tW2R.size() )
 	{
-		r = (right ? tW2R[numero] : tW2L[numero] );
+		r = (right ? tW2R[numero]->getT() : tW2L[numero]->getT() );
 	}
 	
 	return r;
@@ -368,7 +376,7 @@ Mat<EXP> HAROLegsEXP::getW2FINAL(bool right)
 	
 	return r;
 	*/
-	return (right? tW2R[tW2R.size()-1] : tW2L[tW2L.size()-1]);
+	return (right? tW2R[tW2R.size()-1]->getT() : tW2L[tW2L.size()-1]);
 }
 
 
