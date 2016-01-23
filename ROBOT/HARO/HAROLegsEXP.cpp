@@ -5,11 +5,11 @@ float toRad(const float& deg)
 	return (deg*PI)/180.0f;
 }
 
-HAROLegsEXP::HAROLegsEXP()
+HAROLegsEXP::HAROLegsEXP() : x1r(VAR(0.0)), x2r(VAR(0.0)), x3r(VAR(0.0)), x4r(VAR(0.0)), x5r(VAR(0.0)), ankle2footr(VAR(0.0)), x1l(VAR(0.0)), x2l(VAR(0.0)), x3l(VAR(0.0)), x4l(VAR(0.0)), x5l(VAR(0.0)), ankle2footl(VAR(0.0))
 {
 	pe = new PE();
 	
-	
+	/*
 	x1r = VAR(0.0);
 	x2r = VAR(0.0);
 	x3r = VAR(0.0);
@@ -23,7 +23,7 @@ HAROLegsEXP::HAROLegsEXP()
 	x4l = VAR(0.0);
 	x5l = VAR(0.0);
 	ankle2footl = VAR(0.0);
-	
+	*/
 	constructFrames();
 	
 	nbrR = servosR.size();

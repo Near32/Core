@@ -9,7 +9,7 @@ HAROLegsEXP::HAROLegsEXP()
 {
 	pe = new PE();
 	
-	
+	/*
 	x1r = VAR(0.0);
 	x2r = VAR(0.0);
 	x3r = VAR(0.0);
@@ -23,7 +23,7 @@ HAROLegsEXP::HAROLegsEXP()
 	x4l = VAR(0.0);
 	x5l = VAR(0.0);
 	ankle2footl = VAR(0.0);
-	
+	*/
 	constructFrames();
 	
 	nbrR = servosR.size();
@@ -376,7 +376,7 @@ Mat<EXP> HAROLegsEXP::getW2FINAL(bool right)
 	
 	return r;
 	*/
-	return (right? tW2R[tW2R.size()-1]->getT() : tW2L[tW2L.size()-1]);
+	return (right? tW2R[tW2R.size()-1]->getT() : tW2L[tW2L.size()-1]->getT() );
 }
 
 
