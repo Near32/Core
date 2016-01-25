@@ -1,7 +1,7 @@
 #include "Servo.h"
 #include <stdio.h>
  
-#define	pwmRange 100
+#define	pwmRange 200
 
 float toRad( float deg)
 {
