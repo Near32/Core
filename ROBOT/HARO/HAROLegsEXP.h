@@ -44,7 +44,8 @@ class HAROLegsEXP
 	PE* pe;
 	
 	std::vector<std::unique_ptr<ICommand> > listCommand;
-	int varnumber;
+	int varnumberR;
+	int varnumberL;
 	
 	
 	public :

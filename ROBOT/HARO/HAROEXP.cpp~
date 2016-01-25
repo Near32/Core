@@ -51,7 +51,7 @@ void HAROEXP::loop()
                 	
                 	case SDLK_SPACE:
                 	{
-                		st::cout << "COMMAND SENT." << std::endl;
+                		std::cout << "COMMAND SENT." << std::endl;
                 	}
                 	break;
                 	
@@ -73,6 +73,34 @@ void HAROEXP::loop()
                 	{
                 		std::cout << "COMMAND SENT." << std::endl;
                 		harolegs->addCommand( (ICommand*)new ICommandPREVIOUSVAR() );
+                	}
+                	break;
+                	
+                	case SDLK_d :
+                	{
+                		std::cout << "COMMAND SENT." << std::endl;
+                		harolegs->addCommand( (ICommand*)new ICommandNEXTVAR() );
+                	}
+                	break;
+                	
+                	case SDLK_o:
+                	{
+                		std::cout << "COMMAND SENT." << std::endl;
+                		harolegs->addCommand( (ICommand*)new ICommandUPVAR(SIDEleft) ); 
+                	}
+                	break;
+                	
+                	case SDLK_l:
+                	{
+                		std::cout << "COMMAND SENT." << std::endl;
+                		harolegs->addCommand( (ICommand*)new ICommandDOWNVAR(SIDEleft) );
+                	}
+                	break;
+                	
+                	case SDLK_k :
+                	{
+                		std::cout << "COMMAND SENT." << std::endl;
+                		harolegs->addCommand( (ICommand*)new ICommandPREVIOUSVAR(SIDEleft) );
                 	}
                 	break;
                 	

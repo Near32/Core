@@ -8,7 +8,6 @@
 #include "ICommand.h"
 #include <memory>
 
-float toRad(const float& deg);
 
 class HAROLegsEXP
 {

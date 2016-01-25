@@ -9,13 +9,21 @@ enum ICT{
 	ICTdownvar
 };
 
+enum SIDE{
+	SIDEnone,
+	SIDEright,
+	SIDEleft
+};
+	
+
 class ICommand
 {
 	public :
 	
 	ICT type;
+	SIDE side; 
 	
-	ICommand()
+	ICommand(SIDE side_ = SIDEright) : side(side_)
 	{
 		type = ICTnone;
 	}
@@ -30,7 +38,7 @@ class ICommandNEXTVAR : public ICommand
 {
 	public :
 	
-	ICommandNEXTVAR() : ICommand()
+	ICommandNEXTVAR(SIDE side_ = SIDEright) : ICommand(side_)
 	{
 		this->type = ICTnextvar;
 	}
@@ -46,7 +54,7 @@ class ICommandPREVIOUSVAR : public ICommand
 {
 	public :
 	
-	ICommandPREVIOUSVAR() : ICommand()
+	ICommandPREVIOUSVAR(SIDE side_ = SIDEright) : ICommand(side_)
 	{
 		this->type = ICTpreviousvar;
 	}
@@ -62,7 +70,7 @@ class ICommandUPVAR : public ICommand
 {
 	public :
 	
-	ICommandUPVAR() : ICommand()
+	ICommandUPVAR(SIDE side_ = SIDEright) : ICommand(side_)
 	{
 		this->type = ICTupvar;
 	}
@@ -77,7 +85,7 @@ class ICommandDOWNVAR : public ICommand
 {
 	public :
 	
-	ICommandDOWNVAR() : ICommand()
+	ICommandDOWNVAR(SIDE side_ = SIDEright) : ICommand(side_)
 	{
 		this->type = ICTdownvar;
 	}

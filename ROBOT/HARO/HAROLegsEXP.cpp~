@@ -2,7 +2,8 @@
 
 HAROLegsEXP::HAROLegsEXP() : x1r(VAR(0.0)), x2r(VAR(0.0)), x3r(VAR(0.0)), x4r(VAR(0.0)), x5r(VAR(0.0)), ankle2footr(VAR(0.0)), x1l(VAR(0.0)), x2l(VAR(0.0)), x3l(VAR(0.0)), x4l(VAR(0.0)), x5l(VAR(0.0)), ankle2footl(VAR(0.0))
 {
-	varnumber = 0;
+	varnumberR = 0;
+	varnumberL = 0;
 	
 	pe = new PE();
 	
@@ -84,14 +85,14 @@ void HAROLegsEXP::loop()
 		//UPDATE SERVOS :
 		for(int i=1;i<=nbrR;i++)
 		{
-			if(velocitiesR.get(i,1) > 0.0f)
+			if(velocitiesR.get(i,1) != 0.0f)
 			{
 				servosR[i]->set( servosR[i]->get() + dt*velocitiesR.get(i,1) );
 			}
 		}
 		for(int i=1;i<=nbrL;i++)
 		{
-			if(velocitiesL.get(i,1) > 0.0f)
+			if(velocitiesL.get(i,1) != 0.0f)
 			{
 				servosL[i]->set( servosL[i]->get() + dt*velocitiesL.get(i,1) );
 			}
@@ -112,60 +113,123 @@ void HAROLegsEXP::loop()
 				
 				case ICTnextvar :
 				{
-					std::cout << "COMMAND RECEIVED : ICTnextvar... : " << varnumber << " -> ";
-					if( varnumber < 5)	varnumber++;
-					std::cout << varnumber << std::endl;
+					if(listCommand[0]->side == SIDEright)
+					{
+						std::cout << "COMMAND RECEIVED : ICTnextvar... : " << varnumberR << " -> ";
+						if( varnumberR < 5)	varnumberR++;
+						std::cout << varnumberR << std::endl;
+					}
+					else
+					{
+						std::cout << "COMMAND RECEIVED : ICTnextvar... : " << varnumberL << " -> ";
+						if( varnumberL < 5)	varnumberL++;
+						std::cout << varnumberL << std::endl;
+					}
 				}
 				break;
 				
 				case ICTpreviousvar :
 				{
-					std::cout << "COMMAND RECEIVED : ICTpreviousvar... : " << varnumber << " -> ";
-					if( varnumber > 1)	varnumber--;
-					std::cout << varnumber << std::endl;
+					if(listCommand[0]->side == SIDEright)
+					{
+						std::cout << "COMMAND RECEIVED : ICTpreviousvar... : " << varnumberR << " -> ";
+						if( varnumberR > 1)	varnumberR--;
+						std::cout << varnumberR << std::endl;
+					}
+					else
+					{
+						std::cout << "COMMAND RECEIVED : ICTpreviousvar... : " << varnumberL << " -> ";
+						if( varnumberL > 1)	varnumberL--;
+						std::cout << varnumberL << std::endl;
+					}
 				}
 				break;
 				
 				case ICTupvar :
 				{
-					std::cout << "COMMAND RECEIVED : ICTupvar... : " << varnumber << " = ";
-					
-					switch(varnumber)
+					if(listCommand[0]->side == SIDEright)
 					{
-						case 1:
+						std::cout << "COMMAND RECEIVED : ICTupvar... : " << varnumberR << " = ";
+					
+						switch(varnumberR)
 						{
-							x1r.setValue( x1r.getValue()+toRad(10.0f) );
-							std::cout << x1r.evaluate() << std::endl;
-						}
-						break;
+							case 1:
+							{
+								x1r.setValue( x1r.getValue()+toRad(10.0f) );
+								std::cout << x1r.evaluate() << std::endl;
+							}
+							break;
 						
-						case 2:
-						{
-							x2r.setValue( x2r.getValue()+toRad(10.0f) );
-							std::cout << x2r.evaluate() << std::endl;
-						}
-						break;
+							case 2:
+							{
+								x2r.setValue( x2r.getValue()+toRad(10.0f) );
+								std::cout << x2r.evaluate() << std::endl;
+							}
+							break;
 						
-						case 3:
-						{
-							x3r.setValue( x3r.getValue()+toRad(10.0f) );
-							std::cout << x3r.evaluate() << std::endl;
-						}
-						break;
+							case 3:
+							{
+								x3r.setValue( x3r.getValue()+toRad(10.0f) );
+								std::cout << x3r.evaluate() << std::endl;
+							}
+							break;
 						
-						case 4:
-						{
-							x4r.setValue( x4r.getValue()+toRad(10.0f) );
-							std::cout << x4r.evaluate() << std::endl;
-						}
-						break;
+							case 4:
+							{
+								x4r.setValue( x4r.getValue()+toRad(10.0f) );
+								std::cout << x4r.evaluate() << std::endl;
+							}
+							break;
 						
-						case 5:
-						{
-							x5r.setValue( x5r.getValue()+toRad(10.0f) );
-							std::cout << x5r.evaluate() << std::endl;
+							case 5:
+							{
+								x5r.setValue( x5r.getValue()+toRad(10.0f) );
+								std::cout << x5r.evaluate() << std::endl;
+							}
+							break;
 						}
-						break;
+					}
+					else
+					{
+						std::cout << "COMMAND RECEIVED : ICTupvar... : " << varnumberL << " = ";
+					
+						switch(varnumberL)
+						{
+							case 1:
+							{
+								x1l.setValue( x1l.getValue()+toRad(10.0f) );
+								std::cout << x1l.evaluate() << std::endl;
+							}
+							break;
+						
+							case 2:
+							{
+								x2l.setValue( x2l.getValue()+toRad(10.0f) );
+								std::cout << x2l.evaluate() << std::endl;
+							}
+							break;
+						
+							case 3:
+							{
+								x3l.setValue( x3l.getValue()+toRad(10.0f) );
+								std::cout << x3l.evaluate() << std::endl;
+							}
+							break;
+						
+							case 4:
+							{
+								x4l.setValue( x4l.getValue()+toRad(10.0f) );
+								std::cout << x4l.evaluate() << std::endl;
+							}
+							break;
+						
+							case 5:
+							{
+								x5l.setValue( x5l.getValue()+toRad(10.0f) );
+								std::cout << x5.evaluate() << std::endl;
+							}
+							break;
+						}
 					}
 					
 				}
@@ -173,46 +237,90 @@ void HAROLegsEXP::loop()
 				
 				case ICTdownvar :
 				{
-					std::cout << "COMMAND RECEIVED : ICTdownvar... : " << varnumber << " = ";
-					
-					switch(varnumber)
+					if(listCommand[0]->side == SIDEright)
 					{
-						case 1:
-						{
-							x1r.setValue( x1r.getValue()-toRad(10.0f) );
-							std::cout << x1r.evaluate() << std::endl;
-						}
-						break;
-						
-						case 2:
-						{
-							x2r.setValue( x2r.getValue()-toRad(10.0f) );
-							std::cout << x2r.evaluate() << std::endl;
-						}
-						break;
-						
-						case 3:
-						{
-							x3r.setValue( x3r.getValue()-toRad(10.0f) );
-							std::cout << x3r.evaluate() << std::endl;
-						}
-						break;
-						
-						case 4:
-						{
-							x4r.setValue( x4r.getValue()-toRad(10.0f) );
-							std::cout << x4r.evaluate() << std::endl;
-						}
-						break;
-						
-						case 5:
-						{
-							x5r.setValue( x5r.getValue()-toRad(10.0f) );
-							std::cout << x5r.evaluate() << std::endl;
-						}
-						break;
-					}
+						std::cout << "COMMAND RECEIVED : ICTdownvar... : " << varnumber << " = ";
 					
+						switch(varnumber)
+						{
+							case 1:
+							{
+								x1r.setValue( x1r.getValue()-toRad(10.0f) );
+								std::cout << x1r.evaluate() << std::endl;
+							}
+							break;
+						
+							case 2:
+							{
+								x2r.setValue( x2r.getValue()-toRad(10.0f) );
+								std::cout << x2r.evaluate() << std::endl;
+							}
+							break;
+						
+							case 3:
+							{
+								x3r.setValue( x3r.getValue()-toRad(10.0f) );
+								std::cout << x3r.evaluate() << std::endl;
+							}
+							break;
+						
+							case 4:
+							{
+								x4r.setValue( x4r.getValue()-toRad(10.0f) );
+								std::cout << x4r.evaluate() << std::endl;
+							}
+							break;
+						
+							case 5:
+							{
+								x5r.setValue( x5r.getValue()-toRad(10.0f) );
+								std::cout << x5r.evaluate() << std::endl;
+							}
+							break;
+						}
+					}
+					else
+					{
+						std::cout << "COMMAND RECEIVED : ICTdownvar... : " << varnumberL << " = ";
+					
+						switch(varnumberL)
+						{
+							case 1:
+							{
+								x1l.setValue( x1l.getValue()-toRad(10.0f) );
+								std::cout << x1l.evaluate() << std::endl;
+							}
+							break;
+						
+							case 2:
+							{
+								x2l.setValue( x2l.getValue()-toRad(10.0f) );
+								std::cout << x2l.evaluate() << std::endl;
+							}
+							break;
+						
+							case 3:
+							{
+								x3l.setValue( x3l.getValue()-toRad(10.0f) );
+								std::cout << x3l.evaluate() << std::endl;
+							}
+							break;
+						
+							case 4:
+							{
+								x4l.setValue( x4l.getValue()-toRad(10.0f) );
+								std::cout << x4l.evaluate() << std::endl;
+							}
+							break;
+						
+							case 5:
+							{
+								x5l.setValue( x5l.getValue()-toRad(10.0f) );
+								std::cout << x5l.evaluate() << std::endl;
+							}
+							break;
+						}
+					}
 				}
 				break;
 			}
