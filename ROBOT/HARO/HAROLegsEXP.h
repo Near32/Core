@@ -67,7 +67,7 @@ class HAROLegsEXP
 	
 	void stop();
 	
-	void addCommand(const ICommand* command);
+	void addCommand( ICommand* command);
 };
 
 #endif

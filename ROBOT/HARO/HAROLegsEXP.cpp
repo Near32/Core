@@ -133,35 +133,35 @@ void HAROLegsEXP::loop()
 					{
 						case 1:
 						{
-							x1r.setValue( x1r.getValue()+toRad(10) );
+							x1r.setValue( x1r.getValue()+toRad(10.0f) );
 							std::cout << x1r.evaluate() << std::endl;
 						}
 						break;
 						
 						case 2:
 						{
-							x2r.setValue( x2r.getValue()+toRad(10) );
+							x2r.setValue( x2r.getValue()+toRad(10.0f) );
 							std::cout << x2r.evaluate() << std::endl;
 						}
 						break;
 						
 						case 3:
 						{
-							x3r.setValue( x3r.getValue()+toRad(10) );
+							x3r.setValue( x3r.getValue()+toRad(10.0f) );
 							std::cout << x3r.evaluate() << std::endl;
 						}
 						break;
 						
 						case 4:
 						{
-							x4r.setValue( x4r.getValue()+toRad(10) );
+							x4r.setValue( x4r.getValue()+toRad(10.0f) );
 							std::cout << x4r.evaluate() << std::endl;
 						}
 						break;
 						
 						case 5:
 						{
-							x5r.setValue( x5r.getValue()+toRad(10) );
+							x5r.setValue( x5r.getValue()+toRad(10.0f) );
 							std::cout << x5r.evaluate() << std::endl;
 						}
 						break;
@@ -178,35 +178,35 @@ void HAROLegsEXP::loop()
 					{
 						case 1:
 						{
-							x1r.setValue( x1r.getValue()-toRad(10) );
+							x1r.setValue( x1r.getValue()-toRad(10.0f) );
 							std::cout << x1r.evaluate() << std::endl;
 						}
 						break;
 						
 						case 2:
 						{
-							x2r.setValue( x2r.getValue()-toRad(10) );
+							x2r.setValue( x2r.getValue()-toRad(10.0f) );
 							std::cout << x2r.evaluate() << std::endl;
 						}
 						break;
 						
 						case 3:
 						{
-							x3r.setValue( x3r.getValue()-toRad(10) );
+							x3r.setValue( x3r.getValue()-toRad(10.0f) );
 							std::cout << x3r.evaluate() << std::endl;
 						}
 						break;
 						
 						case 4:
 						{
-							x4r.setValue( x4r.getValue()-toRad(10) );
+							x4r.setValue( x4r.getValue()-toRad(10.0f) );
 							std::cout << x4r.evaluate() << std::endl;
 						}
 						break;
 						
 						case 5:
 						{
-							x5r.setValue( x5r.getValue()-toRad(10) );
+							x5r.setValue( x5r.getValue()-toRad(10.0f) );
 							std::cout << x5r.evaluate() << std::endl;
 						}
 						break;
@@ -524,7 +524,7 @@ void HAROLegsEXP::stop()
 }
 
 
-void HAROLegsEXP::addCommand(const ICommand* command)
+void HAROLegsEXP::addCommand( ICommand* command)
 {
 	listCommand.insert( listCommand.begin(), std::unique_ptr<ICommand>(command) );
 }
