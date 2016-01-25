@@ -45,7 +45,7 @@ void Servo::set(float val)
 	
 	if(  value >= 0.0f && value <= pwmRange)
 	{
-		frame->setParam( toRad(val) );
+		frame->setParam( toRad(val*180.0f/pwmRange) );
 		softPwmWrite( pin, wpi2Servo(value) );
 		printf("WPI : softPWM : %f : pin %d : SET.\n", wpi2Servo(value)/*100.0f/pwmRange*/, this->pin);
 	}
