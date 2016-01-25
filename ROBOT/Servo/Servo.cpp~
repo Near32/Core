@@ -2,6 +2,7 @@
 #include <stdio.h>
  
 #define	pwmRange 100.0f 
+
 float toRad( float deg)
 {
 	return deg*PI/180.0f;

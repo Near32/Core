@@ -84,11 +84,17 @@ void HAROLegsEXP::loop()
 		//UPDATE SERVOS :
 		for(int i=1;i<=nbrR;i++)
 		{
-			servosR[i]->set( servosR[i]->get() + dt*velocitiesR.get(i,1) );
+			if(velocitiesR.get(i,1) != 0.0f)
+			{
+				servosR[i]->set( servosR[i]->get() + dt*velocitiesR.get(i,1) );
+			}
 		}
 		for(int i=1;i<=nbrL;i++)
 		{
-			servosL[i]->set( servosL[i]->get() + dt*velocitiesL.get(i,1) );
+			if(velocitiesL.get(i,1) != 0.0f)
+			{
+				servosL[i]->set( servosL[i]->get() + dt*velocitiesL.get(i,1) );
+			}
 		}
 		//----------------------------------------
 		
