@@ -213,6 +213,9 @@ void HAROLegsEXP::loop()
 			
 			//deletion :			
 			listCommand.erase( listCommand.begin()+0);
+			
+			for(int i = servosR.size();i--;)	servosR[i]->setVARVALUE();
+			for(int i = servosL.size();i--;)	servosL[i]->setVARVALUE();
 		}
 		
 	}
