@@ -1,7 +1,7 @@
 #include "Servo.h"
 #include <stdio.h>
  
-#define	pwmRange 100.0f 
+#define	pwmRange 100
 
 float toRad( float deg)
 {
@@ -21,7 +21,7 @@ Servo::Servo(int pin_, int idx, const Mat<float>& se3Init, float zerooffset_, fl
 	//200*100 = 20 000 microseconds = 20 ms pwm length, made up of 200 steps.
 	if( softPwmCreate( pin, (zerooffset+se3Init.get(idx,1))*pwmRange/max, pwmRange) == 0)
 	{
-		printf("WPI : softPWM : %f : pin %d : OKAY.\n", zerooffset+se3Init.get(idx,1), pin);
+		printf("WPI : softPWM : %f : pin %d : OKAY.\n", (zerooffset+se3Init.get(idx,1))*pwmRange/max, pin);
 	}
 	else
 	{
@@ -37,12 +37,13 @@ Servo::~Servo()
 	//---------------------
 void Servo::set(float val)
 {
-	float value = (inverted? zerooffset-val : zerooffset+val);
+	float value = (inverted? zerooffset-val : zerooffset+val)*pwmRange/max;
 	
 	if(  value >= 0.0f && value <= max)
 	{
 		frame->setParam( toRad(val) );
-		softPwmWrite( pin, value*pwmRange/max);
+		softPwmWrite( pin, value);
+		printf("WPI : softPWM : %f : pin %d : SET.\n", (zerooffset+se3Init.get(idx,1))*pwmRange/max, pin);
 	}
 }
 float Servo::get()
