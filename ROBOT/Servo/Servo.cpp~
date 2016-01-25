@@ -43,7 +43,7 @@ void Servo::set(float val)
 	{
 		frame->setParam( toRad(val) );
 		softPwmWrite( pin, value);
-		printf("WPI : softPWM : %f : pin %d : OKAY.\n", (zerooffset+se3Init.get(idx,1))*pwmRange/max, pin);
+		printf("WPI : softPWM : %f : pin %d : SET.\n", (zerooffset+se3Init.get(idx,1))*pwmRange/max, pin);
 	}
 }
 float Servo::get()
