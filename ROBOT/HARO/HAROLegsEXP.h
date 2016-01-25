@@ -6,6 +6,7 @@
 #include "../PE/PE.h"
 
 #include "ICommand.h"
+#include <memory>
 
 float toRad(const float& deg);
 

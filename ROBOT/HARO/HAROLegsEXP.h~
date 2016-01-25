@@ -6,6 +6,7 @@
 #include "../PE/PE.h"
 
 #include "ICommand.h"
+#include <memory>
 
 float toRad(const float& deg);
 
@@ -44,6 +45,7 @@ class HAROLegsEXP
 	PE* pe;
 	
 	std::vector<std::unique_ptr<ICommand> > listCommand;
+	int varnumber;
 	
 	
 	public :

@@ -15,12 +15,12 @@ class ICommand
 	
 	ICT type;
 	
-	ICT()
+	ICommand()
 	{
 		type = ICTnone;
 	}
 	
-	~ICT()
+	~ICommand()
 	{
 	
 	}
