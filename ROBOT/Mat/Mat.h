@@ -12,7 +12,8 @@
 #include <opencv2/opencv.hpp>
 #endif
 
-#define PI 3.1415926535
+//#define PI 3.1415926535
+#define PI 3.14159265358979323846
 #define maxi 10
 
 using namespace std;
@@ -699,7 +700,7 @@ Mat<T> operator*(const Mat<T>& a, const Mat<T>& b)
     if( a.getLine() == b.getLine() && a.getColumn() == b.getColumn())
     {
     	Mat<T> aa(a),bb(b);
-	return product(&aa,&bb);
+		return product(&aa,&bb);
     }
     else
     {
