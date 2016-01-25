@@ -524,7 +524,7 @@ void HAROLegsEXP::stop()
 }
 
 
-void HAROLegsEXP::addCommand(const ICommand* command)
+void HAROLegsEXP::addCommand( ICommand* command)
 {
 	listCommand.insert( listCommand.begin(), std::unique_ptr<ICommand>(command) );
 }
