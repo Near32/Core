@@ -32,7 +32,7 @@ class Servo
 	~Servo();
 	
 	//---------------------
-	virtual void set(float val);
+	void set(float val);
 	float get();	
 	
 	Mat<float> getSE3();

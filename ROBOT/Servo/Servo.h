@@ -26,7 +26,7 @@ class Servo
 	
 	public :
 	
-	bool inversed;
+	bool inverted;
 	
 	Servo(int pin_, int idx, const Mat<float>& se3Init, float zerooffset_ = 120.0f, float min = 0.0f, float max = 240.0f);
 	~Servo();

@@ -6,6 +6,11 @@ float toRad( float deg)
 	return deg*PI/180.0f;
 }
 
+float toDeg( float rad)
+{
+	return rad*180.0f/PI;
+}
+
 
 Servo::Servo(int pin_, int idx, const Mat<float>& se3Init, float zerooffset_, float min_, float max_) : inversed(false), pin(pin_), min(min_), max(max_), zerooffset(zerooffset_)
 {

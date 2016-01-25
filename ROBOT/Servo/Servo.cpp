@@ -12,7 +12,7 @@ float toDeg( float rad)
 }
 
 
-Servo::Servo(int pin_, int idx, const Mat<float>& se3Init, float zerooffset_, float min_, float max_) : inversed(false), pin(pin_), min(min_), max(max_), zerooffset(zerooffset_)
+Servo::Servo(int pin_, int idx, const Mat<float>& se3Init, float zerooffset_, float min_, float max_) : inverted(false), pin(pin_), min(min_), max(max_), zerooffset(zerooffset_)
 {
 	frame = new Frame(idx,se3Init);
 	
@@ -35,7 +35,7 @@ Servo::~Servo()
 	//---------------------
 void Servo::set(float val)
 {
-	float value = (inversed? zerooffset-val : zerooffset+val);
+	float value = (inverted? zerooffset-val : zerooffset+val);
 	
 	if(  value >= 0.0f && value <= max)
 	{
