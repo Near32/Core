@@ -9,21 +9,6 @@ HAROLegsEXP::HAROLegsEXP() : x1r(VAR(0.0)), x2r(VAR(0.0)), x3r(VAR(0.0)), x4r(VA
 {
 	pe = new PE();
 	
-	/*
-	x1r = VAR(0.0);
-	x2r = VAR(0.0);
-	x3r = VAR(0.0);
-	x4r = VAR(0.0);
-	x5r = VAR(0.0);
-	ankle2footr = VAR(0.0);
-	
-	x1l = VAR(0.0);
-	x2l = VAR(0.0);
-	x3l = VAR(0.0);
-	x4l = VAR(0.0);
-	x5l = VAR(0.0);
-	ankle2footl = VAR(0.0);
-	*/
 	constructFrames();
 	
 	nbrR = servosR.size();
@@ -161,7 +146,10 @@ void HAROLegsEXP::constructFrames()
 	finalse3.set( toRad(-90), 1,1);
 	finalse3.set( toRad(90), 2,1);
 	tW2R.insert( tW2R.end(), new FrameEXP( x1r,3,finalse3) );
-	servosR.insert( servosR.end(), new ServoEXP(x1r, pinR[idx],3,finalse3,90) );
+	servosR.insert( servosR.end(), new ServoEXP(x1r, pinR[idx],3,finalse3,120) );
+	servosR[servosR.size()-1].inverted = false;
+	x1r.setValue( toRad(90) );
+	servosR[servosR.size()-1].setVARVALUE();
 	
 	//left hip : nuz, 80 at least offset
 	finalse3 *= 0.0f;
@@ -169,7 +157,10 @@ void HAROLegsEXP::constructFrames()
 	finalse3.set( toRad(90), 1,1);
 	finalse3.set( toRad(90), 2,1);
 	tW2L.insert( tW2L.end(), new FrameEXP( x1l,3,finalse3) );
-	servosL.insert( servosL.end(), new ServoEXP(x1l, pinL[idx],3,finalse3, 90) );
+	servosL.insert( servosL.end(), new ServoEXP(x1l, pinL[idx],3,finalse3, 120) );
+	servosL[servosL.size()-1].inverted = true;
+	x1l.setValue( toRad(-90) );
+	servosL[servosL.size()-1].setVARVALUE();
 	idx++;
 	
 	//--------------------------------------------------------	
@@ -191,7 +182,10 @@ void HAROLegsEXP::constructFrames()
 	finalse3.set( toRad(-90), 1,1);
 	finalse3.set( toRad(-90), 2,1);
 	tW2R.insert( tW2R.end(), new FrameEXP( x2r,3,finalse3) );
-	servosR.insert( servosR.end(), new ServoEXP( x2r, pinR[idx],3,finalse3,50) );
+	servosR.insert( servosR.end(), new ServoEXP( x2r, pinR[idx],3,finalse3,120) );
+	servosR[servosR.size()-1].inverted = false;
+	x2r.setValue( toRad(0) );
+	servosR[servosR.size()-1].setVARVALUE();
 	
 	//left hip low  : nuz, offset : half
 	finalse3 *= 0.0f;
@@ -199,7 +193,10 @@ void HAROLegsEXP::constructFrames()
 	finalse3.set( toRad(90), 1,1);
 	finalse3.set( toRad(-90), 2,1);
 	tW2L.insert( tW2L.end(), new FrameEXP( x2l,3,finalse3) );
-	servosL.insert( servosL.end(), new ServoEXP( x2l, pinL[idx],3,finalse3,50) );
+	servosL.insert( servosL.end(), new ServoEXP( x2l, pinL[idx],3,finalse3,120) );
+	servosL[servosL.size()-1].inverted = false;
+	x2l.setValue( toRad(0) );
+	servosL[servosL.size()-1].setVARVALUE();
 	idx++;
 	
 	//--------------------------------------------------------	
@@ -216,13 +213,19 @@ void HAROLegsEXP::constructFrames()
 	finalse3 *= 0.0f;
 	finalse3.set( hl2kX, 4,1);
 	tW2R.insert( tW2R.end(), new FrameEXP(x3r,3,finalse3) );
-	servosR.insert( servosR.end(), new ServoEXP( x3r, pinR[idx],3,finalse3,50) );
+	servosR.insert( servosR.end(), new ServoEXP( x3r, pinR[idx],3,finalse3,120) );
+	servosR[servosR.size()-1].inverted = true;
+	x3r.setValue( toRad(0) );
+	servosR[servosR.size()-1].setVARVALUE();
 	
 	//left hl to knee : nuz, offset : half
 	finalse3 *= 0.0f;
 	finalse3.set( hl2kX, 4,1);
 	tW2L.insert( tW2L.end(), new FrameEXP(x3l,3,finalse3) );
-	servosL.insert( servosL.end(), new ServoEXP( x3l, pinL[idx],3,finalse3,50) );
+	servosL.insert( servosL.end(), new ServoEXP( x3l, pinL[idx],3,finalse3,120) );
+	servosL[servosL.size()-1].inverted = true;
+	x3l.setValue( toRad(0) );
+	servosL[servosL.size()-1].setVARVALUE();
 	idx++;
 	
 	//--------------------------------------------------------
@@ -240,13 +243,19 @@ void HAROLegsEXP::constructFrames()
 	finalse3 *= 0.0f;
 	finalse3.set( k2aX, 4,1);
 	tW2R.insert( tW2R.end(), new FrameEXP(x4r,3,finalse3) );
-	servosR.insert( servosR.end(), new ServoEXP( x4r, pinR[idx],3,finalse3,50) );
+	servosR.insert( servosR.end(), new ServoEXP( x4r, pinR[idx],3,finalse3,120) );
+	servosR[servosR.size()-1].inverted = false;
+	x4r.setValue( toRad(0) );
+	servosR[servosR.size()-1].setVARVALUE();
 	
 	//left knee to heel : nuz, offset : half
 	finalse3 *= 0.0f;
 	finalse3.set( k2aX, 4,1);
 	tW2L.insert( tW2L.end(), new FrameEXP(x4l,3,finalse3) );
-	servosL.insert( servosL.end(), new ServoEXP( x4l, pinL[idx],3,finalse3,50) );
+	servosL.insert( servosL.end(), new ServoEXP( x4l, pinL[idx],3,finalse3,120) );
+	servosL[servosL.size()-1].inverted = false;
+	x4l.setValue( toRad(0) );
+	servosL[servosL.size()-1].setVARVALUE();
 	idx++;
 	
 	
@@ -266,14 +275,20 @@ void HAROLegsEXP::constructFrames()
 	finalse3.set( a2alX, 4,1);
 	finalse3.set( toRad(90), 1,1);
 	tW2R.insert( tW2R.end(), new FrameEXP(x5r,3,finalse3) );
-	servosR.insert( servosR.end(), new ServoEXP( x5r, pinR[idx],3,finalse3,50) );
+	servosR.insert( servosR.end(), new ServoEXP( x5r, pinR[idx],3,finalse3,120) );
+	servosR[servosR.size()-1].inverted = false;
+	x5r.setValue( toRad(0) );
+	servosR[servosR.size()-1].setVARVALUE();
 	
 	//left heel to heel low : nuz, offset : half
 	finalse3 *= 0.0f;
 	finalse3.set( a2alX, 4,1);
 	finalse3.set( toRad(90), 1,1);
 	tW2L.insert( tW2L.end(), new FrameEXP(x5l,3,finalse3) );
-	servosL.insert( servosL.end(), new ServoEXP( x5l, pinL[idx],3,finalse3,50) );
+	servosL.insert( servosL.end(), new ServoEXP( x5l, pinL[idx],3,finalse3,120) );
+	servosR[servosR.size()-1].inverted = true;
+	x5l.setValue( toRad(0) );
+	servosL[servosR.size()-1].setVARVALUE();
 	idx++;
 	
 	//--------------------------------------------------------

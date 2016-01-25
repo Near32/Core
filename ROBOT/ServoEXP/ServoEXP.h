@@ -21,6 +21,8 @@ class ServoEXP : public Servo
 	
 	int getVARid()	const	{	return (frameEXP!=NULL? frameEXP->getVARid() : 0);	}
 	Mat<EXP> getT()	const	{	return (frameEXP!=NULL? frameEXP->getT() : Mat<EXP>(1,1) );	}
+	
+	void setVARVALUE();
 };
 
 #endif

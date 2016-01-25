@@ -35,7 +35,7 @@ void Servo::set(float val)
 	if(  value >= 0.0f && value <= max)
 	{
 		frame->setParam( toRad(val) );
-		softPwmWrite( pin, (zerooffset+val)*200.0f/max);
+		softPwmWrite( pin, value*200.0f/max);
 	}
 }
 float Servo::get()

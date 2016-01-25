@@ -125,7 +125,7 @@ void HAROEXP::init()
     }
    
     SDL_Rect r = {0,0,320,240};
-    SDL_FillRect(ecran,&r, SDL_MapRGB(ecran->format, 200,200,0) );
+    SDL_FillRect(ecran,&r, SDL_MapRGB(ecran->format, 10,10,100) );
     
 }
 

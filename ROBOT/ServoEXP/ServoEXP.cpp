@@ -10,3 +10,10 @@ ServoEXP::~ServoEXP()
 {
 	if(frameEXP != NULL)	delete frameEXP;
 }
+
+
+void ServoEXP::setVARVALUE()
+{
+	this->set( this->frameEXP->getVAR().evaluate() );
+	this->frame->set( this->frameEXP->getVAR().evaluate() );
+}

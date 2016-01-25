@@ -19,7 +19,7 @@ class FrameEXP : public Frame
 	public :
 	
 	FrameEXP();
-	FrameEXP(VAR variable_, int idxParameter_, const Mat<float>& se3Init);
+	FrameEXP(const VAR& variable_, int idxParameter_, const Mat<float>& se3Init);
 	~FrameEXP();
 	
 	//-----------------------------
@@ -27,6 +27,7 @@ class FrameEXP : public Frame
 	Mat<EXP> getT()	const	{	return (T!=NULL? *T : Mat<EXP>(1,1) );	}
 	
 	void setVAR(const VAR& v);
+	VAR& getVAR()	const 	{	return *variable;	}
 };
 
 #endif

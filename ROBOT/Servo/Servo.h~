@@ -7,6 +7,7 @@
 
 
 float toRad( float deg);
+float toDeg( float rad);
 
 
 
@@ -31,7 +32,7 @@ class Servo
 	~Servo();
 	
 	//---------------------
-	void set(float val);
+	virtual void set(float val);
 	float get();	
 	
 	Mat<float> getSE3();

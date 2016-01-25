@@ -7,6 +7,7 @@
 
 
 float toRad( float deg);
+float toDeg( float rad);
 
 
 

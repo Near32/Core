@@ -27,6 +27,7 @@ class FrameEXP : public Frame
 	Mat<EXP> getT()	const	{	return (T!=NULL? *T : Mat<EXP>(1,1) );	}
 	
 	void setVAR(const VAR& v);
+	VAR& getVAR() const 	{	return *variable;	}
 };
 
 #endif
