@@ -15,5 +15,5 @@ ServoEXP::~ServoEXP()
 void ServoEXP::setVARVALUE()
 {
 	this->set( this->frameEXP->getVAR().evaluate() );
-	this->frame->set( this->frameEXP->getVAR().evaluate() );
+	this->frame->setParam( this->frameEXP->getVAR().evaluate() );
 }
