@@ -239,9 +239,9 @@ void HAROLegsEXP::loop()
 				{
 					if(listCommand[0]->side == SIDEright)
 					{
-						std::cout << "COMMAND RECEIVED : ICTdownvar... : " << varnumber << " = ";
+						std::cout << "COMMAND RECEIVED : ICTdownvar... : " << varnumberR << " = ";
 					
-						switch(varnumber)
+						switch(varnumberR)
 						{
 							case 1:
 							{

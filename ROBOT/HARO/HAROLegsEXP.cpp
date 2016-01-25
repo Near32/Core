@@ -226,7 +226,7 @@ void HAROLegsEXP::loop()
 							case 5:
 							{
 								x5l.setValue( x5l.getValue()+toRad(10.0f) );
-								std::cout << x5.evaluate() << std::endl;
+								std::cout << x5l.evaluate() << std::endl;
 							}
 							break;
 						}
