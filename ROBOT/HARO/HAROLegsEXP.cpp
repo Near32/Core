@@ -79,7 +79,7 @@ void HAROLegsEXP::loop()
 		
 		//TODO : re-implement the PE class so that
 		// it would be using this dt value.
-		pe->callback(dt);
+		//pe->callback(dt);
 		
 		//UPDATE SERVOS :
 		for(int i=1;i<=nbrR;i++)
