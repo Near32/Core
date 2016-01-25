@@ -276,7 +276,7 @@ void HAROLegsEXP::constructFrames()
 	finalse3.set( toRad(90.0f), 2,1);
 	tW2L.insert( tW2L.end(), new FrameEXP( x1l,3,finalse3) );
 	servosL.insert( servosL.end(), new ServoEXP(x1l, pinL[idx],3,finalse3, 120) );
-	servosL[servosL.size()-1]->inverted = true;
+	servosL[servosL.size()-1]->inverted = false;
 	x1l.setValue( toRad(-90.0f) );
 	servosL[servosL.size()-1]->setVARVALUE();
 	idx++;
