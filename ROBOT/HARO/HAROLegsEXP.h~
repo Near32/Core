@@ -5,6 +5,10 @@
 #include <vector>
 #include "../PE/PE.h"
 
+#include "ICommand.h"
+
+float toRad(const float& deg);
+
 class HAROLegsEXP
 {
 	private :
@@ -39,7 +43,12 @@ class HAROLegsEXP
 	
 	PE* pe;
 	
+	std::vector<std::unique_ptr<ICommand> > listCommand;
+	
+	
 	public :
+	
+	
 	
 	HAROLegsEXP();
 	~HAROLegsEXP();
@@ -56,6 +65,7 @@ class HAROLegsEXP
 	
 	void stop();
 	
+	void addCommand(const ICommand* command);
 };
 
 #endif

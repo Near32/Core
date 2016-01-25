@@ -67,18 +67,6 @@ void HAROEXP::loop()
                 	}
                 	break;
                 	
-                	case SDLK_Q :
-                	{
-                		harolegs.addCommand( (ICommand*)new ICommandPREVIOUSVAR() );
-                	}
-                	break;
-                	
-                	case SDLK_D :
-                	{
-                		harolegs.addCommand( (ICommand*)new ICommandNEXTVAR() );
-                	}
-                	break;
-                	
                 	default:
                 	{
                 	
