@@ -4,17 +4,26 @@ using namespace std;
 
 //mutex velocityMutex;
 
+#define nbrTraj 2
 
 HAROEXP::HAROEXP()
 {
 	harolegs = new HAROLegsEXP();
 	
+	time = clock();
+	runtime = 0.0f;
+	
 	init();
+	
+	trajectories = new Mat<float>[nbrTraj];
+	
+	generateTrajectories();
 }
 
 HAROEXP::~HAROEXP()
 {
 	delete harolegs;
+	delete trajectories;
 	SDL_Quit();
 }
 
@@ -185,6 +194,51 @@ void HAROEXP::init()
     
 }
 
+
+void HAROEXP::generateVelocities()
+{
+	float deltaT = 1e-2f;
+	
+	float currenttime = clock();
+	float dt = (float)(currenttime-time)/CLOCKS_PER_SEC;
+	time = currenttime;
+	runtime += dt;
+	
+	//index of the current goal of the trajectory :
+	int nbrIdxTraj = trajectories[0].getColumn();
+	int idxTraj = (runtime/deltaT);
+	if(idxTraj > nbrIdxTraj)	idxTraj = nbrIdxTraj;
+	//we want to ensure that we will not go over the length of the trajectories.
+	
+	//goal that we want to follow at the given currenttime :
+	Mat<float> goal[nbrTraj];
+	for(int i=nbrTraj;i--;)	goal[i] = extract( trajectories[i], 1,idxTraj, 3,idxTraj);
+	
+	//current positions :
+	Mat<EXP> r[nbrTraj];
+	for(int i=nbrTraj;i--;)	r[i] = idxTraj2r[i]();
+	
+	//P(ID) Controller on 3D end-effector velocities:
+	float p = 1.0f;
+	Mat<float> v[nbrTraj];
+	for(int i=nbrTraj;i--;)	v[i] =  p*(goal[i]-r[i].evaluate());
+	
+	
+	//
+}
+
+void HAROEXP::generateTrajectories()
+{
+	//initializations :
+	for(int i=nbrTraj;i--;)	trajectories[i] = Mat<float>(0.0f,3,1);	
+	
+	idxTraj2r[0] = //TODO...
+	//...
+	
+	
+	//TODO
+	
+}
 
 
 

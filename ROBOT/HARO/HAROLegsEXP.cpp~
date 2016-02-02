@@ -1,6 +1,6 @@
 #include "HAROLegsEXP.h"
 
-HAROLegsEXP::HAROLegsEXP() : x1r(VAR(0.0)), x2r(VAR(0.0)), x3r(VAR(0.0)), x4r(VAR(0.0)), x5r(VAR(0.0)), ankle2footr(VAR(0.0)), x1l(VAR(0.0)), x2l(VAR(0.0)), x3l(VAR(0.0)), x4l(VAR(0.0)), x5l(VAR(0.0)), ankle2footl(VAR(0.0))
+HAROLegsEXP::HAROLegsEXP() : x1r(VAR(0.0)), x2r(VAR(0.0)), x3r(VAR(0.0)), x4r(VAR(0.0)), x5r(VAR(0.0)), ankle2footr(VAR(0.0)), x1l(VAR(0.0)), x2l(VAR(0.0)), x3l(VAR(0.0)), x4l(VAR(0.0)), x5l(VAR(0.0)), ankle2footl(VAR(0.0)), Tr(Mat<EXP>(4,4)), Tl(Mat<EXP>(4,4)), rbr(Mat<EXP>(4,1)), rbl(Mat<EXP>(4,1)), rrb(Mat<EXP>(4,1)), rlb(Mat<EXP>(4,1)), rarb(Mat<EXP>(4,1)), ralb(Mat<EXP>(4,1))
 {
 	varnumberR = 0;
 	varnumberL = 0;
@@ -34,8 +34,8 @@ void HAROLegsEXP::loop()
 	clock_t timer = clock();
 	float dt;
 	
-	Mat<EXP> Tr( regwM( tW2R[0]->getT() ) );
-	Mat<EXP> Tl( regwM( tW2L[0]->getT() ) );
+	Tr = regwM( tW2R[0]->getT() ) );
+	Tl = regwM( tW2L[0]->getT() ) );
 
 	evaluate( Tr );
 	evaluate( Tr );
@@ -50,7 +50,14 @@ void HAROLegsEXP::loop()
 		//toString( temp); 
 		Tr = product( regwM(Tr), temp );
 		//T = product( T, temp );
+		
+		if(i==3)
+		{
+			rarb = extract(Tr, 4,1, 4,4);
+		}
 	}
+	rrb = extract( Tr, 1,4, 4,4);
+	rbr = ((-1.0f)*Tr)*rrb;
 	
 	evaluate( Tr);
 	std::cout << "THE MULTIPLICATIONS TOOK : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
@@ -65,7 +72,14 @@ void HAROLegsEXP::loop()
 		//toString( temp); 
 		Tl = product( regwM(Tl), temp );
 		//T = product( T, temp );
+		
+		if(i==3)
+		{
+			ralb = extract(Tl, 4,1, 4,4);
+		}
 	}
+	rlb = extract( Tl, 1,4, 4,4);
+	rbl = ((-1.0f)*Tl)*rlb;
 	
 	evaluate( Tl);
 	std::cout << "THE MULTIPLICATIONS TOOK : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
@@ -640,5 +654,38 @@ void HAROLegsEXP::addCommand( ICommand* command)
 {
 	listCommand.insert( listCommand.begin(), std::unique_ptr<ICommand>(command) );
 }
+
+
+Mat<EXP> HAROLegsEXP::getRbassinR()	const
+{
+	return rbr;
+}
+
+Mat<EXP> HAROLegsEXP::getRbassinL()	const
+{
+	return rbl;
+}
+
+Mat<EXP> HAROLegsEXP::getRfootr()	const
+{
+	return rrb;
+}
+
+Mat<EXP> HAROLegsEXP::getRfootl()	const
+{
+	return rlb;
+}
+
+
+Mat<EXP> HAROLegsEXP::getRkneer()	
+{
+	
+}
+
+Mat<EXP> HAROLegsEXP::getRkneel()
+{
+
+}
+
 
 

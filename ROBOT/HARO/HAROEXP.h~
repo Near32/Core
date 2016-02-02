@@ -4,9 +4,11 @@
 #include "HAROLegsEXP.h"
 #include "SDL/SDL.h"
 
+#include <map>
 #include <thread>
 #include <mutex>
 
+#include "ICommand.h"
 
 class HAROEXP
 {
@@ -16,8 +18,12 @@ class HAROEXP
 	//------------
 	SDL_Surface* ecran;
 	
+	Mat<float>* trajectories;
 	
 	public :
+	
+	clock_t time;
+	float runtime;
 	
 	HAROEXP();
 	~HAROEXP();
@@ -25,6 +31,9 @@ class HAROEXP
 	void loop();
 	
 	void init();
+	
+	void generateVelocities();
+	void generateTrajectories();
 	
 };
 

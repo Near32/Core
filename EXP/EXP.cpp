@@ -369,6 +369,115 @@ EXP EXP::operator*(const EXP& exp)
 	return r;
 }
 
+EXP EXP::operator*=(const EXP& exp)
+{
+	if( (this->type == ETFUNC && ((FUNC*)this)->getFType() == FTzero ) || (this->type == ETEXP && this->otype == EOId && this->arg[0]->getType() == ETFUNC && ((FUNC*)(this->arg[0]))->getFType() == FTzero ) || ( exp.getType() == ETFUNC && ((FUNC&)(exp)).getFType() == FTzero) || (exp.getType() == ETEXP && exp.getOType() == EOId && exp.getArg(0)->getType() == ETFUNC && ((FUNC*)(exp.getArg(0)))->getFType() == FTzero ) )
+	{
+		EXP r(EOId);
+		FUNC fzero(FTzero);
+		attach(r, (EXP&)fzero);
+		
+		*this = r;
+		return r;
+	}
+		
+	EXP r(EOProduct);
+	
+	//r.addArg(this);
+	switch(this->type)
+	{
+		case ETEXP :
+		r.addArg( new EXP(*this) );
+		break;
+		
+		case ETFUNC :
+		r.addArg( (EXP*)new FUNC( *((FUNC*)this) ) );
+		break;
+		
+		case ETVAR :
+		r.addArg( (EXP*)new VAR( *((VAR*)this) ) );
+		break;
+	}
+	
+	//r.addArg(&exp);
+	switch(exp.getType())
+	{
+		case ETEXP :
+		r.addArg( new EXP(exp) );
+		break;
+		
+		case ETFUNC :
+		r.addArg( (EXP*)new FUNC( *((FUNC*)&exp) ) );
+		break;
+		
+		case ETVAR :
+		r.addArg( (EXP*)new VAR( *((VAR*)&exp) ) );
+		break;
+	}
+	
+	
+	//return regw(r);
+	*this = r;
+	return r;
+}
+
+EXP EXP::operator*=( const float& value)
+{		
+	EXP r(EOProduct);
+	
+	//r.addArg(this);
+	switch(this->type)
+	{
+		case ETEXP :
+		r.addArg( new EXP(*this) );
+		break;
+		
+		case ETFUNC :
+		r.addArg( (EXP*)new FUNC( *((FUNC*)this) ) );
+		break;
+		
+		case ETVAR :
+		r.addArg( (EXP*)new VAR( *((VAR*)this) ) );
+		break;
+	}
+	
+	FUNC fcst(FTcst, value);
+	attach(r,fcst);	
+	
+	//return regw(r);
+	*this = r;
+	
+	return r;
+}
+
+EXP EXP::operator*( const float& value)
+{		
+	EXP r(EOProduct);
+	
+	//r.addArg(this);
+	switch(this->type)
+	{
+		case ETEXP :
+		r.addArg( new EXP(*this) );
+		break;
+		
+		case ETFUNC :
+		r.addArg( (EXP*)new FUNC( *((FUNC*)this) ) );
+		break;
+		
+		case ETVAR :
+		r.addArg( (EXP*)new VAR( *((VAR*)this) ) );
+		break;
+	}
+	
+	FUNC fcst(FTcst, value);
+	attach(r,fcst);	
+	
+	//return regw(r);
+	return r;
+}
+
+
 EXP EXP::operator+(const EXP& exp)
 {
 	EXP r(EOSum);

@@ -35,9 +35,6 @@ class HAROLegsEXP
 	std::vector<FrameEXP*> tW2R;
 	std::vector<FrameEXP*> tW2L;
 	
-	Mat<float> velocitiesR;
-	Mat<float> velocitiesL;
-	
 	int nbrR;
 	int nbrL;
 	
@@ -47,10 +44,28 @@ class HAROLegsEXP
 	int varnumberR;
 	int varnumberL;
 	
+	Mat<EXP> Tr;
+	Mat<EXP> Tl;
+	Mat<EXP> rbr;
+	Mat<EXP> rbl;
+	Mat<EXP> rrb;
+	Mat<EXP> rlb;
+	Mat<EXP> rarb;
+	Mat<EXP> ralb;
+	
 	
 	public :
 	
+	//------------------------------------------
+	//------------------------------------------
+	//------------------------------------------
 	
+	Mat<float> velocitiesR;
+	Mat<float> velocitiesL;
+	
+	//-----------------------------------------
+	//------------------------------------------
+	//------------------------------------------
 	
 	HAROLegsEXP();
 	~HAROLegsEXP();
@@ -68,6 +83,21 @@ class HAROLegsEXP
 	void stop();
 	
 	void addCommand( ICommand* command);
+	
+	
+	//-----------------------------------------
+	Mat<EXP> getRbassinR()	const;
+	//Rbassin in Rfootr
+	Mat<EXP> getRbassinL()	const;
+	//Rbassin in Rfootl
+	Mat<EXP> getRfootr()	const;
+	//Rfootr in Rbassin
+	Mat<EXP> getRfootl()	const;
+	//Rfootr in Rbassin
+	Mat<EXP> getRkneer()	const;
+	//Rkneer in Rbassin
+	Mat<EXP> getRkneel()	const;
+	//Rkneer in Rbassin
 };
 
 #endif

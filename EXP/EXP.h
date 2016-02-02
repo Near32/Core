@@ -61,6 +61,9 @@ class EXP
 	
 	EXP operator=(const EXP& exp);
 	EXP operator*( const EXP& exp);
+	EXP operator*=( const EXP& exp);
+	EXP operator*=( const float& value);
+	EXP operator*( const float& value);
 	EXP operator+( const EXP& exp);
 	EXP operator+=(const EXP& exp);
 	EXP operator-( const EXP& exp);
