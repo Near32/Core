@@ -1,5 +1,7 @@
 #include "HAROLegsEXP.h"
 
+#define moveRAD 2.5f
+
 HAROLegsEXP::HAROLegsEXP() : x1r(VAR(0.0)), x2r(VAR(0.0)), x3r(VAR(0.0)), x4r(VAR(0.0)), x5r(VAR(0.0)), ankle2footr(VAR(0.0)), x1l(VAR(0.0)), x2l(VAR(0.0)), x3l(VAR(0.0)), x4l(VAR(0.0)), x5l(VAR(0.0)), ankle2footl(VAR(0.0))
 {
 	varnumberR = 0;
@@ -155,35 +157,35 @@ void HAROLegsEXP::loop()
 						{
 							case 1:
 							{
-								x1r.setValue( x1r.getValue()+toRad(10.0f) );
+								x1r.setValue( x1r.getValue()+toRad(moveRAD) );
 								std::cout << x1r.evaluate() << std::endl;
 							}
 							break;
 						
 							case 2:
 							{
-								x2r.setValue( x2r.getValue()+toRad(10.0f) );
+								x2r.setValue( x2r.getValue()+toRad(moveRAD) );
 								std::cout << x2r.evaluate() << std::endl;
 							}
 							break;
 						
 							case 3:
 							{
-								x3r.setValue( x3r.getValue()+toRad(10.0f) );
+								x3r.setValue( x3r.getValue()+toRad(moveRAD) );
 								std::cout << x3r.evaluate() << std::endl;
 							}
 							break;
 						
 							case 4:
 							{
-								x4r.setValue( x4r.getValue()+toRad(10.0f) );
+								x4r.setValue( x4r.getValue()+toRad(moveRAD) );
 								std::cout << x4r.evaluate() << std::endl;
 							}
 							break;
 						
 							case 5:
 							{
-								x5r.setValue( x5r.getValue()+toRad(10.0f) );
+								x5r.setValue( x5r.getValue()+toRad(moveRAD) );
 								std::cout << x5r.evaluate() << std::endl;
 							}
 							break;
@@ -197,35 +199,35 @@ void HAROLegsEXP::loop()
 						{
 							case 1:
 							{
-								x1l.setValue( x1l.getValue()+toRad(10.0f) );
+								x1l.setValue( x1l.getValue()+toRad(moveRAD) );
 								std::cout << x1l.evaluate() << std::endl;
 							}
 							break;
 						
 							case 2:
 							{
-								x2l.setValue( x2l.getValue()+toRad(10.0f) );
+								x2l.setValue( x2l.getValue()+toRad(moveRAD) );
 								std::cout << x2l.evaluate() << std::endl;
 							}
 							break;
 						
 							case 3:
 							{
-								x3l.setValue( x3l.getValue()+toRad(10.0f) );
+								x3l.setValue( x3l.getValue()+toRad(moveRAD) );
 								std::cout << x3l.evaluate() << std::endl;
 							}
 							break;
 						
 							case 4:
 							{
-								x4l.setValue( x4l.getValue()+toRad(10.0f) );
+								x4l.setValue( x4l.getValue()+toRad(moveRAD) );
 								std::cout << x4l.evaluate() << std::endl;
 							}
 							break;
 						
 							case 5:
 							{
-								x5l.setValue( x5l.getValue()+toRad(10.0f) );
+								x5l.setValue( x5l.getValue()+toRad(moveRAD) );
 								std::cout << x5l.evaluate() << std::endl;
 							}
 							break;
@@ -245,35 +247,35 @@ void HAROLegsEXP::loop()
 						{
 							case 1:
 							{
-								x1r.setValue( x1r.getValue()-toRad(10.0f) );
+								x1r.setValue( x1r.getValue()-toRad(moveRAD) );
 								std::cout << x1r.evaluate() << std::endl;
 							}
 							break;
 						
 							case 2:
 							{
-								x2r.setValue( x2r.getValue()-toRad(10.0f) );
+								x2r.setValue( x2r.getValue()-toRad(moveRAD) );
 								std::cout << x2r.evaluate() << std::endl;
 							}
 							break;
 						
 							case 3:
 							{
-								x3r.setValue( x3r.getValue()-toRad(10.0f) );
+								x3r.setValue( x3r.getValue()-toRad(moveRAD) );
 								std::cout << x3r.evaluate() << std::endl;
 							}
 							break;
 						
 							case 4:
 							{
-								x4r.setValue( x4r.getValue()-toRad(10.0f) );
+								x4r.setValue( x4r.getValue()-toRad(moveRAD) );
 								std::cout << x4r.evaluate() << std::endl;
 							}
 							break;
 						
 							case 5:
 							{
-								x5r.setValue( x5r.getValue()-toRad(10.0f) );
+								x5r.setValue( x5r.getValue()-toRad(moveRAD) );
 								std::cout << x5r.evaluate() << std::endl;
 							}
 							break;
@@ -287,35 +289,35 @@ void HAROLegsEXP::loop()
 						{
 							case 1:
 							{
-								x1l.setValue( x1l.getValue()-toRad(10.0f) );
+								x1l.setValue( x1l.getValue()-toRad(moveRAD) );
 								std::cout << x1l.evaluate() << std::endl;
 							}
 							break;
 						
 							case 2:
 							{
-								x2l.setValue( x2l.getValue()-toRad(10.0f) );
+								x2l.setValue( x2l.getValue()-toRad(moveRAD) );
 								std::cout << x2l.evaluate() << std::endl;
 							}
 							break;
 						
 							case 3:
 							{
-								x3l.setValue( x3l.getValue()-toRad(10.0f) );
+								x3l.setValue( x3l.getValue()-toRad(moveRAD) );
 								std::cout << x3l.evaluate() << std::endl;
 							}
 							break;
 						
 							case 4:
 							{
-								x4l.setValue( x4l.getValue()-toRad(10.0f) );
+								x4l.setValue( x4l.getValue()-toRad(moveRAD) );
 								std::cout << x4l.evaluate() << std::endl;
 							}
 							break;
 						
 							case 5:
 							{
-								x5l.setValue( x5l.getValue()-toRad(10.0f) );
+								x5l.setValue( x5l.getValue()-toRad(moveRAD) );
 								std::cout << x5l.evaluate() << std::endl;
 							}
 							break;
@@ -341,7 +343,7 @@ void HAROLegsEXP::constructFrames()
 {
 	Mat<float> finalse3((float)0,6,1);
 	
-	int pinL[5] = {21,22,23,24,25};
+	int pinL[5] = {25,24,23,22,21};
 	int pinR[5] = {5,26,27,28,29};
 	int idx=0;
 	
@@ -383,7 +385,7 @@ void HAROLegsEXP::constructFrames()
 	tW2R.insert( tW2R.end(), new FrameEXP( x1r,3,finalse3) );
 	servosR.insert( servosR.end(), new ServoEXP(x1r, pinR[idx],3,finalse3,120) );
 	servosR[servosR.size()-1]->inverted = true;
-	x1r.setValue( toRad(90.0f) );
+	x1r.setValue( toRad(20.0f) );
 	servosR[servosR.size()-1]->setVARVALUE();
 	
 	//left hip : nuz, 80 at least offset
@@ -394,7 +396,7 @@ void HAROLegsEXP::constructFrames()
 	tW2L.insert( tW2L.end(), new FrameEXP( x1l,3,finalse3) );
 	servosL.insert( servosL.end(), new ServoEXP(x1l, pinL[idx],3,finalse3, 120) );
 	servosL[servosL.size()-1]->inverted = true;
-	x1l.setValue( toRad(-90.0f) );
+	x1l.setValue( toRad(-20.0f) );
 	servosL[servosL.size()-1]->setVARVALUE();
 	idx++;
 	
@@ -419,7 +421,7 @@ void HAROLegsEXP::constructFrames()
 	tW2R.insert( tW2R.end(), new FrameEXP( x2r,3,finalse3) );
 	servosR.insert( servosR.end(), new ServoEXP( x2r, pinR[idx],3,finalse3,120) );
 	servosR[servosR.size()-1]->inverted = true;
-	x2r.setValue( toRad(0) );
+	x2r.setValue( toRad(10) );
 	servosR[servosR.size()-1]->setVARVALUE();
 	
 	//left hip low  : nuz, offset : half
@@ -430,7 +432,7 @@ void HAROLegsEXP::constructFrames()
 	tW2L.insert( tW2L.end(), new FrameEXP( x2l,3,finalse3) );
 	servosL.insert( servosL.end(), new ServoEXP( x2l, pinL[idx],3,finalse3,120) );
 	servosL[servosL.size()-1]->inverted = true;
-	x2l.setValue( toRad(0) );
+	x2l.setValue( toRad(-10) );
 	servosL[servosL.size()-1]->setVARVALUE();
 	idx++;
 	
@@ -521,7 +523,7 @@ void HAROLegsEXP::constructFrames()
 	finalse3.set( toRad(90.0f), 1,1);
 	tW2L.insert( tW2L.end(), new FrameEXP(x5l,3,finalse3) );
 	servosL.insert( servosL.end(), new ServoEXP( x5l, pinL[idx],3,finalse3,120) );
-	servosR[servosR.size()-1]->inverted = false;
+	servosR[servosR.size()-1]->inverted = true;
 	x5l.setValue( toRad(0) );
 	servosL[servosR.size()-1]->setVARVALUE();
 	idx++;
