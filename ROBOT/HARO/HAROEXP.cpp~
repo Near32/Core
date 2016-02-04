@@ -292,7 +292,7 @@ void HAROEXP::generateTrajectories()
 	//final desired position :
 	for(int i=nbrTraj;i--;)	trajectories[i] = operatorL( trajectories[i], EXP2floatM( (  harolegs->*(idxTraj2r[i]) )() )  + add);
 	
-	
+	std::cout << " OKAY." << std::endl;
 	//TODO
 	
 }
