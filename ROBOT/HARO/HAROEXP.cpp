@@ -270,7 +270,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 		dQ = operatorC( dQ, Mat<float>(0.0f, 10-dQ.getLine()+1, 1) );
 	}
 	
-	harolegs->setDq( dq );
+	harolegs->setDq( dQ );
 	
 }
 
