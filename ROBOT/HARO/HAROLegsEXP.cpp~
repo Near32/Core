@@ -46,8 +46,8 @@ void HAROLegsEXP::loop()
 	clock_t timer = clock();
 	float dt;
 	
-	Tr = regwM( tW2R[0]->getT() ) );
-	Tl = regwM( tW2L[0]->getT() ) );
+	Tr = regwM( tW2R[0]->getT() );
+	Tl = regwM( tW2L[0]->getT() );
 
 	evaluate( Tr );
 	evaluate( Tr );
@@ -69,7 +69,7 @@ void HAROLegsEXP::loop()
 		}
 	}
 	rrb = extract( Tr, 1,4, 4,4);
-	rbr = ((-1.0f)*Tr)*rrb;
+	rbr = ( FUNC(FTmone) *Tr)*rrb;
 	
 	evaluate( Tr);
 	std::cout << "THE MULTIPLICATIONS TOOK : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
@@ -399,21 +399,21 @@ void HAROLegsEXP::setDq( const Mat<float>& dq)
 	
 			case 3:
 			{
-				x3r.setValue( x3r.getValue()+toRad(dq.get(5,1)) );
+				x3r.setValue( x3r.getValue()+toRad(dq.get(3,1)) );
 				//std::cout << x3r.evaluate() << std::endl;
 			}
 			break;
 	
 			case 4:
 			{
-				x4r.setValue( x4r.getValue()+toRad(dq.get(7,1)) );
+				x4r.setValue( x4r.getValue()+toRad(dq.get(4,1)) );
 				//std::cout << x4r.evaluate() << std::endl;
 			}
 			break;
 	
 			case 5:
 			{
-				x5r.setValue( x5r.getValue()+toRad(dq.get(9,1)) );
+				x5r.setValue( x5r.getValue()+toRad(dq.get(5,1)) );
 				//std::cout << x5r.evaluate() << std::endl;
 			}
 			break;
@@ -428,28 +428,28 @@ void HAROLegsEXP::setDq( const Mat<float>& dq)
 		{
 			case 1:
 			{
-				x1l.setValue( x1l.getValue()+toRad(dq.get(2,1)) );
+				x1l.setValue( x1l.getValue()+toRad(dq.get(6,1)) );
 				//std::cout << x1l.evaluate() << std::endl;
 			}
 			break;
 	
 			case 2:
 			{
-				x2l.setValue( x2l.getValue()+toRad(dq.get(4,1)) );
+				x2l.setValue( x2l.getValue()+toRad(dq.get(7,1)) );
 				//std::cout << x2l.evaluate() << std::endl;
 			}
 			break;
 	
 			case 3:
 			{
-				x3l.setValue( x3l.getValue()+toRad(dq.get(6,1)) );
+				x3l.setValue( x3l.getValue()+toRad(dq.get(8,1)) );
 				//std::cout << x3l.evaluate() << std::endl;
 			}
 			break;
 	
 			case 4:
 			{
-				x4l.setValue( x4l.getValue()+toRad(dq.get(8,1)) );
+				x4l.setValue( x4l.getValue()+toRad(dq.get(9,1)) );
 				//std::cout << x4l.evaluate() << std::endl;
 			}
 			break;
@@ -817,9 +817,32 @@ Mat<EXP> HAROLegsEXP::getRkneel()	const
 	return ralb;
 }
 
-Mat<EXP> generateJacobian()	const
+Mat<EXP> HAROLegsEXP::generateJacobian(const Mat<EXP>& v)	const
 {
-
+	Mat<EXP> dvdRX1( regwM( derivateV( v, x1r) ) );
+	Mat<EXP> dvdRX2( regwM( derivateV( v, x2r) ) );
+	Mat<EXP> dvdRX3( regwM( derivateV( v, x3r) ) );
+	Mat<EXP> dvdRX4( regwM( derivateV( v, x4r) ) );
+	Mat<EXP> dvdRX5( regwM( derivateV( v, x5r) ) );
+	
+	Mat<EXP> dvdLX1( regwM( derivateV( v, x1l) ) );
+	Mat<EXP> dvdLX2( regwM( derivateV( v, x2l) ) );
+	Mat<EXP> dvdLX3( regwM( derivateV( v, x3l) ) );
+	Mat<EXP> dvdLX4( regwM( derivateV( v, x4l) ) );
+	Mat<EXP> dvdLX5( regwM( derivateV( v, x5l) ) );
+	
+	Mat<EXP> dvdQ( operatorL( dvdRX1, dvdRX2) );
+	dvdQ = operatorL( dvdQ, dvdRX3);
+	dvdQ = operatorL( dvdQ, dvdRX4);
+	dvdQ = operatorL( dvdQ, dvdRX5);
+	
+	dvdQ = operatorL( dvdQ, dvdLX1);
+	dvdQ = operatorL( dvdQ, dvdLX2);
+	dvdQ = operatorL( dvdQ, dvdLX3);
+	dvdQ = operatorL( dvdQ, dvdLX4);
+	dvdQ = operatorL( dvdQ, dvdLX5);
+	
+	return dvdQ;
 }
 
 

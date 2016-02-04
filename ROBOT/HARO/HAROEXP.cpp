@@ -240,14 +240,36 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	//JACOBIANS & INVERSION :
 	std::vector<Mat<float> > J;
 	for(int i=nbrTraj;i--;)	J.insert( J.begin(), EXP2floatM( harolegs->generateJacobian( r[i] ) ) );
+	//TODO : adjust to the trajs... :
+	J[0] = extract( J[0], 1,1, 3,5);
+	//J[1] = extract( J[1], 1,6, 3,10);
+	
 	std::vector<Mat<float> > invJ;
-	for(int i=nbrTraj;i--;)	invJ.insert( invJ.begin(), invGJ( J[i] ) );
+	for(int i=nbrTraj;i--;)
+	{
+		invJ.insert( invJ.begin(), invGJ( transpose(J[i])*J[i] ) );
+		invJ[0].afficher();
+	}
 	
 	//COMPUTATION OF DQ :
 	std::vector<Mat<float> > dq;
-	for(int i=nbrTraj;i--;)	dq.insert( dq.begin(), invJ[i]*dx[i] );
+	for(int i=nbrTraj;i--;)
+	{
+		dq.insert( dq.begin(), invJ[i] * ( transpose(J[i])*dx[i] ) );
+		dq[0].afficher();
+	}
 	
 	//PUSHING :
+	//TODO : this function assume that the dq are for the all the variables beginning by the ones of the right leg...
+	Mat<float> dQ( dq[0] );
+	//TODO change this : only works if we have two traj, one for each legs...
+	for(int i=nbrTraj;i--;)	dQ = operatorC( dQ, dq[i] );
+	
+	if( dQ.getLine() < 10)
+	{
+		dQ = operatorC( dQ, Mat<float>(0.0f, 10-dQ.getLine()+1, 1) );
+	}
+	
 	this->setDq( dq );
 	
 }
