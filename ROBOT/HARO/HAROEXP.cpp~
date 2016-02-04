@@ -124,9 +124,15 @@ void HAROEXP::loop()
                 	}
                 	break;
                 	
-                	case SDLK_t :
+                	case SDLK_v :
                 	{
                 		this->generateVelocitiesANDPUSH();
+                	}
+                	break;
+                	
+                	case SDLK_t:
+                	{
+                		this->generateTrajectories();
                 	}
                 	break;
                 	
