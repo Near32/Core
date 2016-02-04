@@ -225,12 +225,12 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	//we want to ensure that we will not go over the length of the trajectories.
 	
 	//goal that we want to follow at the given currenttime :
-	Mat<float> goal[nbrTraj];
-	for(int i=nbrTraj;i--;)	goal[i] = extract( trajectories[i], 1,idxTraj, 3,idxTraj);
+	std::vector<Mat<float> > goal;
+	for(int i=nbrTraj;i--;)	goal.insert( goal.begin(), extract( trajectories[i], 1,idxTraj, 3,idxTraj) );
 	
 	//current positions :
-	Mat<EXP> r[nbrTraj];
-	for(int i=nbrTraj;i--;)	r[i] = harolegs->( * (idxTraj2r[i]) ) ();
+	std::vector<Mat<EXP> > r;
+	for(int i=nbrTraj;i--;)	r.insert( r.begin(), harolegs->*(idxTraj2r[i]) () );
 	
 	//P(ID) Controller on 3D end-effector velocities:
 	float p = 1.0f;
