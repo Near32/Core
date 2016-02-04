@@ -10,6 +10,8 @@
 
 #include "ICommand.h"
 
+typedef Mat<EXP> (*Function)(void);
+
 class HAROEXP
 {
 	private :
@@ -19,6 +21,8 @@ class HAROEXP
 	SDL_Surface* ecran;
 	
 	Mat<float>* trajectories;
+	std::map<int,HAROLegsEXP::Function> idxTraj2r;
+	
 	
 	public :
 	

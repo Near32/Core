@@ -7,6 +7,7 @@
 
 #include "ICommand.h"
 #include <memory>
+#include <mutex>
 
 
 class HAROLegsEXP
@@ -78,7 +79,7 @@ class HAROLegsEXP
 	
 	Mat<EXP> getSE3_one2next( int numero, bool right);
 	Mat<EXP> getW2FINAL(bool right);
-	
+	void setDq( const Mat<float>& dq);
 	
 	void stop();
 	
@@ -98,6 +99,8 @@ class HAROLegsEXP
 	//Rkneer in Rbassin
 	Mat<EXP> getRkneel()	const;
 	//Rkneer in Rbassin
+	
+	Mat<EXP> generateJacobian()	const;
 };
 
 #endif

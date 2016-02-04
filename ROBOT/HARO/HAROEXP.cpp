@@ -2,9 +2,9 @@
 
 using namespace std;
 
-//mutex velocityMutex;
+mutex mutexRES;
 
-#define nbrTraj 2
+#define nbrTraj 1
 
 HAROEXP::HAROEXP()
 {
@@ -37,10 +37,15 @@ void HAROEXP::loop()
     Uint32 current_time,ellapsed_time;
     Uint32 start_time;
     
+    this->generateTrajectories();
+    
     bool continuer = true;
     while(continuer)
     {
     	start_time = SDL_GetTicks();
+		
+		
+		
 		
 		//traitement/récupération des events.
         while (SDL_PollEvent(&event))
@@ -120,6 +125,12 @@ void HAROEXP::loop()
                 	}
                 	break;
                 	
+                	case SDLK_t :
+                	{
+                		this->generateVelocitiesANDPUSH();
+                	}
+                	break;
+                	
                 	default:
                 	{
                 	
@@ -195,19 +206,22 @@ void HAROEXP::init()
 }
 
 
-void HAROEXP::generateVelocities()
+void HAROEXP::generateVelocitiesANDPUSH()
 {
-	float deltaT = 1e-2f;
+	float deltaT = 1e0f;
 	
-	float currenttime = clock();
-	float dt = (float)(currenttime-time)/CLOCKS_PER_SEC;
-	time = currenttime;
+	//float currenttime = clock();
+	//float dt = (float)(currenttime-time)/CLOCKS_PER_SEC;
+	//time = currenttime;
+	float dt = 1e-1f;
+	//TODO : handle it without debugging...
 	runtime += dt;
 	
 	//index of the current goal of the trajectory :
 	int nbrIdxTraj = trajectories[0].getColumn();
 	int idxTraj = (runtime/deltaT);
-	if(idxTraj > nbrIdxTraj)	idxTraj = nbrIdxTraj;
+	if(idxTraj > nbrIdxTraj)	
+		idxTraj = nbrIdxTraj;
 	//we want to ensure that we will not go over the length of the trajectories.
 	
 	//goal that we want to follow at the given currenttime :
@@ -216,24 +230,44 @@ void HAROEXP::generateVelocities()
 	
 	//current positions :
 	Mat<EXP> r[nbrTraj];
-	for(int i=nbrTraj;i--;)	r[i] = idxTraj2r[i]();
+	for(int i=nbrTraj;i--;)	r[i] = ( * (idxTraj2r[i]) ) (harolegs);
 	
 	//P(ID) Controller on 3D end-effector velocities:
 	float p = 1.0f;
-	Mat<float> v[nbrTraj];
-	for(int i=nbrTraj;i--;)	v[i] =  p*(goal[i]-r[i].evaluate());
+	std::vector<Mat<float> >  dx;
+	for(int i=nbrTraj;i--;)	dx.insert( dx.begin(), (p*dt)*(goal[i]- EXP2floatM(r[i])) );
 	
+	//JACOBIANS & INVERSION :
+	std::vector<Mat<float> > J;
+	for(int i=nbrTraj;i--;)	J.insert( J.begin(), EXP2floatM( harolegs->generateJacobian( r[i] ) ) );
+	std::vector<Mat<float> > invJ;
+	for(int i=nbrTraj;i--;)	invJ.insert( invJ.begin(), invGJ( J[i] ) );
 	
-	//
+	//COMPUTATION OF DQ :
+	std::vector<Mat<float> > dq;
+	for(int i=nbrTraj;i--;)	dq.insert( dq.begin(), invJ[i]*dx[i] );
+	
+	//PUSHING :
+	this->setDq( dq );
+	
 }
 
 void HAROEXP::generateTrajectories()
 {
-	//initializations :
-	for(int i=nbrTraj;i--;)	trajectories[i] = Mat<float>(0.0f,3,1);	
 	
-	idxTraj2r[0] = //TODO...
-	//...
+	idxTraj2r[0] = &HAROLegsEXP::getRkneer;
+	idxTraj2r[1] = &HAROLegsEXP::getLkneer;
+	
+	//initializations :
+	for(int i=nbrTraj;i--;)	trajectories[i] = EXP2floatM( ( * (idxTraj2r[i]) ) (harolegs) );
+	//on the current position of the robot...
+	
+	Mat<float> add(0.0f,3,1);
+	add.set( 5e-2f, 1,1);
+	//5 centimeters on the X forward axis.
+	
+	//final desired position :
+	for(int i=nbrTraj;i--;)	trajectories[i] = operatorL( trajectories[i], EXP2floatM( ( * (idxTraj2r[i]) ) (harolegs) )  + add);
 	
 	
 	//TODO

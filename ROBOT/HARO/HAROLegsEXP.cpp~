@@ -1,12 +1,18 @@
 #include "HAROLegsEXP.h"
 
-<<<<<<< HEAD
+/*<<<<<<< HEAD
 HAROLegsEXP::HAROLegsEXP() : x1r(VAR(0.0)), x2r(VAR(0.0)), x3r(VAR(0.0)), x4r(VAR(0.0)), x5r(VAR(0.0)), ankle2footr(VAR(0.0)), x1l(VAR(0.0)), x2l(VAR(0.0)), x3l(VAR(0.0)), x4l(VAR(0.0)), x5l(VAR(0.0)), ankle2footl(VAR(0.0)), Tr(Mat<EXP>(4,4)), Tl(Mat<EXP>(4,4)), rbr(Mat<EXP>(4,1)), rbl(Mat<EXP>(4,1)), rrb(Mat<EXP>(4,1)), rlb(Mat<EXP>(4,1)), rarb(Mat<EXP>(4,1)), ralb(Mat<EXP>(4,1))
 =======
 #define moveRAD 2.5f
 
 HAROLegsEXP::HAROLegsEXP() : x1r(VAR(0.0)), x2r(VAR(0.0)), x3r(VAR(0.0)), x4r(VAR(0.0)), x5r(VAR(0.0)), ankle2footr(VAR(0.0)), x1l(VAR(0.0)), x2l(VAR(0.0)), x3l(VAR(0.0)), x4l(VAR(0.0)), x5l(VAR(0.0)), ankle2footl(VAR(0.0))
->>>>>>> 18d222c75bb91562084fb2b8f5c9487498c5ebb5
+>>>>>>> 18d222c75bb91562084fb2b8f5c9487498c5ebb5*/
+#define moveRAD 2.5f
+
+extern mutex mutexRES;
+
+
+HAROLegsEXP::HAROLegsEXP() : x1r(VAR(0.0)), x2r(VAR(0.0)), x3r(VAR(0.0)), x4r(VAR(0.0)), x5r(VAR(0.0)), ankle2footr(VAR(0.0)), x1l(VAR(0.0)), x2l(VAR(0.0)), x3l(VAR(0.0)), x4l(VAR(0.0)), x5l(VAR(0.0)), ankle2footl(VAR(0.0)), Tr(Mat<EXP>(4,4)), Tl(Mat<EXP>(4,4)), rbr(Mat<EXP>(4,1)), rbl(Mat<EXP>(4,1)), rrb(Mat<EXP>(4,1)), rlb(Mat<EXP>(4,1)), rarb(Mat<EXP>(4,1)), ralb(Mat<EXP>(4,1))
 {
 	varnumberR = 0;
 	varnumberL = 0;
@@ -103,12 +109,14 @@ void HAROLegsEXP::loop()
 		//pe->callback(dt);
 		
 		//UPDATE SERVOS :
-		for(int i=1;i<=nbrR;i++)
+		/*for(int i=1;i<=nbrR;i++)
 		{
+			mutexRES.lock();
 			if(velocitiesR.get(i,1) != 0.0f)
 			{
 				servosR[i]->set( servosR[i]->get() + dt*velocitiesR.get(i,1) );
 			}
+			mutexRES.unlock();
 		}
 		for(int i=1;i<=nbrL;i++)
 		{
@@ -116,13 +124,14 @@ void HAROLegsEXP::loop()
 			{
 				servosL[i]->set( servosL[i]->get() + dt*velocitiesL.get(i,1) );
 			}
-		}
+		}*/
 		//----------------------------------------
 		
 		//----------------------------------------
 		//gestion des commandes :
 		if( listCommand.size() >= 1)
 		{
+			mutexRES.lock();
 			switch( listCommand[0]->type)
 			{
 				default :
@@ -344,14 +353,129 @@ void HAROLegsEXP::loop()
 				}
 				break;
 			}
+			mutexRES.unlock();
 			
 			//deletion :			
 			listCommand.erase( listCommand.begin()+0);
 			
-			for(int i = servosR.size();i--;)	servosR[i]->setVARVALUE();
-			for(int i = servosL.size();i--;)	servosL[i]->setVARVALUE();
+			for(int i = servosR.size();i--;)
+			{
+				mutexRES.lock();
+				servosR[i]->setVARVALUE();
+				mutexRES.unlock();
+			}
+	
+			for(int i = servosL.size();i--;)
+			{
+				mutexRES.lock();
+				servosL[i]->setVARVALUE();
+				mutexRES.unlock();
+			}
 		}
 		
+	}
+}
+
+void HAROLegsEXP::setDq( const Mat<float>& dq)
+{
+	for(int i=1;i<=5;i++)
+	{
+		mutexRES.lock();
+		switch(i)
+		{
+			case 1:
+			{
+				x1r.setValue( x1r.getValue()+toRad(dq.get(1,1)) );
+				//std::cout << x1r.evaluate() << std::endl;
+			}
+			break;
+	
+			case 2:
+			{
+				x2r.setValue( x2r.getValue()+toRad(dq.get(3,1)) );
+				//std::cout << x2r.evaluate() << std::endl;
+			}
+			break;
+	
+			case 3:
+			{
+				x3r.setValue( x3r.getValue()+toRad(dq.get(5,1)) );
+				//std::cout << x3r.evaluate() << std::endl;
+			}
+			break;
+	
+			case 4:
+			{
+				x4r.setValue( x4r.getValue()+toRad(dq.get(7,1)) );
+				//std::cout << x4r.evaluate() << std::endl;
+			}
+			break;
+	
+			case 5:
+			{
+				x5r.setValue( x5r.getValue()+toRad(dq.get(9,1)) );
+				//std::cout << x5r.evaluate() << std::endl;
+			}
+			break;
+		}
+		mutexRES.unlock();
+	}
+	
+	for(int i=1;i<=5;i++)
+	{
+		mutexRES.lock();
+		switch(i)
+		{
+			case 1:
+			{
+				x1l.setValue( x1l.getValue()+toRad(dq.get(2,1)) );
+				//std::cout << x1l.evaluate() << std::endl;
+			}
+			break;
+	
+			case 2:
+			{
+				x2l.setValue( x2l.getValue()+toRad(dq.get(4,1)) );
+				//std::cout << x2l.evaluate() << std::endl;
+			}
+			break;
+	
+			case 3:
+			{
+				x3l.setValue( x3l.getValue()+toRad(dq.get(6,1)) );
+				//std::cout << x3l.evaluate() << std::endl;
+			}
+			break;
+	
+			case 4:
+			{
+				x4l.setValue( x4l.getValue()+toRad(dq.get(8,1)) );
+				//std::cout << x4l.evaluate() << std::endl;
+			}
+			break;
+	
+			case 5:
+			{
+				x5l.setValue( x5l.getValue()+toRad(dq.get(10,1)) );
+				//std::cout << x5l.evaluate() << std::endl;
+			}
+			break;
+		}
+		mutexRES.unlock();
+	}
+	
+	for(int i = servosR.size();i--;)
+	{
+		mutexRES.lock();
+		servosR[i]->setVARVALUE();
+		mutexRES.unlock();
+	}
+	
+	for(int i = servosL.size();i--;)
+	{
+		mutexRES.lock();
+		servosL[i]->setVARVALUE();
+		mutexRES.unlock();
 	}
 }
 	
@@ -691,6 +815,11 @@ Mat<EXP> HAROLegsEXP::getRkneer()	const
 Mat<EXP> HAROLegsEXP::getRkneel()	const
 {
 	return ralb;
+}
+
+Mat<EXP> generateJacobian()	const
+{
+
 }
 
 

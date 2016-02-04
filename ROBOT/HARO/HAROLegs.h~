@@ -11,8 +11,8 @@ class HAROLegs
 	
 	bool continuer;
 	
-	std::vector<Servo> servosR;
-	std::vector<Servo> servosL;
+	std::vector<Servo*> servosR;
+	std::vector<Servo*> servosL;
 	std::vector<Mat<float> > tW2R;
 	std::vector<Mat<float> > tW2L;
 	
@@ -37,6 +37,7 @@ class HAROLegs
 	
 	Mat<float> getSE3_one2next( int numero, bool right);
 	Mat<float> getW2FINAL(bool right);
+	void setDx( std::vector<Mat<float> > dx);
 	
 	
 	void stop();
