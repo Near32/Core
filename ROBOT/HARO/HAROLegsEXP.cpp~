@@ -69,7 +69,17 @@ void HAROLegsEXP::loop()
 		}
 	}
 	rrb = extract( Tr, 1,4, 4,4);
-	rbr = ( FUNC(FTmone) *Tr)*rrb;
+	FUNC fmone( FTmone);
+	Mat<EXP> mT(Tr);
+	for(int i=1;i<=mT.getLine();i++)
+	{
+		for(int j=1;j<=mT.getColumn();j++)
+		{
+			mt.set( fmone*Tr.get(i,j), i,j);
+		}
+	}
+	
+	rbr = ( mT) *rrb;
 	
 	evaluate( Tr);
 	std::cout << "THE MULTIPLICATIONS TOOK : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
@@ -392,7 +402,7 @@ void HAROLegsEXP::setDq( const Mat<float>& dq)
 	
 			case 2:
 			{
-				x2r.setValue( x2r.getValue()+toRad(dq.get(3,1)) );
+				x2r.setValue( x2r.getValue()+toRad(dq.get(2,1)) );
 				//std::cout << x2r.evaluate() << std::endl;
 			}
 			break;

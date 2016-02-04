@@ -278,7 +278,7 @@ void HAROEXP::generateTrajectories()
 {
 	
 	idxTraj2r[0] = &HAROLegsEXP::getRkneer;
-	idxTraj2r[1] = &HAROLegsEXP::getLkneer;
+	idxTraj2r[1] = &HAROLegsEXP::getRkneel;
 	
 	//initializations :
 	for(int i=nbrTraj;i--;)	trajectories[i] = EXP2floatM( ( * (idxTraj2r[i]) ) (harolegs) );

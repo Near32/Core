@@ -100,7 +100,7 @@ class HAROLegsEXP
 	Mat<EXP> getRkneel()	const;
 	//Rkneer in Rbassin
 	
-	Mat<EXP> generateJacobian(const Mat<EXP>& v)	const
+	Mat<EXP> generateJacobian(const Mat<EXP>& v)	const;
 };
 
 #endif
