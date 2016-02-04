@@ -281,14 +281,18 @@ void HAROEXP::generateTrajectories()
 	idxTraj2r[0] = &HAROLegsEXP::getRkneer;
 	//idxTraj2r[1] = &HAROLegsEXP::getRkneel;
 	
+	std::cout << " ... " ;
 	//initializations :
 	for(int i=nbrTraj;i--;)	trajectories[i] = EXP2floatM( ( harolegs->*(idxTraj2r[i]) )() );
 	//on the current position of the robot...
+	
+	std::cout << " ... " ;
 	
 	Mat<float> add(0.0f,3,1);
 	add.set( 5e-2f, 1,1);
 	//5 centimeters on the X forward axis.
 	
+	std::cout << " ... " ;
 	//final desired position :
 	for(int i=nbrTraj;i--;)	trajectories[i] = operatorL( trajectories[i], EXP2floatM( (  harolegs->*(idxTraj2r[i]) )() )  + add);
 	
