@@ -37,7 +37,6 @@ void HAROEXP::loop()
     Uint32 current_time,ellapsed_time;
     Uint32 start_time;
     
-    this->generateTrajectories();
     
     bool continuer = true;
     while(continuer)
@@ -125,9 +124,15 @@ void HAROEXP::loop()
                 	}
                 	break;
                 	
-                	case SDLK_t :
+                	case SDLK_v :
                 	{
                 		this->generateVelocitiesANDPUSH();
+                	}
+                	break;
+                	
+                	case SDLK_t:
+                	{
+                		this->generateTrajectories();
                 	}
                 	break;
                 	
