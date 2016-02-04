@@ -276,6 +276,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 
 void HAROEXP::generateTrajectories()
 {
+	std::cout << "GENERATION OF TRAJECTORIES : ... " ;
 	
 	idxTraj2r[0] = &HAROLegsEXP::getRkneer;
 	idxTraj2r[1] = &HAROLegsEXP::getRkneel;
@@ -291,7 +292,7 @@ void HAROEXP::generateTrajectories()
 	//final desired position :
 	for(int i=nbrTraj;i--;)	trajectories[i] = operatorL( trajectories[i], EXP2floatM( (  harolegs->*(idxTraj2r[i]) )() )  + add);
 	
-	
+	std::cout << " OKAY." << std::endl;
 	//TODO
 	
 }

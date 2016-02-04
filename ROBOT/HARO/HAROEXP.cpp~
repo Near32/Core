@@ -270,12 +270,13 @@ void HAROEXP::generateVelocitiesANDPUSH()
 		dQ = operatorC( dQ, Mat<float>(0.0f, 10-dQ.getLine()+1, 1) );
 	}
 	
-	harolegs->setDq( dQ);
+	harolegs->setDq( dQ );
 	
 }
 
 void HAROEXP::generateTrajectories()
 {
+	std::cout << "GENERATION OF TRAJECTORIES : ... " ;
 	
 	idxTraj2r[0] = &HAROLegsEXP::getRkneer;
 	idxTraj2r[1] = &HAROLegsEXP::getRkneel;
