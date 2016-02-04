@@ -36,7 +36,7 @@ class HAROEXP
 	
 	void init();
 	
-	void generateVelocities();
+	void generateVelocitiesANDPUSH();
 	void generateTrajectories();
 	
 };

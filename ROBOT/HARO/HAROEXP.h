@@ -21,7 +21,7 @@ class HAROEXP
 	SDL_Surface* ecran;
 	
 	Mat<float>* trajectories;
-	std::map<int,HAROLegsEXP::Function> idxTraj2r;
+	std::map<int,Function> idxTraj2r;
 	
 	
 	public :
