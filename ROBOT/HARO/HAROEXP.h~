@@ -10,7 +10,7 @@
 
 #include "ICommand.h"
 
-typedef Mat<EXP> (HAROLegsEXP::*Function)(void)const;
+typedef Mat<EXP> (HAROLegsEXP::*Function)(void);
 
 class HAROEXP
 {
