@@ -75,7 +75,7 @@ void HAROLegsEXP::loop()
 	{
 		for(int j=1;j<=mT.getColumn();j++)
 		{
-			mt.set( fmone*Tr.get(i,j), i,j);
+			mT.set( fmone*Tr.get(i,j), i,j);
 		}
 	}
 	
@@ -106,7 +106,7 @@ void HAROLegsEXP::loop()
 	{
 		for(int j=1;j<=mT.getColumn();j++)
 		{
-			mt.set( fmone*Tl.get(i,j), i,j);
+			mT.set( fmone*Tl.get(i,j), i,j);
 		}
 	}
 	rbl = ( mT )*rlb;
