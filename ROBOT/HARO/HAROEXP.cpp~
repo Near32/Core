@@ -17,7 +17,7 @@ HAROEXP::HAROEXP()
 	
 	trajectories = new Mat<float>[nbrTraj];
 	
-	generateTrajectories();
+	//generateTrajectories();
 }
 
 HAROEXP::~HAROEXP()
