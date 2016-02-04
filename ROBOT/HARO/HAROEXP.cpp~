@@ -230,7 +230,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	
 	//current positions :
 	std::vector<Mat<EXP> > r;
-	for(int i=nbrTraj;i--;)	r.insert( r.begin(), harolegs->*(idxTraj2r[i]) () );
+	for(int i=nbrTraj;i--;)	r.insert( r.begin(), (harolegs->*(idxTraj2r[i])) () );
 	
 	//P(ID) Controller on 3D end-effector velocities:
 	float p = 1.0f;
@@ -270,7 +270,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 		dQ = operatorC( dQ, Mat<float>(0.0f, 10-dQ.getLine()+1, 1) );
 	}
 	
-	this->setDq( dq );
+	harolegs->setDq( dq );
 	
 }
 
@@ -281,7 +281,7 @@ void HAROEXP::generateTrajectories()
 	idxTraj2r[1] = &HAROLegsEXP::getRkneel;
 	
 	//initializations :
-	for(int i=nbrTraj;i--;)	trajectories[i] = EXP2floatM( harolegs->( * (idxTraj2r[i]) )() );
+	for(int i=nbrTraj;i--;)	trajectories[i] = EXP2floatM( ( harolegs->*(idxTraj2r[i]) )() );
 	//on the current position of the robot...
 	
 	Mat<float> add(0.0f,3,1);
