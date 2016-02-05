@@ -289,7 +289,7 @@ void HAROEXP::generateTrajectories()
 	std::cout << " ... " ;
 	//initializations :
 	//for(int i=nbrTraj;i--;)	trajectories[i] = EXP2floatM( ( harolegs->*(idxTraj2r[i]) )() );
-	trajectories[i] = EXP2floatM(  harolegs->getRkneer() );
+	trajectories[0] = EXP2floatM(  this->harolegs->getRkneer() );
 	//on the current position of the robot...
 	
 	std::cout << " ... " ;
