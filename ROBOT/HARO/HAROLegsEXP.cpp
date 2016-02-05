@@ -65,7 +65,7 @@ void HAROLegsEXP::loop()
 		
 		if(i==3)
 		{
-			rarb = extract(Tr, 4,1, 4,4);
+			rarb = extract(Tr, 1,4, 4,4);
 		}
 	}
 	rrb = extract( Tr, 1,4, 4,4);
@@ -97,7 +97,7 @@ void HAROLegsEXP::loop()
 		
 		if(i==3)
 		{
-			ralb = extract(Tl, 4,1, 4,4);
+			ralb = extract(Tl, 1,4, 4,4);
 		}
 	}
 	rlb = extract( Tl, 1,4, 4,4);

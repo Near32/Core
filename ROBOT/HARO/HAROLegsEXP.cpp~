@@ -53,7 +53,7 @@ void HAROLegsEXP::loop()
 	evaluate( Tr );
 	
 	clock_t time = clock();
-	for(int i=1;i<5;i++)
+	for(int i=1;i<6;i++)
 	{
 		evaluate(tW2R[i]->getT());
 		//toString( regwM( tW2R[i]->getT() ) );
@@ -65,7 +65,7 @@ void HAROLegsEXP::loop()
 		
 		if(i==3)
 		{
-			rarb = extract(Tr, 4,1, 4,4);
+			rarb = extract(Tr, 1,4, 4,4);
 		}
 	}
 	rrb = extract( Tr, 1,4, 4,4);
