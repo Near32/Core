@@ -15,6 +15,21 @@ Mat<float> EXP2floatM( Mat<EXP>& m)
 	return r;
 }
 
+Mat<float> EXP2floatM( Mat<EXP> m)
+{
+	Mat<float> r(m.getLine(),m.getColumn());
+	
+	for(int i=1;i<=m.getLine();i++)
+	{
+		for(int j=1;j<=m.getColumn();j++)
+		{
+			r.set( m.get(i,j).evaluate(), i,j);
+		}
+	}
+	
+	return r;
+}
+
 Mat<EXP> product(const Mat<EXP>& a, const Mat<EXP>& b)
 {
 	if(a.getColumn() == b.getLine() )

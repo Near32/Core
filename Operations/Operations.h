@@ -9,6 +9,7 @@
 //Mat<EXP> product(const Mat<EXP>& a, const Mat<EXP>& b);
 
 Mat<float> EXP2floatM( Mat<EXP>& m);
+Mat<float> EXP2floatM( Mat<EXP> m);
 Mat<EXP> product(const Mat<EXP>& a, const Mat<EXP>& b);
 Mat<EXP> regwM(const Mat<EXP>& m);
 void toString(const Mat<EXP>& m);
