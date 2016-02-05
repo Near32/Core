@@ -19,8 +19,10 @@ Mat<float> EXP2floatM( Mat<EXP> m)
 {
 	Mat<float> r(m.getLine(),m.getColumn());
 	
+	std::cout <<" EXP2FLOATM " ;
 	for(int i=1;i<=m.getLine();i++)
 	{
+		std::cout << i << " ";
 		for(int j=1;j<=m.getColumn();j++)
 		{
 			r.set( m.get(i,j).evaluate(), i,j);
