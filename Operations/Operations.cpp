@@ -1,5 +1,5 @@
 #include "Operations.h"
-
+/*
 Mat<float> EXP2floatM( Mat<EXP>& m)
 {
 	Mat<float> r(m.getLine(),m.getColumn());
@@ -14,7 +14,7 @@ Mat<float> EXP2floatM( Mat<EXP>& m)
 	
 	return r;
 }
-
+*/
 Mat<float> EXP2floatM( Mat<EXP> m)
 {
 	Mat<float> r(m.getLine(),m.getColumn());
