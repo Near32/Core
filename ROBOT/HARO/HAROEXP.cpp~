@@ -235,7 +235,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	
 	//current positions :
 	std::vector<Mat<EXP> > r;
-	for(int i=nbrTraj;i--;)	r.insert( r.begin(), (harolegs->*(idxTraj2r[i])) () );
+	for(int i=nbrTraj;i--;)	r.insert( r.begin(), extract( (harolegs->*(idxTraj2r[i])) (), 1,1, 3,1) );
 	
 	//P(ID) Controller on 3D end-effector velocities:
 	float p = 1.0f;
@@ -244,7 +244,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	
 	//JACOBIANS & INVERSION :
 	std::vector<Mat<float> > J;
-	for(int i=nbrTraj;i--;)	J.insert( J.begin(), EXP2floatM( harolegs->generateJacobian( r[i] ) ) );
+	for(int i=nbrTraj;i--;)	J.insert( J.begin(), extract( EXP2floatM( harolegs->generateJacobian( r[i] ) ), 1,1, 3,1) );
 	//TODO : adjust to the trajs... :
 	J[0] = extract( J[0], 1,1, 3,5);
 	//J[1] = extract( J[1], 1,6, 3,10);
@@ -301,7 +301,7 @@ void HAROEXP::generateTrajectories()
 	
 	std::cout << " ... " ;
 	//final desired position :
-	for(int i=nbrTraj;i--;)	trajectories[i] = operatorL( trajectories[i], EXP2floatM( (  harolegs->*(idxTraj2r[i]) )() )  + add);
+	for(int i=nbrTraj;i--;)	trajectories[i] = operatorL( trajectories[i], extract( EXP2floatM( (  harolegs->*(idxTraj2r[i]) )() ), 1,1, 3,1)  + add);
 	
 	std::cout << " OKAY." << std::endl;
 	//TODO
