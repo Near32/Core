@@ -240,7 +240,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	//P(ID) Controller on 3D end-effector velocities:
 	float p = 1.0f;
 	std::vector<Mat<float> >  dx;
-	for(int i=nbrTraj;i--;)	dx.insert( dx.begin(), (p*dt)*(goal[i]- EXP2floatM(r[i])) );
+	for(int i=nbrTraj;i--;)	dx.insert( dx.begin(), (p*dt)*(goal[i]- EXP2floatM( r[i])) );
 	
 	//JACOBIANS & INVERSION :
 	std::vector<Mat<float> > J;
@@ -289,7 +289,7 @@ void HAROEXP::generateTrajectories()
 	std::cout << " ... " ;
 	//initializations :
 	//for(int i=nbrTraj;i--;)	trajectories[i] = EXP2floatM( ( harolegs->*(idxTraj2r[i]) )() );
-	trajectories[0] = EXP2floatM(  harolegs->getRkneer() );
+	trajectories[0] = EXP2floatM(  this->harolegs->getRkneer() );
 	//on the current position of the robot...
 	
 	std::cout << " ... " ;
