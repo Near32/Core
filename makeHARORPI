@@ -1,0 +1,2 @@
+#!/bin/bash
+g++-4.7 mainHARO.cpp ./EXP/EXP.cpp ./FUNC/FUNC.cpp ./VAR/VAR.cpp ./Operations/Operations.cpp ./ROBOT/Frame/Frame.cpp ./ROBOT/FrameEXP/FrameEXP.cpp ./ROBOT/MVG/MVG.cpp ./ROBOT/Quaternion/Quaternion.cpp -o CoreHARORPI.out -std=c++11 -g
