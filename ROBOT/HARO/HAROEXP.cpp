@@ -305,9 +305,9 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	
 	//PUSHING :
 	//TODO : this function assume that the dq are for the all the variables beginning by the ones of the right leg...
-	Mat<float> dQ( dq[nbrTraj-1] );
+	Mat<float> dQ( dq[0] );
 	//TODO change this : only works if we have two traj, one for each legs...
-	for(int i=nbrTraj-1;i--;)	dQ = operatorC( dQ, dq[i] );
+	for(int i=1;i<nbrTraj;i++)	dQ = operatorC( dQ, dq[i] );
 	
 	if( dQ.getLine() < 10)
 	{

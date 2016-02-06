@@ -305,9 +305,9 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	
 	//PUSHING :
 	//TODO : this function assume that the dq are for the all the variables beginning by the ones of the right leg...
-	Mat<float> dQ( dq[nbrTraj-1] );
+	Mat<float> dQ( dq[0] );
 	//TODO change this : only works if we have two traj, one for each legs...
-	for(int i=nbrTraj-1;i--;)	dQ = operatorC( dQ, dq[i] );
+	for(int i=1;i<nbrTraj;i++)	dQ = operatorC( dQ, dq[i] );
 	
 	if( dQ.getLine() < 10)
 	{
@@ -372,7 +372,8 @@ void HAROEXP::generateTrajectories()
 	{
 		idxTraj2J[i] = harolegs->generateJacobian( extract( (harolegs->*(idxTraj2r[i]) )(), 1,1, 3,1)  );
 		idxTraj2J[i] = extract( idxTraj2J[i], 1,1, 3,5);
-	evaluate( idxTraj2J[0] );
+		evaluate( idxTraj2J[i] );
+	}
 	
 	std::cout << "The JACOBIAN DERIVATION took : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
 
