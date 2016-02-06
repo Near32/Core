@@ -318,7 +318,7 @@ void HAROEXP::generateTrajectories()
 	for(int i=nbrTraj;i--;)
 	{
 		trajectories[i] = EXP2floatM( extract( ( harolegs->*(idxTraj2r[i]) )(), 1,1, 3,1) );
-		std::cout << "Traj : " i << std::endl;
+		std::cout << "Traj : " << i << std::endl;
 		trajectories[i].afficher();
 	}
 	

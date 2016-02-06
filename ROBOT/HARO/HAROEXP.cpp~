@@ -228,6 +228,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	//index of the current goal of the trajectory :
 	int nbrIdxTraj = trajectories[0].getColumn();
 	int idxTraj = (runtime/deltaT);
+	std::cout << " NBR IDX TRAJ before regul = " << idxTraj << std::endl;
 	if(idxTraj > nbrIdxTraj)	
 		idxTraj = nbrIdxTraj;
 		
