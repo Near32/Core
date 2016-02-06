@@ -251,7 +251,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	
 	
 	//P(ID) Controller on 3D end-effector velocities:
-	float p = 15.0f;
+	float p = 5.0f;
 	std::vector<Mat<float> >  dx;
 	for(int i=nbrTraj;i--;)
 	{
@@ -329,7 +329,7 @@ void HAROEXP::generateTrajectories()
 	std::cout << " ... " ;
 	
 	Mat<float> add(0.0f,3,1);
-	add.set( 1e-1f, 1,1);
+	add.set( -1e-1f, 1,1);
 	//5 centimeters on the X forward axis.
 	
 	std::cout << " ... " ;
