@@ -216,7 +216,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 {
 	clock_t time = clock();
 	
-	float deltaT = 1e0f;
+	float deltaT = 1e-11f;
 	
 	//float currenttime = clock();
 	//float dt = (float)(currenttime-time)/CLOCKS_PER_SEC;
@@ -260,7 +260,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	for(int i=nbrTraj;i--;)
 	{
 		invJ.insert( invJ.begin(), invGJ( transpose(J[i])*J[i] ) );
-		invJ[0].afficher();
+		//invJ[0].afficher();
 	}
 	
 	std::cout << "The JACOBIAN INVERSION took : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
@@ -271,7 +271,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	for(int i=nbrTraj;i--;)
 	{
 		dq.insert( dq.begin(), invJ[i] * ( transpose(J[i])*dx[i] ) );
-		dq[0].afficher();
+		//dq[0].afficher();
 	}
 	
 	//PUSHING :
@@ -318,13 +318,15 @@ void HAROEXP::generateTrajectories()
 	std::cout << " OKAY." << std::endl;
 	
 	
-	std::cout << "GENERATION OF JACOBIANS : ... " ;
+	std::cout << "GENERATION OF JACOBIANS : ... " << std::endl;
+	clock_t time = clock();
 	
 	for(int i=nbrTraj;i--;)	idxTraj2J[i] = harolegs->generateJacobian( extract( (harolegs->*(idxTraj2r[i]) )(), 1,1, 3,1)  );
 	//TODO : take care of the case nbrtraj /= 1...
 	idxTraj2J[0] = extract( idxTraj2J[0], 1,1, 3,5);
 	evaluate( idxTraj2J[0] );
 	
+	std::cout << "The JACOBIAN DERIVATION took : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
 	std::cout << " OKAY." << std::endl;
 	//TODO
 	
