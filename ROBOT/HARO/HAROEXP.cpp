@@ -216,7 +216,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 {
 	clock_t time = clock();
 	
-	float deltaT = 1e-1f;
+	float deltaT = 1e1f;
 	
 	//float currenttime = clock();
 	//float dt = (float)(currenttime-time)/CLOCKS_PER_SEC;
@@ -238,7 +238,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	{
 		goal.insert( goal.begin(), extract( trajectories[i], 1,idxTraj, 3,idxTraj) );
 		std::cout << "The Current goal is : " << std::endl;
-		goal[0].afficher();
+		transpose(goal[0]).afficher();
 	}
 	
 	//current positions :
@@ -246,9 +246,14 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	for(int i=nbrTraj;i--;)	r.insert( r.begin(), extract( (harolegs->*(idxTraj2r[i])) (), 1,1, 3,1) );
 	
 	//P(ID) Controller on 3D end-effector velocities:
-	float p = 1.0f;
+	float p = 10.0f;
 	std::vector<Mat<float> >  dx;
-	for(int i=nbrTraj;i--;)	dx.insert( dx.begin(), (p*dt)*(goal[i]- EXP2floatM( r[i])) );
+	for(int i=nbrTraj;i--;)
+	{
+		dx.insert( dx.begin(), (p*dt)*(goal[i]- EXP2floatM( r[i])) );
+		std::cout << "The Current PID dx is : " << std::endl;
+		transpose(dx[0]).afficher();
+	}
 	
 	std::cout << "The INIT took : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
 	time = clock();
