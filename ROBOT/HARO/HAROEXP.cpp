@@ -16,6 +16,7 @@ HAROEXP::HAROEXP()
 	init();
 	
 	trajectories = new Mat<float>[nbrTraj];
+	trajREADY = false;
 	
 	//generateTrajectories();
 }
@@ -134,6 +135,7 @@ void HAROEXP::loop()
                 	case SDLK_t:
                 	{
                 		this->generateTrajectories();
+                		trajREADY = true;
                 	}
                 	break;
                 	
@@ -160,6 +162,10 @@ void HAROEXP::loop()
             }
         }
 
+		if(trajREADY)
+		{
+			this->generateVelocitiesANDPUSH();
+		}
 		
         //--------------------------------------
         //--------------------------------------
@@ -216,7 +222,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 {
 	clock_t time = clock();
 	
-	float deltaT = 2e-1f;
+	float deltaT = 5e-1f;
 	
 	//float currenttime = clock();
 	//float dt = (float)(currenttime-time)/CLOCKS_PER_SEC;
@@ -251,7 +257,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	
 	
 	//P(ID) Controller on 3D end-effector velocities:
-	float p = 25.0f;
+	float p = 50.0f;
 	std::vector<Mat<float> >  dx;
 	for(int i=nbrTraj;i--;)
 	{
