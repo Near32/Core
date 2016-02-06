@@ -228,8 +228,11 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	//index of the current goal of the trajectory :
 	int nbrIdxTraj = trajectories[0].getColumn();
 	int idxTraj = (runtime/deltaT);
+	std::cout << " NBR IDX TRAJ before regul = " << idxTraj << std::endl;
 	if(idxTraj > nbrIdxTraj)	
 		idxTraj = nbrIdxTraj;
+		
+	std::cout << " NBR IDX TRAJ = " << idxTraj << std::endl;
 	//we want to ensure that we will not go over the length of the trajectories.
 	
 	//current positions :
@@ -248,7 +251,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	
 	
 	//P(ID) Controller on 3D end-effector velocities:
-	float p = 10.0f;
+	float p = 5.0f;
 	std::vector<Mat<float> >  dx;
 	for(int i=nbrTraj;i--;)
 	{
@@ -312,7 +315,13 @@ void HAROEXP::generateTrajectories()
 	
 	std::cout << " ... " ;
 	//initializations :
-	for(int i=nbrTraj;i--;)	trajectories[i] = extract( EXP2floatM( ( harolegs->*(idxTraj2r[i]) )() ), 1,1, 3,1);
+	for(int i=nbrTraj;i--;)
+	{
+		trajectories[i] = EXP2floatM( extract( ( harolegs->*(idxTraj2r[i]) )(), 1,1, 3,1) );
+		std::cout << "Traj : " i << std::endl;
+		trajectories[i].afficher();
+	}
+	
 	//evaluate( this->harolegs->getRkneer() );
 	//trajectories[0] = EXP2floatM(  this->harolegs->getRkneer() );
 	//on the current position of the robot...
