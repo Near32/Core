@@ -338,10 +338,13 @@ void HAROEXP::generateTrajectories()
 	{
 		trajectories[i] += add;
 		
+		trajectories[i] = operatorL( trajectories[i], extract( EXP2floatM( (  harolegs->*(idxTraj2r[i]) )() ), 1,1, 3,1)  + add );
+		/*
 		for(int j=1;j<=4;j++)
 		{
 			trajectories[i] = operatorL( trajectories[i], extract( EXP2floatM( (  harolegs->*(idxTraj2r[i]) )() ), 1,1, 3,1)  + (j%2? add : (-1.0f)*add ) );
 		}
+		*/
 	}
 	
 	std::cout << " OKAY." << std::endl;
