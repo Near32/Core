@@ -320,8 +320,8 @@ void HAROEXP::generateTrajectories()
 	
 	for(int i=nbrTraj;i--;)	idxTraj2J[i] = harolegs->generateJacobian( extract( harolegs->*(idxTraj2r[i])(), 1,1, 3,1)  );
 	//TODO : take care of the case nbrtraj /= 1...
-	J[0] = extract( J[0], 1,1, 3,5);
-	evaluate( J[0] );
+	idxTraj2J[0] = extract( idxTraj2J[0], 1,1, 3,5);
+	evaluate( idxTraj2J[0] );
 	
 	std::cout << " OKAY." << std::endl;
 	//TODO
