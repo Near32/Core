@@ -23,7 +23,8 @@ HAROEXP::HAROEXP()
 HAROEXP::~HAROEXP()
 {
 	delete harolegs;
-	delete trajectories;
+	
+	delete[] trajectories;
 	SDL_Quit();
 }
 
@@ -277,7 +278,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	//TODO : this function assume that the dq are for the all the variables beginning by the ones of the right leg...
 	Mat<float> dQ( dq[0] );
 	//TODO change this : only works if we have two traj, one for each legs...
-	for(int i=nbrTraj;i--;)	dQ = operatorC( dQ, dq[i] );
+	for(int i=nbrTraj-1;i--;)	dQ = operatorC( dQ, dq[i] );
 	
 	if( dQ.getLine() < 10)
 	{
