@@ -4,7 +4,7 @@ using namespace std;
 
 mutex mutexRES;
 
-#define nbrTraj 1
+#define nbrTraj 2
 
 HAROEXP::HAROEXP()
 {
@@ -235,7 +235,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	//float currenttime = clock();
 	//float dt = (float)(currenttime-time)/CLOCKS_PER_SEC;
 	//time = currenttime;
-	float dt = 5e-2f;
+	float dt = 8e-2f;
 	//TODO : handle it without debugging...
 	runtime += dt;
 	
@@ -265,7 +265,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	
 	
 	//P(ID) Controller on 3D end-effector velocities:
-	float p = 25.0f;
+	float p = 45.0f;
 	std::vector<Mat<float> >  dx;
 	for(int i=nbrTraj;i--;)
 	{
@@ -305,7 +305,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	
 	//PUSHING :
 	//TODO : this function assume that the dq are for the all the variables beginning by the ones of the right leg...
-	Mat<float> dQ( dq[0] );
+	Mat<float> dQ( dq[nbrTraj-1] );
 	//TODO change this : only works if we have two traj, one for each legs...
 	for(int i=nbrTraj-1;i--;)	dQ = operatorC( dQ, dq[i] );
 	
@@ -325,7 +325,7 @@ void HAROEXP::generateTrajectories()
 	std::cout << "GENERATION OF TRAJECTORIES : ... " ;
 	
 	idxTraj2r[0] = &HAROLegsEXP::getRkneer;
-	//idxTraj2r[1] = &HAROLegsEXP::getRkneel;
+	idxTraj2r[1] = &HAROLegsEXP::getRkneel;
 	
 	std::cout << " ... " ;
 	//initializations :
@@ -368,10 +368,12 @@ void HAROEXP::generateTrajectories()
 	std::cout << "GENERATION OF JACOBIANS : ... " << std::endl;
 	clock_t time = clock();
 	
-	for(int i=nbrTraj;i--;)	idxTraj2J[i] = harolegs->generateJacobian( extract( (harolegs->*(idxTraj2r[i]) )(), 1,1, 3,1)  );
-	//TODO : take care of the case nbrtraj /= 1...
-	idxTraj2J[0] = extract( idxTraj2J[0], 1,1, 3,5);
-	evaluate( idxTraj2J[0] );
+	for(int i=nbrTraj;i--;)
+	{
+		idxTraj2J[i] = harolegs->generateJacobian( extract( (harolegs->*(idxTraj2r[i]) )(), 1,1, 3,1)  );
+		idxTraj2J[i] = extract( idxTraj2J[i], 1,1, 3,5);
+		evaluate( idxTraj2J[i] );
+	}
 	
 	std::cout << "The JACOBIAN DERIVATION took : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
 
