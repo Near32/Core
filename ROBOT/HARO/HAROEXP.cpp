@@ -285,6 +285,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	}
 	
 	harolegs->setDq( dQ );
+	dQ.afficher();
 	
 	std::cout << "The PUSHING took : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
 }
