@@ -343,7 +343,7 @@ void HAROEXP::generateTrajectories()
 	std::cout << " ... " ;
 	
 	Mat<float> add(0.0f,3,1);
-	add.set( -5e-5f, 1,1);
+	add.set( -5e-2f, 1,1);
 	//5 centimeters on the X forward axis.
 	
 	std::cout << " ... " ;
