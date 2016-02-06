@@ -237,8 +237,9 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	for(int i=nbrTraj;i--;)	
 	{
 		goal.insert( goal.begin(), extract( trajectories[i], 1,idxTraj, 3,idxTraj) );
-		std::cout << "The Current goal is : " << std::endl;
+		std::cout << "The Current goal/position are : " << std::endl;
 		transpose(goal[0]).afficher();
+		transpose( EXP2floatM( r[i]) ).afficher();
 	}
 	
 	//current positions :
@@ -318,7 +319,7 @@ void HAROEXP::generateTrajectories()
 	std::cout << " ... " ;
 	
 	Mat<float> add(0.0f,3,1);
-	add.set( 5e-2f, 1,1);
+	add.set( 1e-1f, 1,1);
 	//5 centimeters on the X forward axis.
 	
 	std::cout << " ... " ;
