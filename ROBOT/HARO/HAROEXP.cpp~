@@ -213,6 +213,8 @@ void HAROEXP::init()
 
 void HAROEXP::generateVelocitiesANDPUSH()
 {
+	clock_t time = clock();
+	
 	float deltaT = 1e0f;
 	
 	//float currenttime = clock();
@@ -242,11 +244,15 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	std::vector<Mat<float> >  dx;
 	for(int i=nbrTraj;i--;)	dx.insert( dx.begin(), (p*dt)*(goal[i]- EXP2floatM( r[i])) );
 	
+	std::cout << "The INIT took : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
+	time = clock();
+	
 	//JACOBIANS & INVERSION :
 	std::vector<Mat<float> > J;
-	for(int i=nbrTraj;i--;)	J.insert( J.begin(), extract( EXP2floatM( harolegs->generateJacobian( r[i] ) ), 1,1, 3,1) );
+	for(int i=nbrTraj;i--;)	J.insert( J.begin(), EXP2floatM( idxTraj2J[i] ) );
+	//for(int i=nbrTraj;i--;)	J.insert( J.begin(), extract( EXP2floatM( harolegs->generateJacobian( r[i] ) ), 1,1, 3,1) );
 	//TODO : adjust to the trajs... :
-	J[0] = extract( J[0], 1,1, 3,5);
+	//J[0] = extract( J[0], 1,1, 3,5);
 	//J[1] = extract( J[1], 1,6, 3,10);
 	
 	std::vector<Mat<float> > invJ;
@@ -255,6 +261,9 @@ void HAROEXP::generateVelocitiesANDPUSH()
 		invJ.insert( invJ.begin(), invGJ( transpose(J[i])*J[i] ) );
 		invJ[0].afficher();
 	}
+	
+	std::cout << "The JACOBIAN INVERSION took : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
+	time = clock();
 	
 	//COMPUTATION OF DQ :
 	std::vector<Mat<float> > dq;
@@ -277,6 +286,8 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	
 	harolegs->setDq( dQ );
 	
+	std::cout << "The PUSHING took : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
+	time = clock();
 }
 
 void HAROEXP::generateTrajectories()
@@ -302,6 +313,16 @@ void HAROEXP::generateTrajectories()
 	std::cout << " ... " ;
 	//final desired position :
 	for(int i=nbrTraj;i--;)	trajectories[i] = operatorL( trajectories[i], extract( EXP2floatM( (  harolegs->*(idxTraj2r[i]) )() ), 1,1, 3,1)  + add);
+	
+	std::cout << " OKAY." << std::endl;
+	
+	
+	std::cout << "GENERATION OF JACOBIANS : ... " ;
+	
+	for(int i=nbrTraj;i--;)	idxTraj2J[i] = harolegs->generateJacobian( extract( harolegs->*(idxTraj2r[i])(), 1,1, 3,1)  );
+	//TODO : take care of the case nbrtraj /= 1...
+	J[0] = extract( J[0], 1,1, 3,5);
+	evaluate( J[0] );
 	
 	std::cout << " OKAY." << std::endl;
 	//TODO
