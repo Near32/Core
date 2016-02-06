@@ -352,14 +352,14 @@ void HAROEXP::generateTrajectories()
 	//final desired position :
 	for(int i=nbrTraj;i--;)	
 	{
-		trajectories[i] += (i?add1:add2);
+		trajectories[i] += ((i+1)%2?add1:add2);
 		
 		/*
 		trajectories[i] = operatorL( trajectories[i], extract( EXP2floatM( (  harolegs->*(idxTraj2r[i]) )() ), 1,1, 3,1)  + add );
 		*/
 		for(int j=1;j<=20;j++)
 		{
-			trajectories[i] = operatorL( trajectories[i], extract( EXP2floatM( (  harolegs->*(idxTraj2r[i]) )() ), 1,1, 3,1)  + ((j+i)%2? add1 : add2/*(-1.0f)*add*/ ) );
+			trajectories[i] = operatorL( trajectories[i], extract( EXP2floatM( (  harolegs->*(idxTraj2r[i]) )() ), 1,1, 3,1)  + ((j+i+1)%2? add1 : add2/*(-1.0f)*add*/ ) );
 		}
 		
 		trajectories[i].afficher();
