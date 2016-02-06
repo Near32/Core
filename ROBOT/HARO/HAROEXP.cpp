@@ -227,7 +227,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	
 	//index of the current goal of the trajectory :
 	int nbrIdxTraj = trajectories[0].getColumn();
-	int idxTraj = (runtime/deltaT);
+	int idxTraj = (runtime/deltaT)+1;
 	std::cout << " NBR IDX TRAJ before regul = " << idxTraj << std::endl;
 	if(idxTraj > nbrIdxTraj)	
 		idxTraj = nbrIdxTraj;
@@ -251,11 +251,11 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	
 	
 	//P(ID) Controller on 3D end-effector velocities:
-	float p = 5.0f;
+	float p = 1.0f;
 	std::vector<Mat<float> >  dx;
 	for(int i=nbrTraj;i--;)
 	{
-		dx.insert( dx.begin(), (p*dt)*(goal[i]- EXP2floatM( r[i])) );
+		dx.insert( dx.begin(), ((-1.0f)*p*dt)*(goal[i]- EXP2floatM( r[i])) );
 		std::cout << "The Current PID dx is : " << std::endl;
 		transpose(dx[0]).afficher();
 	}
