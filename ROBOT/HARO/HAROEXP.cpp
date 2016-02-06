@@ -265,7 +265,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	
 	
 	//P(ID) Controller on 3D end-effector velocities:
-	float p = 10.0f;
+	float p = 30.0f;
 	std::vector<Mat<float> >  dx;
 	for(int i=nbrTraj;i--;)
 	{
@@ -342,22 +342,24 @@ void HAROEXP::generateTrajectories()
 	
 	std::cout << " ... " ;
 	
-	Mat<float> add(0.0f,3,1);
-	add.set( -5e-2f, 1,1);
+	Mat<float> add1(0.0f,3,1);
+	Mat<float> add2(0.0f,3,1);
+	add1.set( -1e-1f, 1,1);
+	add2.set( 5e-2f, 1,1);
 	//5 centimeters on the X forward axis.
 	
 	std::cout << " ... " ;
 	//final desired position :
 	for(int i=nbrTraj;i--;)	
 	{
-		trajectories[i] += add;
+		trajectories[i] += (i?add1:add2);
 		
 		/*
 		trajectories[i] = operatorL( trajectories[i], extract( EXP2floatM( (  harolegs->*(idxTraj2r[i]) )() ), 1,1, 3,1)  + add );
 		*/
 		for(int j=1;j<=20;j++)
 		{
-			trajectories[i] = operatorL( trajectories[i], extract( EXP2floatM( (  harolegs->*(idxTraj2r[i]) )() ), 1,1, 3,1)  + ((j+i)%2? add : (-1.0f)*add ) );
+			trajectories[i] = operatorL( trajectories[i], extract( EXP2floatM( (  harolegs->*(idxTraj2r[i]) )() ), 1,1, 3,1)  + ((j+i)%2? add1 : add2/*(-1.0f)*add*/ ) );
 		}
 		
 		trajectories[i].afficher();
