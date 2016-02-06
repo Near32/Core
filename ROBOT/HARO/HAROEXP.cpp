@@ -232,6 +232,10 @@ void HAROEXP::generateVelocitiesANDPUSH()
 		idxTraj = nbrIdxTraj;
 	//we want to ensure that we will not go over the length of the trajectories.
 	
+	//current positions :
+	std::vector<Mat<EXP> > r;
+	for(int i=nbrTraj;i--;)	r.insert( r.begin(), extract( (harolegs->*(idxTraj2r[i])) (), 1,1, 3,1) );
+	
 	//goal that we want to follow at the given currenttime :
 	std::vector<Mat<float> > goal;
 	for(int i=nbrTraj;i--;)	
@@ -242,9 +246,6 @@ void HAROEXP::generateVelocitiesANDPUSH()
 		transpose( EXP2floatM( r[i]) ).afficher();
 	}
 	
-	//current positions :
-	std::vector<Mat<EXP> > r;
-	for(int i=nbrTraj;i--;)	r.insert( r.begin(), extract( (harolegs->*(idxTraj2r[i])) (), 1,1, 3,1) );
 	
 	//P(ID) Controller on 3D end-effector velocities:
 	float p = 10.0f;
