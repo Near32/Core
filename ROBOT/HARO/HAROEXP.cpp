@@ -235,7 +235,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	//float currenttime = clock();
 	//float dt = (float)(currenttime-time)/CLOCKS_PER_SEC;
 	//time = currenttime;
-	float dt = 8e-2f;
+	float dt = 1e-1f;
 	//TODO : handle it without debugging...
 	runtime += dt;
 	
@@ -265,7 +265,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	
 	
 	//P(ID) Controller on 3D end-effector velocities:
-	float p = 45.0f;
+	float p = 100.0f;
 	std::vector<Mat<float> >  dx;
 	for(int i=nbrTraj;i--;)
 	{
@@ -357,7 +357,7 @@ void HAROEXP::generateTrajectories()
 		*/
 		for(int j=1;j<=20;j++)
 		{
-			trajectories[i] = operatorL( trajectories[i], extract( EXP2floatM( (  harolegs->*(idxTraj2r[i]) )() ), 1,1, 3,1)  + (j%2? add : (-1.0f)*add ) );
+			trajectories[i] = operatorL( trajectories[i], extract( EXP2floatM( (  harolegs->*(idxTraj2r[i]) )() ), 1,1, 3,1)  + ((j+i)%2? add : (-1.0f)*add ) );
 		}
 		
 	}
