@@ -371,7 +371,8 @@ void HAROEXP::generateTrajectories()
 	for(int i=nbrTraj;i--;)
 	{
 		idxTraj2J[i] = harolegs->generateJacobian( extract( (harolegs->*(idxTraj2r[i]) )(), 1,1, 3,1)  );
-		idxTraj2J[i] = extract( idxTraj2J[i], 1,1, 3,5);
+		//TODO : only works if nbrtraj == 2
+		idxTraj2J[i] = extract( idxTraj2J[i], 1,i*5+1, 3,i*5+5);
 		evaluate( idxTraj2J[i] );
 	}
 	
