@@ -63,7 +63,7 @@ void HAROLegsEXP::loop()
 		Tr = product( regwM(Tr), temp );
 		//T = product( T, temp );
 		
-		if(i==3)
+		if(i==2)
 		{
 			rarb = extract(Tr, 1,4, 4,4);
 		}
@@ -95,7 +95,7 @@ void HAROLegsEXP::loop()
 		Tl = product( regwM(Tl), temp );
 		//T = product( T, temp );
 		
-		if(i==3)
+		if(i==2)
 		{
 			ralb = extract(Tl, 1,4, 4,4);
 		}
