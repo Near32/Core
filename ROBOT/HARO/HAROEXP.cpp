@@ -216,7 +216,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 {
 	clock_t time = clock();
 	
-	float deltaT = 1e-11f;
+	float deltaT = 1e-1f;
 	
 	//float currenttime = clock();
 	//float dt = (float)(currenttime-time)/CLOCKS_PER_SEC;
@@ -234,7 +234,12 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	
 	//goal that we want to follow at the given currenttime :
 	std::vector<Mat<float> > goal;
-	for(int i=nbrTraj;i--;)	goal.insert( goal.begin(), extract( trajectories[i], 1,idxTraj, 3,idxTraj) );
+	for(int i=nbrTraj;i--;)	
+	{
+		goal.insert( goal.begin(), extract( trajectories[i], 1,idxTraj, 3,idxTraj) );
+		std::cout << "The Current goal is : " << std::endl;
+		goal[0].afficher();
+	}
 	
 	//current positions :
 	std::vector<Mat<EXP> > r;
