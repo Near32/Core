@@ -1,9 +1,9 @@
-#ifndef PIDcontroller_H
-#define PIDcontroller_H
+#ifndef PIDcontrollerM_H
+#define PIDcontrollerM_H
 #include "../Mat/Mat.h"
 
 template<typename T>
-class PIDcontrollerM
+class PIDControllerM
 {
     private :
     T Kp;
@@ -19,7 +19,7 @@ class PIDcontrollerM
     
     public :
     
-    PIDcontrollerM() : err( Mat<T>((T)0,1,1)), err_old( Mat<T>((T)0,1,1)), err_sum( Mat<T>((T)0,1,1)), consigne( Mat<T>((T)0,1,1)), value( Mat<T>((T)0,1,1))
+    PIDControllerM() : err( Mat<T>((T)0,1,1)), err_old( Mat<T>((T)0,1,1)), err_sum( Mat<T>((T)0,1,1)), consigne( Mat<T>((T)0,1,1)), value( Mat<T>((T)0,1,1))
     {
         Kp = (T)1;
         Ki = (T)1;
@@ -27,14 +27,14 @@ class PIDcontrollerM
         
     }
     
-    PIDcontrollerM(T Kp, T Ki, T Kd) : err( Mat<T>((T)0,1,1)), err_old( Mat<T>((T)0,1,1)), err_sum( Mat<T>((T)0,1,1)), consigne( Mat<T>((T)0,1,1)), value( Mat<T>((T)0,1,1))
+    PIDControllerM(T Kp, T Ki, T Kd) : err( Mat<T>((T)0,1,1)), err_old( Mat<T>((T)0,1,1)), err_sum( Mat<T>((T)0,1,1)), consigne( Mat<T>((T)0,1,1)), value( Mat<T>((T)0,1,1))
     {
         this->Kp = Kp;
         this->Ki = Ki;
         this->Kd = Kd;
     }
     
-    ~PIDcontrollerM()
+    ~PIDControllerM()
     {
         
     }
