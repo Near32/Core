@@ -9,7 +9,7 @@
 #include <mutex>
 
 #include "ICommand.h"
-#include "../PIDController/PIDController.h"
+#include "../PIDController/PIDControllerM.h"
 
 typedef Mat<EXP> (HAROLegsEXP::*Function)(void) const;
 
