@@ -36,5 +36,5 @@ add_executable(HAROEXP mainHAROEXP.cpp ../EXP/EXP.cpp ../FUNC/FUNC.cpp ../VAR/VA
 #########################################################
 
 # create the program "HAROEXP"
-target_link_libraries(HAROEXP ${SDL_LIBRARY} )
+target_link_libraries(HAROEXP ${SDL_LIBRARY} -lm -lbcm2835)
 

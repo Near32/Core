@@ -66,22 +66,10 @@ class PIDcontrollerM
         this->Kp = Kp;
     }
     
-    void setKi(T Ki)
-    {
-        this->Ki = Ki;
-    }
-    
-    void setKd(T Kd)
-    {
-        this->Kd = Kd;
-    }
-    
-    void set(T Kp, T Ki,T Kd)
-    {
-        setKp(Kp);
-        setKi(Ki);
-        setKd(Kd);
-    }
+    void setKi(T Ki);
+    void setKd(T Kd);
+    void set(T Kp, T Ki,T Kd);
+
     
 };
 
