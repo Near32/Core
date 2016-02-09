@@ -232,7 +232,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 {
 	clock_t time = clock();
 	
-	float deltaT = 5e0f;
+	float deltaT = 3e0f;
 	
 	//float currenttime = clock();
 	//float dt = (float)(currenttime-time)/CLOCKS_PER_SEC;
