@@ -24,6 +24,7 @@ class HAROEXP
 	std::map<int,Function> idxTraj2r;
 	std::map<int,Mat<EXP> > idxTraj2J;
 	bool trajREADY;
+	PIDControllerM* pid;
 	
 	public :
 	

@@ -16,6 +16,7 @@ HAROEXP::HAROEXP()
 	init();
 	
 	trajectories = new Mat<float>[nbrTraj];
+	pid = new PIDControllerM<float>(1,0,0)[nbrTraj];
 	trajREADY = false;
 	
 	//generateTrajectories();
@@ -26,6 +27,7 @@ HAROEXP::~HAROEXP()
 	delete harolegs;
 	
 	delete[] trajectories;
+	delete[] pid;
 	SDL_Quit();
 }
 
@@ -230,7 +232,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 {
 	clock_t time = clock();
 	
-	float deltaT = 5e0f;
+	float deltaT = 3e0f;
 	
 	//float currenttime = clock();
 	//float dt = (float)(currenttime-time)/CLOCKS_PER_SEC;
@@ -265,11 +267,16 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	
 	
 	//P(ID) Controller on 3D end-effector velocities:
-	float p = 20.0f;
+	float p = 10.0f;
+	float i = 0.1f;
+	float d = 0.0f;
 	std::vector<Mat<float> >  dx;
 	for(int i=nbrTraj;i--;)
 	{
-		dx.insert( dx.begin(), ((1.0f)*p*dt)*(goal[i]- EXP2floatM( r[i])) );
+		pid[i].set( p,i,d);
+		pid[i].setConsigne( goal[i] );
+		//dx.insert( dx.begin(), ((1.0f)*p*dt)*(goal[i]- EXP2floatM( r[i])) );
+		dx.insert( dx.begin(), pid[i].update(EXP2floatM( r[i]), dt) );
 		std::cout << "The Current PID dx is : " << std::endl;
 		transpose(dx[0]).afficher();
 	}
@@ -357,8 +364,9 @@ void HAROEXP::generateTrajectories()
 		/*
 		trajectories[i] = operatorL( trajectories[i], extract( EXP2floatM( (  harolegs->*(idxTraj2r[i]) )() ), 1,1, 3,1)  + add );
 		*/
-		for(int j=1;j<=20;j++)
+		for(int j=1;j<=10;j++)
 		{
+			trajectories[i] = operatorL( trajectories[i], extract( EXP2floatM( (  harolegs->*(idxTraj2r[i]) )() ), 1,1, 3,1) );
 			trajectories[i] = operatorL( trajectories[i], extract( EXP2floatM( (  harolegs->*(idxTraj2r[i]) )() ), 1,1, 3,1)  + ((j+i+1)%2? add1 : add2/*(-1.0f)*add*/ ) );
 		}
 		
