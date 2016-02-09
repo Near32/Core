@@ -47,13 +47,15 @@ class PIDControllerM
     void setConsigne(const Mat<T>& consigne)
     {
         this->consigne = consigne;
+        err_sum = Mat<T>((T)0, consigne.getLine(), consigne.getColumn());
+        err_old = Mat<T>((T)0, consigne.getLine(), consigne.getColumn());
     }
     
     Mat<T> update(const Mat<T>& currentValue, T dt = (T)0.1)
     {
         err = consigne - currentValue;
         err_sum = err_sum + err;
-        Mat<T> err_diff = err-err_old;
+        Mat<T> err_diff(err-err_old);
         err_old = err;   
         
         value = Kp*(err + Ki*err_sum + (Kd/dt)*err_diff);
