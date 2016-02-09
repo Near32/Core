@@ -111,7 +111,7 @@ class PIDcontrollerM
     
     public :
     
-    PIDcontroller() : err( Mat<T>((T)0,1,1)), err_old( Mat<T>((T)0,1,1)), err_sum( Mat<T>((T)0,1,1)), consigne( Mat<T>((T)0,1,1)), value( Mat<T>((T)0,1,1))
+    PIDcontrollerM() : err( Mat<T>((T)0,1,1)), err_old( Mat<T>((T)0,1,1)), err_sum( Mat<T>((T)0,1,1)), consigne( Mat<T>((T)0,1,1)), value( Mat<T>((T)0,1,1))
     {
         Kp = (T)1;
         Ki = (T)1;
@@ -119,14 +119,14 @@ class PIDcontrollerM
         
     }
     
-    PIDcontroller(T Kp, T Ki, T Kd) : err( Mat<T>((T)0,1,1)), err_old( Mat<T>((T)0,1,1)), err_sum( Mat<T>((T)0,1,1)), consigne( Mat<T>((T)0,1,1)), value( Mat<T>((T)0,1,1))
+    PIDcontrollerM(T Kp, T Ki, T Kd) : err( Mat<T>((T)0,1,1)), err_old( Mat<T>((T)0,1,1)), err_sum( Mat<T>((T)0,1,1)), consigne( Mat<T>((T)0,1,1)), value( Mat<T>((T)0,1,1))
     {
         this->Kp = Kp;
         this->Ki = Ki;
         this->Kd = Kd;
     }
     
-    ~PIDcontroller()
+    ~PIDcontrollerM()
     {
         
     }
