@@ -29,7 +29,7 @@ endif(NOT SDL_FOUND)
 #########################################################
 #add_executable(Gunvarrel src/mainENGINE.cpp src/EtatEngine.cpp src/IEngine.cpp src/VueEngine.cpp src/Game.cpp src/Environnement.cpp src/IElement.cpp src/TrackBallCamera.cpp  src/utils/math.cpp src/utils/Quaternion/Quaternion.cpp src/common/objloader.cpp)
 #add_executable(Gunvarrel src/mainENGINE.cpp src/EtatEngine.cpp src/IEngine.cpp src/VueEngine.cpp src/Game.cpp src/Environnement.cpp src/IElement.cpp src/IElementFixe.cpp src/Obstacle.cpp src/OrbeBonus.cpp src/IFabricant.cpp src/Fabriques.cpp src/TrackBallCamera.cpp  src/utils/math.cpp src/utils/Quaternion/Quaternion.cpp src/common/objloader.cpp )
-add_executable(HAROEXP mainHAROEXP.cpp ../EXP/EXP.cpp ../FUNC/FUNC.cpp ../VAR/VAR.cpp ../Operations/Operations.cpp ./HARO/HAROLegsEXP.cpp ./HARO/HAROEXP.cpp ./PE/PE.cpp ./Servo/Servo.cpp ./ServoEXP/ServoEXP.cpp ./Frame/Frame.cpp ./FrameEXP/FrameEXP.cpp ./MVG/MVG.cpp ./Quaternion/Quaternion.cpp ./PE/MPU6050/MPU6050.cpp ./PE/RPI/I2Cdev/I2Cdev.cpp ./PIDController/PIDControllerM.cpp )
+add_executable(HAROEXP mainHAROEXP.cpp ../EXP/EXP.cpp ../FUNC/FUNC.cpp ../VAR/VAR.cpp ../Operations/Operations.cpp ./HARO/HAROLegsEXP.cpp ./HARO/HAROEXP.cpp ./PE/PE.cpp ./Servo/Servo.cpp ./ServoEXP/ServoEXP.cpp ./Frame/Frame.cpp ./FrameEXP/FrameEXP.cpp ./MVG/MVG.cpp ./Quaternion/Quaternion.cpp ./PE/MPU6050/MPU6050.cpp ./PE/RPI/I2Cdev/I2Cdev.cpp )
 
 ########################################################
 # Linking & stuff

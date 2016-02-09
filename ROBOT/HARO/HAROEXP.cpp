@@ -16,7 +16,7 @@ HAROEXP::HAROEXP()
 	init();
 	
 	trajectories = new Mat<float>[nbrTraj];
-	pid = new PIDControllerM<float>(1,0,0)[nbrTraj];
+	pid = new PIDControllerM<float>[nbrTraj];
 	trajREADY = false;
 	
 	//generateTrajectories();
