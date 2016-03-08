@@ -267,8 +267,8 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	
 	
 	//P(ID) Controller on 3D end-effector velocities:
-	float p = 2.0f;
-	float i = 0.1f;
+	float p = 1.0f;
+	float i = 0.5f;
 	float d = 0.0f;
 	std::vector<Mat<float> >  dx;
 	for(int i=nbrTraj;i--;)

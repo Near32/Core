@@ -89,6 +89,9 @@ class EXP
 
 
 void attach(EXP& parent, EXP& node);
+void attach(EXP* parent, EXP* node);
+void reattach(EXP* parent, EXP* node);
+
 
 #endif
 

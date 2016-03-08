@@ -1076,7 +1076,8 @@ std::cout << "RESULT PRODUCT : arg = " << i+1 << "/" << nbrarg << " sum : " << e
 							if( e->getNBRArg() == 0)
 							{
 								//the we have to delete this node and NULLed the pointer :
-								eParent->deleteArg( (EXP*)e);								
+								//eParent->deleteArg( (EXP*)e);								
+								e->getParent()->deleteArg( (EXP*)e);								
 								//deletion --> do not advance in the list, at parent level... :
 								goOn = false;
 							}
@@ -1220,7 +1221,8 @@ std::cout << "RESULT PRODUCT : arg = " << i+1 << "/" << nbrarg << " sum : " << e
 #ifdef debuglvl1
 std::cout << "BEFORE DELETION :" << eParent->toString() << std::endl;
 #endif
-							eParent->deleteArg(e);
+							//eParent->deleteArg(e);
+							e->getParent()->deleteArg(e);
 #ifdef debuglvl1
 std::cout << "PARENT after deletion :" << eParent->toString() << std::endl;
 #endif							
@@ -1241,7 +1243,8 @@ std::cout << "CAS FT 1 : with a parent product... deletion." << std::endl;
 #endif						
 							//then we can delete this argument :
 							//std::cout << "BEFORE DELETION :" << eParent->toString() << std::endl;
-							eParent->deleteArg(e);
+							//eParent->deleteArg(e);
+							e->getParent()->deleteArg(e);
 							//std::cout << "PARENT after deletion :" << eParent->toString() << std::endl;
 							
 							
@@ -1305,7 +1308,8 @@ std::cout << "CAS FTCST 0 : BEFORE DELETION :" << eParent->toString() << std::en
 							if(eParent->getOType() == EOSum )
 							{
 								//then we can delete this argument :
-								eParent->deleteArg(e);
+								//eParent->deleteArg(e);
+								e->getParent()->deleteArg(e);
 #ifdef debuglvl1								
 std::cout << "CAS FTCST 0: PARENT after deletion :" << eParent->toString() << std::endl;
 #endif
@@ -1324,7 +1328,8 @@ std::cout << "CAS FTCST 1 : BEFORE DELETION :" << eParent->toString() << std::en
 							if( eParent->getOType() == EOProduct && eParent->getNBRArg() != 1 )
 							{
 								//then we can delete this argument :
-								eParent->deleteArg(e);						
+								//eParent->deleteArg(e);
+								e->getParent()->deleteArg(e);
 #ifdef debuglvl4								
 std::cout << "CAS FTCST 1 : PARENT after deletion :" << eParent->toString() << std::endl;
 #endif
@@ -1370,7 +1375,7 @@ EXP regw( EXP& exp)
 bool seek4Zeros(EXP* e)
 {
 	bool r = false;
-	float prec = 1e-7f;
+	float prec = 1e-10f;
 	
 	//we assume that the zeros have been raised within the tree and so on,
 	// so than we only have to check for the given arguments :

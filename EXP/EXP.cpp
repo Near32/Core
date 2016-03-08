@@ -575,99 +575,96 @@ EXP EXP::operator+(const EXP& exp)
 
 EXP EXP::operator+=(const EXP& exp)
 {
-	EXP r(EOSum);
-	int zeroFOUND = 0;
-	
-	//r.addArg(this);
-	switch(this->type)
+	if(this->otype == EOSum)
 	{
-		case ETEXP :
-		if( this->otype == EOId )
+		attach( this, (EXP*)(&exp) );
+		
+		return *this;
+	}
+	else
+	{
+		bool zeroFOUNDEXP = false;
+		bool zeroFOUNDTHIS = false;
+	
+		switch(this->type)
 		{
-			EXP* temp = this->arg[0];
-			if( temp->getType() == ETFUNC && ((FUNC*)(temp))->getFType() == FTzero )
+			case ETEXP :
+			if( this->otype == EOId )
 			{
-				zeroFOUND++;
+				EXP* temp = this->arg[0];
+				if( temp->getType() == ETFUNC && ((FUNC*)(temp))->getFType() == FTzero )
+				{
+					zeroFOUNDTHIS = true;
+					break;
+				}
+			}
+			break;
+		
+			case ETFUNC :
+		
+			if( ((FUNC*)(this))->getFType() == FTzero )
+			{
+				zeroFOUNDTHIS = true;
 				break;
 			}
-		}
-		
-		r.addArg( new EXP(*this) );		
-		break;
-		
-		case ETFUNC :
-		
-		if( ((FUNC*)(this))->getFType() == FTzero )
-		{
-			zeroFOUND++;
 			break;
 		}
-		
-		r.addArg( (EXP*)new FUNC( *((FUNC*)this) ) );
-		break;
-		
-		case ETVAR :
-		r.addArg( (EXP*)new VAR( *((VAR*)this) ) );
-		break;
-	}
 	
-	//r.addArg(&exp);
-	switch(exp.getType())
-	{
-		case ETEXP :
-		if( exp.getOType() == EOId )
+		switch(exp.getType())
 		{
-			EXP* temp = exp.getArg(0);
-			if( temp->getType() == ETFUNC && ((FUNC*)(temp))->getFType() == FTzero )
+			case ETEXP :
+			if( exp.getOType() == EOId )
 			{
-				zeroFOUND++;
+				EXP* temp = exp.getArg(0);
+				if( temp->getType() == ETFUNC && ((FUNC*)(temp))->getFType() == FTzero )
+				{
+					zeroFOUNDEXP = true;
+					break;
+				}
+			}
+			break;
+		
+			case ETFUNC :
+		
+			if( ((FUNC&)(exp)).getFType() == FTzero )
+			{
+				zeroFOUNDEXP = true;
 				break;
 			}
-		}
-		
-		//if we go on, it means that we didn't find a zero in exp :
-		if(zeroFOUND == 1)
-		{
-			r=EXP(EOId);
-		}
-		
-		r.addArg( new EXP(exp) );
-		break;
-		
-		case ETFUNC :
-		
-		if( ((FUNC&)(exp)).getFType() == FTzero )
-		{
-			zeroFOUND++;
 			break;
 		}
-		
-		//if we go on, it means that we didn't find a zero in exp :
-		if(zeroFOUND == 1)
+	
+		if(zeroFOUNDTHIS && zeroFOUNDEXP)
 		{
-			r=EXP(EOId);
+			//entering here means that none of this or exp was interesting in this sum :
+			EXP r(EOId);
+			FUNC fzero(FTzero);
+			attach(r, fzero);
+			
+			//*((EXP*)this) = regw(r);
+			*((EXP*)this) = r;
 		}
-		
-		r.addArg( (EXP*)new FUNC( *((FUNC*)&exp) ) );
-		break;
-		
-		case ETVAR :
-		r.addArg( (EXP*)new VAR( *((VAR*)&exp) ) );
-		break;
+		else if(zeroFOUNDTHIS)
+		{
+			//entering here means that we just have to exchange this and exp :
+			*((EXP*)this) = exp;
+		}
+		else if(zeroFOUNDEXP)
+		{
+			//entering here means that there is nothing to add, so there is nothing to do...
+		}
+		else
+		{
+			//entering here means that we do have to add those two :
+			EXP r(EOSum);
+			attach(r,*this);
+			attach(&r, (EXP*)&exp);
+			
+			*((EXP*)this) = r;
+		}
+	
+		return *this;
 	}
-	
-	if(zeroFOUND == 2)
-	{
-		//entering here means that none of this or exp was interesting in this sum :
-		r=EXP(EOId);
-		FUNC fzero(FTzero);
-		attach(r, (EXP&)fzero);
-	}
-	
-	//*((EXP*)this) = regw(r);
-	*((EXP*)this) = r;
-	
-	return *this;
 }
 
 
@@ -855,6 +852,33 @@ void attach(EXP& parent, EXP& node)
 		break;
 	}
 }
+
+void attach(EXP* parent, EXP* node)
+{
+	//copy are being done and then entirely handled by the parent, there is no problem.
+	switch(node->getType())
+	{
+		case ETEXP :
+		parent->addArg( new EXP(*node) );
+		break;
+		
+		case ETFUNC :
+		parent->addArg( (EXP*)new FUNC( *((FUNC*)node) ) );
+		break;
+		
+		case ETVAR :
+		parent->addArg( (EXP*)new VAR( *((VAR*)node) ) );
+		break;
+	}
+}
+
+
+void reattach(EXP* parent, EXP* node)
+{
+	//no copy is being done...
+	parent->addArg( node );
+}
+
 
 
 
