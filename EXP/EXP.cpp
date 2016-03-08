@@ -672,7 +672,6 @@ EXP EXP::operator-( const EXP& exp)
 {
 	EXP r(EOSum);
 	
-	//r.addArg(this);
 	switch(this->type)
 	{
 		case ETEXP :
@@ -690,7 +689,6 @@ EXP EXP::operator-( const EXP& exp)
 	
 	FUNC temp(FTminus);
 	
-	//temp->setArg(&exp);
 	switch(exp.getType())
 	{
 		case ETEXP :
@@ -708,7 +706,6 @@ EXP EXP::operator-( const EXP& exp)
 	
 	r.addArg( (EXP*)new FUNC(temp) );
 	
-	//return regw(r);
 	return r;
 }
 
@@ -761,7 +758,6 @@ EXP EXP::operator/( const EXP& exp)
 	
 	r.addArg( (EXP*)new FUNC(temp) );
 	
-	//return regw(r);
 	return r;
 }
 
