@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd `find ROBOONE2016` 
+cd ..
+sudo ./outputROBOONE2016
+
