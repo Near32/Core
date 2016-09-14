@@ -1,0 +1,2 @@
+#!/bin/bash
+g++-4.7 mainHAROEXP.cpp ../EXP/EXP.cpp ../FUNC/FUNC.cpp ../VAR/VAR.cpp ../Operations/Operations.cpp ./ROBOONE2016/HAROLegsEXP.cpp ./ROBOONE2016/HAROEXP.cpp ./PE/PE.cpp ./Servo/Servo.cpp ./ServoEXP/ServoEXP.cpp ./Frame/Frame.cpp ./FrameEXP/FrameEXP.cpp ./MVG/MVG.cpp ./Quaternion/Quaternion.cpp ./PE/MPU6050/MPU6050.cpp ./PE/RPI/I2Cdev/I2Cdev.cpp -lbcm2835 -lm -lwiringPi -pthread -lSDL -lSDLmain -std=c++0x -o outputROBOONE2016 -g
