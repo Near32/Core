@@ -672,7 +672,7 @@ void HAROLegsEXP::constructFrames()
 	finalse3.set( a2alX, 4,1);
 	finalse3.set( toRad(90.0f), 1,1);
 	tW2R.insert( tW2R.end(), new FrameEXP(x5r,3,finalse3) );
-	servosR.insert( servosR.end(), new ServoEXP( x5r, pinR[idx],3,finalse3,120) );
+	servosR.insert( servosR.end(), new ServoEXP( x5r, pinR[idx],3,finalse3,45) );
 	servosR[servosR.size()-1]->inverted = true;
 	x5r.setValue( toRad(0) );
 	servosR[servosR.size()-1]->setVARVALUE();
@@ -701,6 +701,7 @@ void HAROLegsEXP::constructFrames()
 	finalse3 *= 0.0f;
 	finalse3.set( al2fX, 4,1);
 	tW2R.insert( tW2R.end(), new FrameEXP(ankle2footr,3,finalse3) );
+    
 	
 	//left heel low to foot :
 	finalse3 *= 0.0f;
