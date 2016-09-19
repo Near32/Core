@@ -25,6 +25,24 @@ int main(int argc, char* argv[])
 		valDegree = atof(argv[2]);
 	}
 	
+
+	if(argc >3)
+	{
+		zerooffset = (float)atoi(argv[3]);
+	}
+
+	if(argc >4)
+	{
+		min = (float)atoi(argv[4]);
+	}
+
+	if(argc>5)
+	{
+		max = (float)atoi(argv[5]);
+	}
+
+	std::cout << " MIN MAX :: " << min << " --> " << max << std::endl;
+	std::cout << "ZEROOFFSET = " << zerooffset << std::endl;
 	std::cout << " INIT VALUE :: " << valDegree << " degree. " << std::endl;
 	std::cout << " CONTINUE ?? [0,1]" << std::endl;
 	int continuer = 0;
@@ -47,15 +65,16 @@ int main(int argc, char* argv[])
 		{
 			int tempval = 0;
 			std::cin >> tempval;
-			float val = x.getValue();
-		
+			valDegree = toDeg(x.getValue());
+			
+			std::cout << " TEMPVAL = " << tempval << std::endl;
 			if(tempval != 0)
 			{
-				val+=toRad((float)tempval);
-				x.setValue( val );
+				valDegree += (float)tempval;
+				x.setValue( toRad(valDegree) );
 			}
 		
-			std::cout << "val = " << val << std::endl;
+			std::cout << "valDegree = " << valDegree << std::endl;
 		
 			servo.setVARVALUE();
 		}
