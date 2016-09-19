@@ -504,7 +504,7 @@ void HAROLegsEXP::constructFrames()
 	Mat<float> finalse3((float)0,6,1);
 	
 	int pinL[5] = {25,24,23,22,21};
-	int pinR[5] = {5,26,27,28,29};
+	int pinR[5] = {6,26,27,28,29};
 	int idx=0;
 	
 	//in relative manner : from frame n-1 to frame n.
