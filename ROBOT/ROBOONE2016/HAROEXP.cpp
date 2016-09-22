@@ -3,6 +3,7 @@
 using namespace std;
 
 mutex mutexRES;
+mutex mutexKin;
 
 #define nbrTraj 2
 

@@ -50,7 +50,7 @@ class HAROEXP
 	
 	
 	//Thread used to request the robot to perform an action :
-	void ThreadAction( ActionParam& ap);
+	void threadAction( ActionParam& ap);
 	//Creations of the ActionParam required :
 	void GenerateActionParam();
 	

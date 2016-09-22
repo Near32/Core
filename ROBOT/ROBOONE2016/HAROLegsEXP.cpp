@@ -851,7 +851,7 @@ Mat<EXP> HAROLegsEXP::getRkneel()	const
 	return ralb;
 }
 
-Mat<EXP> HAROLegsEXP::generateJacobian(const Mat<EXP>& v)	const
+Mat<EXP> HAROLegsEXP::generateJacobian(const Mat<EXP>& v)
 {
 	Mat<EXP> dvdRX1( regwM( derivateV( v, x1r) ) );
 	Mat<EXP> dvdRX2( regwM( derivateV( v, x2r) ) );
