@@ -12,6 +12,8 @@
 #include "../PIDController/PIDControllerM.h"
 
 typedef Mat<EXP> (HAROLegsEXP::*Function)(void) const;
+class ActionParam;
+
 
 class HAROEXP
 {
@@ -43,6 +45,76 @@ class HAROEXP
 	void generateTrajectories();
 	void generateTrajectoriesBASSIN();
 	
+	
+	//Thread used to request the robot to perform an action :
+	void ThreadAction( ActionParam& ap);
+	
 };
+
+
+
+
+
+
+class ActionParams
+{
+	public :
+	
+	void* ptrRobotPart;
+	int nbrTraj;
+	std::vector<std::vector<Mat<float> > > GoalTraj;
+	std::vector<Function> FunctionTrajThread2r;
+	
+	std::vector<Mat<EXP> > Traj2J;							//EXP of the Jacobian matrix related to the interesting variables.
+	bool JacobianInitialized;
+	
+	
+	
+	
+	//-----------------------------------------------------------
+	//-----------------------------------------------------------
+	//-----------------------------------------------------------
+	//-----------------------------------------------------------
+	
+	
+	
+	
+	ActionParams( void* ptrrobotpart, const std::vector<std::vector<Mat<float> > >& goaltraj, const std::vector<Function>& functiontrajthread2r) : ptrRobotPart(ptrrobotpart), GoalTraj(goaltraj), FunctionTrajThread2r( functiontrajthread2r)
+	{
+		JacobianInitialized = false;
+		nbrTraj = GoalTraj.size();
+	}
+	
+	~ActionParams()
+	{
+	
+	}
+	
+	void JacobianInitialization()
+	{
+		if(!JacobianInitialized)
+		{
+			JacobianInitialized = true;
+			
+			//-------------------------------------
+			//	Generations of the Jacobians EXP :
+			//-------------------------------------
+			clock_t timeJacobian = clock();
+			Traj2J.clear();
+			for(int i=nbrTraj;i--;)
+			{
+				Traj2J.insert( Traj2J.begin(), ptrRobotPart->generateJacobian( (harolegs->*(FunctionTrajThread2r[i]) )() ) );
+				evaluate( Traj2J[i] );
+			}
+	
+			std::cout << "ActionParams :: The JACOBIAN DERIVATION took : " << (float)(clock()-timeJacobian)/CLOCKS_PER_SEC << " seconds." << std::endl;
+			//-------------------------------------
+			//-------------------------------------
+		}
+	}
+};
+
+
+
 
 #endif
