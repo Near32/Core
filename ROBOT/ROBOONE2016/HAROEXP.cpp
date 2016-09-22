@@ -328,6 +328,141 @@ void HAROEXP::generateVelocitiesANDPUSH()
 	std::cout << "The PUSHING took : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
 }
 
+
+
+void HAROEXP::threadAction( ActionParam& ap )
+{
+	clock_t time = clock();
+	
+	int nbrTrajThread = ap.FunctionTrajThread2r.size();
+	float deltaT = 5e-1f;
+	
+	float currenttime = 0.0f;
+	float dt = 0.0f;
+	
+	//index of the current goal of the trajectory :
+	int nbrStepInTraj = ap.GoalTraj[0][0].getColumn();
+	int idxTraj = 0;
+	
+	//current positions :
+	std::vector<Mat<EXP> > r;
+	mutexKin.lock();
+	for(int i=nbrTrajThread;i--;)	
+	{
+		r.insert( r.begin(), extract( (ap.ptrRobotPart->*(ap.FunctionTrajThread2r[i])) (), 1,1, 3,1) );
+	}
+	mutexKin.unlock();
+	
+	
+	//-----------------------------------------------------------
+	//P(ID) Controller on 3D end-effector velocities:
+	//-----------------------------------------------------------
+	//-----------------------------------------------------------
+	float p = 1.0f;
+	float i = 0.5f;
+	float d = 0.0f;
+	
+	std::vector<Mat<float> >  dx;
+	PIDControllerM<float>* pids = new PIDControllerM<float>[nbrTrajThread];
+	for(int i=nbrTrajThread;i--;)
+	{
+		pids[i].set( p,i,d);
+		pids[i].setConsigne( ap.GoalTraj[i][idxTraj] );
+		dx.insert( dx.begin(), pids[i].update(EXP2floatM( r[i]), dt) );
+	}
+	//-----------------------------------------------------------
+	//-----------------------------------------------------------
+	
+	ap.JacobianInitialization();
+	
+	
+	std::cout << "THREAD ACTION :: The INIT took : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
+	
+	clock_t elapsedTime = clock;
+	while(idxTraj <= nbrStepInTraj)
+	{
+		elapsedTime -= clock();
+		dt = elapsedTime/CLOCK_PER_SEC;
+		elapsedTime = clock();
+		
+		currenttime += dt;
+		idxTraj = (int)(currenttime/deltaT);
+		std::cout << " THREAD ACTION :: IDX TRAJ = " << idxTraj << " / " << nbrStepInTraj << std::endl;
+		
+		mutexKin.lock();
+		//-----------------------------------------------------------
+		//P(ID) Controller on 3D end-effector velocities:
+		//-----------------------------------------------------------
+		//-----------------------------------------------------------	
+		for(int i=nbrTrajThread;i--;)
+		{
+			pids[i].setConsigne( ap.GoalTraj[i][idxTraj] );
+			dx.insert( dx.begin(), pids[i].update(EXP2floatM( r[i]), dt) );
+		}
+		//-----------------------------------------------------------
+		//-----------------------------------------------------------
+		//-----------------------------------------------------------
+		//JACOBIANS & INVERSION :
+		//-----------------------------------------------------------
+		//-----------------------------------------------------------
+		time = clock();
+		
+		std::vector<Mat<float> > J;
+		for(int i=nbrTrajThread;i--;)
+		{
+			J.insert( J.begin(), EXP2floatM( ap.Traj2J[i] ) );
+		}
+		mutexKin.unlock();
+		
+		std::vector<Mat<float> > invJ;
+		for(int i=nbrTrajThread;i--;)
+		{
+			invJ.insert( invJ.begin(), invGJ( transpose(J[i])*J[i] ) );
+		}
+	
+		//-----------------------------------------------------------
+		//-----------------------------------------------------------
+		std::cout << " THREAD ACTION :: The JACOBIAN INVERSION took : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
+		
+	
+		//-----------------------------------------------------------
+		//COMPUTATION OF DQ :
+		//-----------------------------------------------------------
+		//-----------------------------------------------------------
+		time = clock();
+		
+		std::vector<Mat<float> > dq;
+		for(int i=nbrTrajThread;i--;)
+		{
+			dq.insert( dq.begin(), invJ[i] * ( transpose(J[i])*dx[i] ) );
+		}
+		//-----------------------------------------------------------
+		//-----------------------------------------------------------
+	
+		//-----------------------------------------------------------
+		//PUSHING :
+		//-----------------------------------------------------------
+		Mat<float> dQ( dq[0] );
+		for(int i=1;i<nbrTrajThread;i++)	
+		{
+			dQ += dq[i];
+		}
+		ap.ptrRobotPart->setDq( dQ );
+		//-----------------------------------------------------------
+		//-----------------------------------------------------------
+		std::cout << " THREAD ACTION :: The COMPUTATION OF DQ + PUSHING took : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
+		
+		//-----------------------------------------------------------
+		
+		dx.clear();
+	
+	}
+	
+	delete[] pids;
+	
+	std::cout << " THREAD ACTION :: END OF ACTION . " << std::endl;
+}
+
 void HAROEXP::generateTrajectories()
 {
 	std::cout << "GENERATION OF TRAJECTORIES : ... " << std::endl;
