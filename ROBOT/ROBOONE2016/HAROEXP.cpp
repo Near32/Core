@@ -380,11 +380,11 @@ void HAROEXP::threadAction( ActionParams& ap )
 	
 	std::cout << "THREAD ACTION :: The INIT took : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
 	
-	clock_t elapsedTime = clock;
+	clock_t elapsedTime = clock();
 	while(idxTraj <= nbrStepInTraj)
 	{
 		elapsedTime -= clock();
-		dt = elapsedTime/CLOCK_PER_SEC;
+		dt = elapsedTime/CLOCKS_PER_SEC;
 		elapsedTime = clock();
 		
 		currenttime += dt;
@@ -476,8 +476,10 @@ void HAROEXP::generateTrajectories()
 {
 	std::cout << "GENERATION OF TRAJECTORIES : ... " << std::endl;
 	
-	idxTraj2r[0] = &HAROLegsEXP::getRkneer;
-	idxTraj2r[1] = &HAROLegsEXP::getRkneel;
+	//idxTraj2r[0] = &HAROLegsEXP::getRkneer;
+	idxTraj2r[0] = &RobotPart::getRkneer;
+	//idxTraj2r[1] = &HAROLegsEXP::getRkneel;
+	idxTraj2r[1] = &RobotPart::getRkneel;
 	
 	std::cout << " ... " ;
 	//initializations :
@@ -544,8 +546,10 @@ void HAROEXP::generateTrajectoriesBASSIN()
 {
 	std::cout << "GENERATION OF TRAJECTORIES for BASSIN : ... " << std::endl;
 	
-	idxTraj2r[0] = &HAROLegsEXP::getRbassinR;
-	idxTraj2r[1] = &HAROLegsEXP::getRbassinL;
+	//idxTraj2r[0] = &HAROLegsEXP::getRbassinR;
+	idxTraj2r[0] = &RobotPart::getRbassinR;
+	//idxTraj2r[1] = &HAROLegsEXP::getRbassinL;
+	idxTraj2r[1] = &RobotPart::getRbassinL;
 	
 	std::cout << " ... " ;
 	//initializations :
