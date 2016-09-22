@@ -12,49 +12,7 @@
 #include "../PIDController/PIDControllerM.h"
 
 typedef Mat<EXP> (RobotPart::*Function)(void) const;
-class ActionParams;
 
-
-class HAROEXP
-{
-	private :
-	HAROLegsEXP* harolegs;
-	
-	//------------
-	SDL_Surface* ecran;
-	
-	Mat<float>* trajectories;
-	std::map<int,Function> idxTraj2r;
-	std::map<int,Mat<EXP> > idxTraj2J;
-	bool trajREADY;
-	PIDControllerM<float>* pid;
-	
-	//ActionParam used in the multithreaded approach :
-	ActionParams moveRFootForward;	
-	
-	public :
-	
-	clock_t time;
-	float runtime;
-	
-	HAROEXP();
-	~HAROEXP();
-	
-	void loop();
-	
-	void init();
-	
-	void generateVelocitiesANDPUSH();
-	void generateTrajectories();
-	void generateTrajectoriesBASSIN();
-	
-	
-	//Thread used to request the robot to perform an action :
-	void threadAction( ActionParams& ap);
-	//Creations of the ActionParam required :
-	void GenerateActionParam();
-	
-};
 
 
 
@@ -123,6 +81,54 @@ class ActionParams
 		}
 	}
 };
+
+
+
+
+class HAROEXP
+{
+	private :
+	HAROLegsEXP* harolegs;
+	
+	//------------
+	SDL_Surface* ecran;
+	
+	Mat<float>* trajectories;
+	std::map<int,Function> idxTraj2r;
+	std::map<int,Mat<EXP> > idxTraj2J;
+	bool trajREADY;
+	PIDControllerM<float>* pid;
+	
+	//ActionParams used in the multithreaded approach :
+	ActionParams moveRFootForward;	
+	
+	public :
+	
+	clock_t time;
+	float runtime;
+	
+	HAROEXP();
+	~HAROEXP();
+	
+	void loop();
+	
+	void init();
+	
+	void generateVelocitiesANDPUSH();
+	void generateTrajectories();
+	void generateTrajectoriesBASSIN();
+	
+	
+	//Thread used to request the robot to perform an action :
+	void threadAction( ActionParams& ap);
+	//Creations of the ActionParam required :
+	void GenerateActionParam();
+	
+};
+
+
+
+
 
 
 

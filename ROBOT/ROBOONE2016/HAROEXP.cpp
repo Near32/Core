@@ -5,7 +5,7 @@ using namespace std;
 mutex mutexRES;
 mutex mutexKin;
 
-#define nbrTraj 2
+int nbrTraj=2;
 
 HAROEXP::HAROEXP()
 {
@@ -21,6 +21,7 @@ HAROEXP::HAROEXP()
 	trajREADY = false;
 	
 	//generateTrajectories();
+	//GenerateActionParams();
 }
 
 HAROEXP::~HAROEXP()
@@ -331,7 +332,7 @@ void HAROEXP::generateVelocitiesANDPUSH()
 
 
 
-void HAROEXP::threadAction( ActionParam& ap )
+void HAROEXP::threadAction( ActionParams& ap )
 {
 	clock_t time = clock();
 	
@@ -462,6 +463,13 @@ void HAROEXP::threadAction( ActionParam& ap )
 	delete[] pids;
 	
 	std::cout << " THREAD ACTION :: END OF ACTION . " << std::endl;
+}
+
+
+
+void HAROEXP::GenerateActionParams()
+{
+	//TODO !!!
 }
 
 void HAROEXP::generateTrajectories()
