@@ -29,6 +29,9 @@ class HAROEXP
 	bool trajREADY;
 	PIDControllerM<float>* pid;
 	
+	//ActionParam used in the multithreaded approach :
+	ActionParam	
+	
 	public :
 	
 	clock_t time;
@@ -48,6 +51,8 @@ class HAROEXP
 	
 	//Thread used to request the robot to perform an action :
 	void ThreadAction( ActionParam& ap);
+	//Creations of the ActionParam required :
+	void GenerateActionParam();
 	
 };
 
@@ -60,7 +65,7 @@ class ActionParams
 {
 	public :
 	
-	void* ptrRobotPart;
+	RobotPart* ptrRobotPart;
 	int nbrTraj;
 	std::vector<std::vector<Mat<float> > > GoalTraj;
 	std::vector<Function> FunctionTrajThread2r;
@@ -77,9 +82,14 @@ class ActionParams
 	//-----------------------------------------------------------
 	
 	
+	ActionParams()
+	{
+		ptrRobotPart = NULL;
+		JacobianInitialized = false;
+		nbrTraj = 0;
+	}
 	
-	
-	ActionParams( void* ptrrobotpart, const std::vector<std::vector<Mat<float> > >& goaltraj, const std::vector<Function>& functiontrajthread2r) : ptrRobotPart(ptrrobotpart), GoalTraj(goaltraj), FunctionTrajThread2r( functiontrajthread2r)
+	ActionParams( RobotPart* ptrrobotpart, const std::vector<std::vector<Mat<float> > >& goaltraj, const std::vector<Function>& functiontrajthread2r) : ptrRobotPart(ptrrobotpart), GoalTraj(goaltraj), FunctionTrajThread2r( functiontrajthread2r)
 	{
 		JacobianInitialized = false;
 		nbrTraj = GoalTraj.size();
@@ -103,7 +113,7 @@ class ActionParams
 			Traj2J.clear();
 			for(int i=nbrTraj;i--;)
 			{
-				Traj2J.insert( Traj2J.begin(), ptrRobotPart->generateJacobian( (harolegs->*(FunctionTrajThread2r[i]) )() ) );
+				Traj2J.insert( Traj2J.begin(), ptrRobotPart->generateJacobian( (ptrRobotPart->*(FunctionTrajThread2r[i]) )() ) );
 				evaluate( Traj2J[i] );
 			}
 	

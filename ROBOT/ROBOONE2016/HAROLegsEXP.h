@@ -9,8 +9,40 @@
 #include <memory>
 #include <mutex>
 
+class RobotPart
+{
+	public :
+	
+	RobotPart()
+	{
+	
+	}	
+	
+	~RobotPart()
+	{
+	
+	}
+	
+	virtual Mat<EXP> generateJacobian(const Mat<EXP>& v)=0;
+	virtual void setDq( const Mat<float>& dq)=0;
+	
+	//-----------------------------------------
+	virtual Mat<EXP> getRbassinR()	const	{}
+	//Rbassin in Rfootr
+	virtual Mat<EXP> getRbassinL()	const	{}
+	//Rbassin in Rfootl
+	virtual Mat<EXP> getRfootr()	const	{}
+	//Rfootr in Rbassin
+	virtual Mat<EXP> getRfootl()	const	{}
+	//Rfootr in Rbassin
+	virtual Mat<EXP> getRkneer()	const	{}
+	//Rkneer in Rbassin
+	virtual Mat<EXP> getRkneel()	const	{}
+	//Rkneer in Rbassin
+};
 
-class HAROLegsEXP
+
+class HAROLegsEXP : public RobotPart
 {
 	private :
 	
@@ -79,7 +111,7 @@ class HAROLegsEXP
 	
 	Mat<EXP> getSE3_one2next( int numero, bool right);
 	Mat<EXP> getW2FINAL(bool right);
-	void setDq( const Mat<float>& dq);
+	virtual void setDq( const Mat<float>& dq)	override;
 	
 	void stop();
 	
@@ -87,20 +119,20 @@ class HAROLegsEXP
 	
 	
 	//-----------------------------------------
-	Mat<EXP> getRbassinR()	const;
+	virtual Mat<EXP> getRbassinR()	const;
 	//Rbassin in Rfootr
-	Mat<EXP> getRbassinL()	const;
+	virtual Mat<EXP> getRbassinL()	const;
 	//Rbassin in Rfootl
-	Mat<EXP> getRfootr()	const;
+	virtual Mat<EXP> getRfootr()	const;
 	//Rfootr in Rbassin
-	Mat<EXP> getRfootl()	const;
+	virtual Mat<EXP> getRfootl()	const;
 	//Rfootr in Rbassin
-	Mat<EXP> getRkneer()	const;
+	virtual Mat<EXP> getRkneer()	const;
 	//Rkneer in Rbassin
-	Mat<EXP> getRkneel()	const;
+	virtual Mat<EXP> getRkneel()	const;
 	//Rkneer in Rbassin
 	
-	Mat<EXP> generateJacobian(const Mat<EXP>& v)	const;
+	virtual Mat<EXP> generateJacobian(const Mat<EXP>& v)	override;
 };
 
 #endif
