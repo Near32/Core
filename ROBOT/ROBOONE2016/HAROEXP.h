@@ -11,8 +11,8 @@
 #include "ICommand.h"
 #include "../PIDController/PIDControllerM.h"
 
-typedef Mat<EXP> (HAROLegsEXP::*Function)(void) const;
-class ActionParam;
+typedef Mat<EXP> (RobotPart::*Function)(void) const;
+class ActionParams;
 
 
 class HAROEXP
@@ -30,7 +30,7 @@ class HAROEXP
 	PIDControllerM<float>* pid;
 	
 	//ActionParam used in the multithreaded approach :
-	ActionParam	
+	ActionParams moveRFootForward;	
 	
 	public :
 	
@@ -50,7 +50,7 @@ class HAROEXP
 	
 	
 	//Thread used to request the robot to perform an action :
-	void threadAction( ActionParam& ap);
+	void threadAction( ActionParams& ap);
 	//Creations of the ActionParam required :
 	void GenerateActionParam();
 	
