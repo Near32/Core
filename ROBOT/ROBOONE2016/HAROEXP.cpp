@@ -146,8 +146,8 @@ void HAROEXP::loop()
                 	
                 	case SDLK_t:
                 	{
-                		//this->generateTrajectories();
-                		this->generateTrajectoriesBASSIN();
+                		this->generateTrajectories();
+                		//this->generateTrajectoriesBASSIN();
                 		//trajREADY = true;
                 	}
                 	break;
