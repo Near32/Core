@@ -7,7 +7,6 @@
 #include <math.h>
 #include <time.h>
 #include <assert.h>
-#include <vector>
 
 #ifdef OPENCV_USE
 #include <opencv2/opencv.hpp>
@@ -36,12 +35,9 @@ class Mat
         int m_column;	/*idem...*/                
 
     public :
-		
-		T** mat;
-		T dummy;
+	T** mat;
 
         Mat();
-        Mat(const int& val);
         Mat(const Mat<T>& m);
         Mat(const Mat<T>& m, T oValue, int d_line, int d_column, int line, int column);	/*initialise les autres valeurs à oValue*/
         Mat(const Mat<T>& m, int delLine[], int cLine, int delColumn[], int cColumn);
@@ -59,21 +55,14 @@ class Mat
         int getColumn() const;
 
         inline T get(int line, int column) const;
-        inline T& operator()(const int& line, const int& column);
         inline void set(T value, int line, int column);
-        void afficher()	const;
+        void afficher();
 
         void swap(int i1, int j1, int i2, int j2);
         void swapL(int i1, int i2);
         void swapC(int j1, int j2);
 
 };
-
-
-
-
-
-
 
 
 template<typename T>	/*pas de point virgule en fin de ligne...*/
@@ -128,7 +117,7 @@ T computeDeterminant(const Mat<T>& m)
 	return det;
 }
 template<typename T>
-bool isnanM(Mat<T> m);
+bool isnanM(Mat<T>* m);
 template<typename T>
 bool isnanM(Mat<T> m)
 {
@@ -150,28 +139,6 @@ bool isnanM(Mat<T> m)
 
     return ret;
 }
-
-template<typename T>
-Mat<T> NANregularize(const Mat<T>& m)
-{
-	Mat<T> r(m);
-	for(size_t i=1;i<=r.getLine();i++)
-	{
-		for(size_t j=1;j<=r.getColumn();j++)
-		{
-			if( isnan( r.get(i,j) ) )
-			{
-				r.set( (T)0, i,j);
-			}
-		}
-	}
-	
-	return r;
-}
-
-
-template<typename T>
-void regularizeNanM(Mat<T>* m);
 template<typename T>
 bool operator==(const Mat<T>& a, const Mat<T>& b);
 template<typename T>
@@ -188,8 +155,6 @@ template<typename T>	/*pas de point virgule en fin de ligne...*/
 Mat<T> operator*=(Mat<T>& a, const Mat<T>& b);
 template<typename T>	/*pas de point virgule en fin de ligne...*/
 Mat<T> product(Mat<T>* a, Mat<T>* b);
-template<typename T>	/*pas de point virgule en fin de ligne...*/
-Mat<T> productNONEEDTRANSPOSE(Mat<T>* a, Mat<T>* b);
 template<typename T>	/*pas de point virgule en fin de ligne...*/
 inline Mat<T> operator*(const T& v, const Mat<T>& a);
 template<typename T>	/*pas de point virgule en fin de ligne...*/
@@ -246,9 +211,6 @@ template<typename T>	/*pas de point virgule en fin de ligne...*/
 T dist( const Mat<T>& a, const Mat<T>& b, int method = 2);
 template<typename T>	/*pas de point virgule en fin de ligne...*/
 T atan21( T y, T x);
-
-template<typename T>	/*pas de point virgule en fin de ligne...*/
-T arctan( T y, T x);
 template<typename T>	/*pas de point virgule en fin de ligne...*/
 Mat<T> atan2(const Mat<T>& y, const Mat<T>& x);
 
@@ -257,7 +219,7 @@ T var(Mat<T> mat);
 template<typename T>	/*pas de point virgule en fin de ligne...*/
 T covar(Mat<T> a, Mat<T> b);
 template<typename T>	/*pas de point virgule en fin de ligne...*/
-T sigmoid( const T& z);
+T sigmoid( const T z);
 template<typename T>	/*pas de point virgule en fin de ligne...*/
 Mat<T> sigmoidM(const Mat<T>& z);
 template<typename T>	/*pas de point virgule en fin de ligne...*/
@@ -312,7 +274,7 @@ int cv2MatAt(const cv::Mat mat, Mat<T>* r, Mat<T>* g, Mat<T>* b);
 template<typename T>	//pas de point virgule en fin de ligne...
 int cv2Matp( cv::Mat mat, Mat<T>* r, Mat<T>* g, Mat<T>* b);
 template<typename T>	//pas de point virgule en fin de ligne...
-Mat<T> cv2Matp( const cv::Mat& mat);
+Mat<T> cv2Matp( cv::Mat mat);
 template<typename T>	//pas de point virgule en fin de ligne...
 cv::Mat Mat2cv(Mat<T>* r, Mat<T>* g, Mat<T>* b);
 template<typename T>	//pas de point virgule en fin de ligne...
@@ -382,32 +344,14 @@ Mat<T>::Mat()
 
 /*---------------------------------------------*/
 
-
-template<typename T>	/*pas de point virgule en fin de ligne...*/
-Mat<T>::Mat(const int& val)
-{
-    m_line = 1;
-    m_column = 1;
-
-    mat = new T*[m_line];
-
-    for(int i=0;i<=m_line-1;i++)
-        mat[i] = new T[m_column];
-	
-	this->set( (T)val, 1,1);
-}
-
-
-/*---------------------------------------------*/
-
 template<typename T>	/*pas de point virgule en fin de ligne...*/
 Mat<T>::Mat(const Mat<T>& m)
 {
     m_line = m.getLine();
     m_column = m.getColumn();
    
-	/*if((m_line>1000)||(m_column>1000))
-    	throw;*/
+	if((m_line>1000)||(m_column>1000))
+    	throw;
     if((m_line<=0)||(m_column<=0))
     	throw;
 	
@@ -541,8 +485,8 @@ Mat<T>::Mat( int line, int column)
 	m_line = line;
     m_column = column;
 
-	/*if((m_line>1000)||(m_column>1000))
-    	throw;*/
+	if((m_line>1000)||(m_column>1000))
+    	throw;
     if((m_line<=0)||(m_column<=0))
     	throw;
 
@@ -564,8 +508,8 @@ Mat<T>::Mat( int line, int column, char mode)
     m_line = line;
     m_column = column;
 
-	/*if((m_line>1000)||(m_column>1000))
-    	throw;*/
+	if((m_line>1000)||(m_column>1000))
+    	throw;
     if((m_line<=0)||(m_column<=0))
     	throw;
     	
@@ -604,10 +548,8 @@ Mat<T>::Mat( T value, int line, int column)
 	m_line = line;
     m_column = column;
     
-    /*
     if((m_line>1000)||(m_column>1000))
     	throw;
-    */
     if((m_line<=0)||(m_column<=0))
     	throw;
     
@@ -704,15 +646,6 @@ inline T Mat<T>::get(int line, int column) const
 }
 
 
-template<typename T>
-inline T& Mat<T>::operator()(const int& line, const int& column)
-{
-    if(line <= m_line && column <= m_column && line >=1 && column >=1)
-        return mat[line-1][column-1];
-
-    return this->dummy;
-}
-
 
 /*---------------------------------------------*/
 
@@ -730,7 +663,7 @@ inline void Mat<T>::set(T value, int line, int column)
 
 
 template<typename T>	/*pas de point virgule en fin de ligne...*/
-void Mat<T>::afficher()	const
+void Mat<T>::afficher()
 {
     cout << "Matrice :" << endl;
 
@@ -766,14 +699,8 @@ Mat<T> operator*(const Mat<T>& a, const Mat<T>& b)
 
     if( a.getLine() == b.getLine() && a.getColumn() == b.getColumn())
     {
-    	
     	Mat<T> aa(a),bb(b);
 		return product(&aa,&bb);
-		
-		/*
-		Mat<T> aa(a),bb(transpose(b));
-		return productNONEEDTRANSPOSE(&aa,&bb);
-		*/
     }
     else
     {
@@ -795,11 +722,9 @@ Mat<T> operator*(const Mat<T>& a, const Mat<T>& b)
             for(int k=a.getColumn();k--;)
             {
 #ifdef optim
-	        //temp += a.mat[i][k]*tb.mat[j][k];
-	        temp += a.get(i+1,k+1)*tb.get(j+1,k+1);
+	        temp += a.mat[i][k]*tb.mat[j][k];
 #else
-                //temp += a.mat[i][k]*b.mat[k][j];
-                temp += a.get(i+1,k+1)*b.get(k+1,j+1);
+                temp += a.mat[i][k]*b.mat[k][j];
 #endif
             }
 
@@ -853,11 +778,9 @@ Mat<T> operator*=( Mat<T>& a, const Mat<T>& b)
             for(int k=a.getColumn();k--;)
             {
 #ifdef optim
-	        //temp += a.mat[i][k]*tb.mat[j][k];
-	        temp += a.get(i+1,k+1)*tb.get(j+1,k+1);
+	        temp += a.mat[i][k]*tb.mat[j][k];
 #else
-                //temp += a.mat[i][k]*b.mat[k][j];
-                temp += a.get(i+1,k+1)*tb.get(k+1,j+1);
+                temp += a.mat[i][k]*b.mat[k][j];
 #endif
             }
 
@@ -894,8 +817,7 @@ Mat<T> product(Mat<T>* a, Mat<T>* b)
             for(int k=a->getColumn();k--;)
             {
                 //cout << "i=" << i << " j=" << j << " k=" << k << endl;
-	        	//temp += a->mat[i][k]*b->mat[j][k];
-	        	temp += a->get(i+1,k+1)*b->get(j+1,k+1);
+	        temp += a->mat[i][k]*b->mat[j][k];
                 //temp += a->get(i+1,k+1)*b->get(j+1,k+1);
             }
 
@@ -904,39 +826,6 @@ Mat<T> product(Mat<T>* a, Mat<T>* b)
     }
 	
     transpose(b);
-
-    return r;
-}
-
-template<typename T>	/*pas de point virgule en fin de ligne...*/
-Mat<T> productNONEEDTRANSPOSE(Mat<T>* a, Mat<T>* b)
-{
-
-    if(a->getColumn() != b->getLine())
-    {
-        cerr << "Impossible d'operer la multiplication : mauvais formats de matrices.\n" << endl;
-        cerr << "Format m1 : " << a->getLine() << " x " << a->getColumn() << "\t Fromat m2 : " << b->getLine() << " x " << b->getColumn() << endl;
-        return Mat<T>(1,1);
-    }
-
-    Mat<T> r( a->getLine(), b->getLine());
-
-    for(int i=r.getLine();i--;)
-    {
-        for(int j=r.getColumn();j--;)
-        {
-            T temp = (T)0;
-            for(int k=a->getColumn();k--;)
-            {
-                //cout << "i=" << i << " j=" << j << " k=" << k << endl;
-	        	//temp += a->mat[i][k]*b->mat[j][k];
-	        	temp += a->get(i+1,k+1)*b->get(j+1,k+1);
-                //temp += a->get(i+1,k+1)*b->get(j+1,k+1);
-            }
-
-            r.set( temp, i+1, j+1);
-        }
-    }
 
     return r;
 }
@@ -1049,8 +938,7 @@ Mat<T> add(Mat<T>* a, Mat<T>* b)
     {
         for(int j=r.getColumn();j--;)
         {
-            //r.mat[i][j] = a->mat[i][j]+b.mat[i][j];
-            r.set( a->get(i+1,j+1)+b.get(i+1,j+1), i+1,j+1);
+            r.mat[i][j] = a->mat[i][j]+b.mat[i][j];
         }
     }
 
@@ -1068,7 +956,8 @@ inline Mat<T> operator-(const Mat<T>& a, const Mat<T>& b)
     {
         cerr << "Impossible d'operer la soustraction : mauvais formats de matrices.\n" << endl;
         cerr << "Format m1 : " << a.getLine() << " x " << a.getColumn() << "\t Fromat m2 : " << b.getLine() << " x " << b.getColumn() << endl;
-        throw;
+        exit(EXIT_FAILURE);
+        return Mat<T>(1,1);
     }
 
     Mat<T> r(a.getLine(), b.getColumn());
@@ -1095,7 +984,8 @@ inline Mat<T> operator-=(Mat<T>& a, const Mat<T>& b)
     {
         cerr << "Impossible d'operer la soustraction : mauvais formats de matrices.\n" << endl;
         cerr << "Format m1 : " << a.getLine() << " x " << a.getColumn() << "\t Fromat m2 : " << b.getLine() << " x " << b.getColumn() << endl;
-        throw;                
+        exit(EXIT_FAILURE);                
+        return Mat<T>(1,1);
     }
 
 
@@ -1122,7 +1012,7 @@ inline Mat<T> operator%(const Mat<T>& a, const Mat<T>& b)
     {
         cerr << "Impossible d'operer la multiplication c_a_c : mauvais formats de matrices.\n" << endl;
         cerr << "Format m1 : " << a.getLine() << " x " << a.getColumn() << "\t Fromat m2 : " << b.getLine() << " x " << b.getColumn() << endl;
-        throw;
+        exit(EXIT_FAILURE);        
         return Mat<T>((T)0,1,1);
     }
 
@@ -1133,8 +1023,7 @@ inline Mat<T> operator%(const Mat<T>& a, const Mat<T>& b)
         for(int j=r.getColumn();j--;)
         {
             //r.set( a.get(i+1,j+1)*b.get(i+1,j+1), i+1, j+1);
-            //r.mat[i][j] =  a.mat[i][j]*b.mat[i][j];
-            r.set( a.get(i+1,j+1)*b.get(i+1,j+1), i+1,j+1);
+            r.mat[i][j] =  a.mat[i][j]*b.mat[i][j];
         }
     }
 
@@ -1170,66 +1059,9 @@ void Mat<T>::copy(const Mat<T>& m)
 
 /*---------------------------------------------*/
 
-template<typename T>
-void regularizeNanM(Mat<T>* m)
-{
-
-    for(int i=m->getLine();i--;)
-    {
-        for(int j=m->getColumn();j--;)
-        {
-            if( isnan(m->get(i+1,j+1) ) )
-            {
-            	/*T val = m->get(i+1,j+1);
-                if( fabs_(val ) / val > 0)
-                {
-                	m->set( 1.0f / numeric_limits<T>::epsilon(), i+1,j+1 );
-                }
-                else
-                {
-                	m->set( -1.0f / numeric_limits<T>::epsilon(), i+1,j+1 );
-                }
-                */
-                m->set( 0.0f, i+1,j+1);
-            }
-        }
-    }
-
-}
-
-
-/*---------------------------------------------*/
-
-template<typename T>
-void regularizeNanInfM(Mat<T>* m)
-{
-
-    for(int i=m->getLine();i--;)
-    {
-        for(int j=m->getColumn();j--;)
-        {
-            //if( isnan(m->get(i+1,j+1) ) )
-            if( ! isfinite( m->get(i+1,j+1) ) )
-            {
-            	/*T val = m->get(i+1,j+1);
-                if( fabs_(val ) / val > 0)
-                {
-                	m->set( 1.0f / numeric_limits<T>::epsilon(), i+1,j+1 );
-                }
-                else
-                {
-                	m->set( -1.0f / numeric_limits<T>::epsilon(), i+1,j+1 );
-                }*/
-                m->set( (T)0, i+1,j+1);
-            }
-        }
-    }
-
-}
 
 
 
-/*---------------------------------------------*/
 
 template<typename T>
 bool operator==(const Mat<T>& a, const Mat<T>& b)
@@ -1527,7 +1359,7 @@ Mat<T> operatorC(const Mat<T>* a, const Mat<T>& b)
     else
     {
         cout << "Erreur : impossible de concatener les deux matrices sur les colonnes." << endl;
-        throw;
+        return Mat<T>( 1, 1);
     }
 
 }
@@ -1556,7 +1388,6 @@ Mat<T> operatorL(const Mat<T>& a, const Mat<T>& b)
     else
     {
         cout << "Erreur : impossible de concatener les deux matrices sur les lignes." << endl;
-        throw;
         return Mat<T>(1, 1);
     }
 
@@ -1569,6 +1400,26 @@ Mat<T> operatorL(const Mat<T>& a, const Mat<T>& b)
 template<typename T>	/*pas de point virgule en fin de ligne...*/
 Mat<T> Line( const Mat<T>& a, int ind)
 {
+    /*
+    int* delLine = NULL;
+    delLine = (int*)malloc(sizeof(int)*(a.getLine()-1));
+
+    int delColumn[1];
+    int cLine = a.getLine()-1;
+    int cColumn = 0;
+
+    int k = 0;
+    for(int i=1;i<=a.getLine();i++)
+    {
+        if(ind != i)
+        {
+            delLine[k] = i;
+            k++;
+        }
+    }
+
+    Mat<T> r( a, delLine, cLine, delColumn, cColumn);
+    */
     int m = a.getColumn();
     Mat<T> r(1, m);
 
@@ -1723,9 +1574,9 @@ Mat<T> sum(const Mat<T>& a)
 
 
 template<typename T>	/*pas de point virgule en fin de ligne...*/
-T sigmoid( const T& z)
+T sigmoid( const T z)
 {
-    return (T)(1.0f/(1.0f+exp(-z)) );
+    return 1/exp(-z);
 }
 
 
@@ -1738,14 +1589,15 @@ Mat<T> sigmoidM(const Mat<T>& z)
 {
     Mat<T> r(z);
 
+
     for(int i=1;i<=z.getLine();i++)
     {
         for(int j=1;j<=z.getColumn();j++)
         {
-            r.set( sigmoid<T>( (T)(z.get(i,j)) ),i,j);
+            r.set(sigmoid(z.get(i,j)),i,j);
         }
     }
-	
+
     return r;
 }
 
@@ -1758,7 +1610,8 @@ template<typename T>	/*pas de point virgule en fin de ligne...*/
 Mat<T> sigmoidGradM( const Mat<T>& z)
 {
     Mat<T> one((T)(1), z.getLine(), z.getColumn());
-    Mat<T> r(sigmoidM<T>(z) % (one - sigmoidM<T>(z)));	//	sigmoid(z).*(ones(size(z))-sigmoid(z));
+    Mat<T> r(sigmoidM(z) % (one - sigmoidM(z)));	//	sigmoid(z).*(ones(size(z))-sigmoid(z));
+
     return r;
 }
 
@@ -1913,30 +1766,6 @@ T atan21( T y, T x)
                 r = -PI + atan(y/x);
             else
                 r = PI/2 + atan(y/x);
-        }
-        else
-            r = atan(y/x);
-    }
-    else
-        r = ( y <= 0 ? -PI/2 : PI/2);
-
-    return r;
-
-}
-
-template<typename T>	/*pas de point virgule en fin de ligne...*/
-T arctan( T y, T x)
-{
-    T r = y;
-
-    if( x!= 0)
-    {
-        if(x < 0)
-        {
-            if(y<0)
-                r = -PI + atan(y/x);
-            else
-                r = PI/2 - atan(x/y);
         }
         else
             r = atan(y/x);
@@ -2191,7 +2020,7 @@ Mat<T> conv(Mat<T> m, Mat<T> k)
 	int kj = k.getColumn();
 	Mat<T> r((T)0, (int)(mi/ki+1), (int)(mj/kj+1));
 		
-	if((float)mj/(float)kj >= 1 && (float)mi/(float)ki >= 1)
+	if(mj/kj >= 1 && mi/ki >= 1)
 	{
 		for(int i=1;i<=mi/ki;i++)
 		{
@@ -2306,8 +2135,8 @@ T maxabs(const Mat<T>& mat)
 template<typename T>
 Mat<T> idmin(Mat<T> mat)
 {
-	Mat<T> r((T)1, 2,1);
-	Mat<T> id((T)1,2,1);	
+	Mat<T> r((T)0, 2,1);
+	Mat<T> id(2,1);	
 	int n = mat.getLine();
 	int m = mat.getColumn();
 	
@@ -2967,15 +2796,13 @@ inline int cv2Matp( cv::Mat mat, Mat<T>* red, Mat<T>* green, Mat<T>* blue)
 
 
 template<typename T>	//pas de point virgule en fin de ligne...
-Mat<T> cv2Matp( const cv::Mat& mat)
+Mat<T> cv2Matp( cv::Mat mat)
 {    
-	cv::Mat copy;
-	mat.copyTo(copy);
-    if( copy.channels() != 1)
-        cv::cvtColor(copy,copy,CV_BGR2GRAY);
+    if( mat.channels() != 1)
+        cv::cvtColor(mat,mat,CV_BGR2GRAY);
 
-    int r = copy.rows;
-    int c = copy.cols;
+    int r = mat.rows;
+    int c = mat.cols;
 
     Mat<T> rim( r,c);
 
@@ -2984,7 +2811,7 @@ Mat<T> cv2Matp( const cv::Mat& mat)
     for(int i=r;i--;)
     {
 
-        p = copy.ptr<uchar>(i);
+        p = mat.ptr<uchar>(i);
         for(int j=c;j--;)
             rim.set((T)p[j], i+1,j+1);//rim.mat[i][j] = (T)p[j];
 
@@ -3106,53 +2933,6 @@ cv::Mat Mat2cvAt(Mat<T> r, Mat<T> g, Mat<T> b)
     else
         rim = cv::Mat(1,1, CV_8UC3);
 
-    return rim;
-
-}
-
-
-template<typename T>	//pas de point virgule en fin de ligne...
-cv::Mat Mat2cvAt(const Mat<T>& img)
-{
-    int l=img.getLine();
-    int c=img.getColumn();
-    int channel=img.getDepth();
-
-	
-    cv::Mat rim;
-    switch(channel)
-    {
-    	case 1:
-    	rim = cv::Mat( l, c, CV_8UC1);
-    	break;
-    	
-    	case 3:
-    	rim = cv::Mat( l, c, CV_8UC3);
-    	break;
-    }
-
-    cout << "Creating cv::Mat..." << endl;
-    for(int x=0;x<=l-1;x++)
-    {
-            for(int y=0;y<=c-1;y++)
-            {
-                    switch(channel)
-                    {
-                    	case 1:
-                    	rim.at<uchar>(x,y) = img(x+1,y+1);
-                    	break;
-                    	
-                    	case 3:
-                    	for(int k=0;k<=channel-1;k++)
-                    	{
-                    		rim.at<uchar>(x,y)[k] = img(x+1,y+1,k+1);		
-                    	}
-                    	break;
-                    }
-            }
-    }
-    cout << "Creation cv::Mat : DONE." << endl;
-   
     return rim;
 
 }
