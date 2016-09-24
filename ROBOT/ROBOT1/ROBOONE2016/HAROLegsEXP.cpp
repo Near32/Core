@@ -50,7 +50,7 @@ void HAROLegsEXP::loop()
 	Tl = regwM( tW2L[0]->getT() );
 
 	evaluate( Tr );
-	evaluate( Tr );
+	evaluate( Tl );
 	
 	clock_t time = clock();
 	for(int i=1;i<6;i++)

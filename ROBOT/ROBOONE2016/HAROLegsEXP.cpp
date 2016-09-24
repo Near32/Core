@@ -56,12 +56,10 @@ void HAROLegsEXP::loop()
 	for(int i=1;i<6;i++)
 	{
 		evaluate(tW2R[i]->getT());
-		//toString( regwM( tW2R[i]->getT() ) );
-		Mat<EXP> temp( regwM(tW2R[i]->getT()) );
-		//Mat<EXP> temp( tW2R[i]->getT() );
-		//toString( temp); 
-		Tr = product( regwM(Tr), temp );
-		//T = product( T, temp );
+		//Mat<EXP> temp( regwM(tW2R[i]->getT()) );
+		Mat<EXP> temp( tW2R[i]->getT() );
+		//Tr = product( regwM(Tr), temp );
+		Tr = product( Tr, temp );
 		
 		if(i==2)
 		{
@@ -88,11 +86,10 @@ void HAROLegsEXP::loop()
 	for(int i=1;i<6;i++)
 	{
 		evaluate(tW2L[i]->getT());
-		//toString( regwM( tW2R[i]->getT() ) );
-		Mat<EXP> temp( regwM(tW2L[i]->getT()) );
-		//Mat<EXP> temp( tW2R[i]->getT() );
-		//toString( temp); 
-		Tl = product( regwM(Tl), temp );
+		//Mat<EXP> temp( regwM(tW2L[i]->getT()) );
+		Mat<EXP> temp( tW2L[i]->getT() );
+		//Tl = product( regwM(Tl), temp );
+		Tl = product( Tl, temp );
 		//T = product( T, temp );
 		
 		if(i==2)
@@ -100,6 +97,7 @@ void HAROLegsEXP::loop()
 			ralb = extract(Tl, 1,4, 4,4);
 		}
 	}
+	
 	rlb = extract( Tl, 1,4, 4,4);
 	
 	for(int i=1;i<=mT.getLine();i++)
