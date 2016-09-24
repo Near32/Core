@@ -56,18 +56,22 @@ void HAROLegsEXP::loop()
 	for(int i=1;i<6;i++)
 	{
 		evaluate(tW2R[i]->getT());
-		//toString( regwM( tW2R[i]->getT() ) );
-		Mat<EXP<float> > temp( regwM(tW2R[i]->getT()) );
-		//Mat<EXP> temp( tW2R[i]->getT() );
-		//toString( temp); 
-		Tr = product( regwM(Tr), temp );
-		//T = product( T, temp );
+		//Mat<EXP<float> > temp( regwM(tW2R[i]->getT()) );
+		Mat<EXP<float> > temp( tW2R[i]->getT() );
+		//Tr = product( regwM(Tr), temp );
+		Tr = product( Tr, temp );
 		
 		if(i==2)
 		{
 			rarb = extract(Tr, 1,4, 4,4);
 		}
 	}
+	std::cout << "THE 1st MULTIPLICATIONS TOOK : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
+	time = clock();
+	regularize(Tr);
+	std::cout << "THE 1st Regularization  TOOK : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
+	
+	
 	rrb = extract( Tr, 1,4, 4,4);
 	EXP<float> fmone( FTmone);
 	Mat<EXP<float> > mT(Tr.getLine(),Tr.getColumn());
@@ -88,12 +92,10 @@ void HAROLegsEXP::loop()
 	for(int i=1;i<6;i++)
 	{
 		evaluate(tW2L[i]->getT());
-		//toString( regwM( tW2R[i]->getT() ) );
-		Mat<EXP<float> > temp( regwM(tW2L[i]->getT()) );
-		//Mat<EXP> temp( tW2R[i]->getT() );
-		//toString( temp); 
-		Tl = product( regwM(Tl), temp );
-		//T = product( T, temp );
+		//Mat<EXP<float> > temp( regwM(tW2L[i]->getT()) );
+		Mat<EXP<float> > temp( tW2L[i]->getT() );
+		//Tl = product( regwM(Tl), temp );
+		Tl = product( Tl, temp );
 		
 		if(i==2)
 		{
