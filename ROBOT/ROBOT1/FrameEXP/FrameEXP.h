@@ -2,8 +2,8 @@
 #define FRAMEEXP_H
 
 #include "../Frame/Frame.h"
-#include "../../Core1/EXP.h"
-#include "../../Core1/Operations/Operations.h"
+#include "../../../Core1/EXP.h"
+#include "../../../Core1/Operations/Operations.h"
 
 
 class FrameEXP : public Frame
