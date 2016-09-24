@@ -1,7 +1,8 @@
 #ifndef EKF_H
 #define EKF_H
 
-#include "Mat.h"
+//#include "Mat.h"
+#include "../../../Core1/MAT/Mat2.h"
 #include "rand.h"
 #define default_ACC 1
 #define default_DEC 1

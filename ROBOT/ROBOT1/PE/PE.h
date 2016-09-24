@@ -2,7 +2,8 @@
 #define PE_H
 
 #include "EKF.h"
-#include "Mat.h"
+//#include "Mat.h"
+#include "../../../Core1/MAT/Mat2.h"
 
 #include <stdio.h>
 #include <bcm2835.h>
