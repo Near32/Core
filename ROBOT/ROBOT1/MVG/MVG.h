@@ -1,7 +1,8 @@
 #ifndef MVG_H
 #define MVG_H
 
-#include "../Mat/Mat.h"
+//#include "../Mat/Mat.h"
+#include "../../../Core1/MAT/Mat2.h"
 #include "../Quaternion/Quaternion.h"
 
 

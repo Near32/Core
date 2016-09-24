@@ -1,7 +1,8 @@
 #ifndef QUAT_H
 #define QUAT_H
 
-#include "../Mat/Mat.h"
+//#include "../Mat/Mat.h"
+#include "../../../Core1/MAT/Mat2.h"
 
 class Quat
 {	
