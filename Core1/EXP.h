@@ -53,10 +53,10 @@ enum FUNCType{
 
 
 
-int VARID_COUNT = 0;
+extern int VARID_COUNT;
 
 
-std::map<int,float> ID2REF;
+extern std::map<int,float> ID2REF;
 
 
 template<typename T>
