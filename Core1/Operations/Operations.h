@@ -80,7 +80,7 @@ void regularize(Mat<EXP<T> >& m)
 
 
 template<typename T>
-Mat<T> EXP2floatM( Mat<EXP<T> >& m)
+Mat<T> EXP2floatM( Mat<EXP<T> > m)
 {
 	Mat<T> r(m.getLine(),m.getColumn());
 	

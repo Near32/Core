@@ -57,7 +57,7 @@ void HAROLegsEXP::loop()
 	{
 		evaluate(tW2R[i]->getT());
 		//toString( regwM( tW2R[i]->getT() ) );
-		Mat<EXP> temp( regwM(tW2R[i]->getT()) );
+		Mat<EXP<float> > temp( regwM(tW2R[i]->getT()) );
 		//Mat<EXP> temp( tW2R[i]->getT() );
 		//toString( temp); 
 		Tr = product( regwM(Tr), temp );
@@ -784,7 +784,7 @@ void HAROLegsEXP::constructFrames()
 
 Mat<EXP<float> > HAROLegsEXP::getSE3_one2next( int numero, bool right)
 {
-	Mat<EXP> r(4,4);
+	Mat<EXP<float> > r(4,4);
 	
 	if(numero < tW2R.size() )
 	{
