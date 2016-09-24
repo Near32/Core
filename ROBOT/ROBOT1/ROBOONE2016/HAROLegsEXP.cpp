@@ -46,16 +46,21 @@ void HAROLegsEXP::loop()
 	clock_t timer = clock();
 	float dt;
 	
-	Tr = regwM( tW2R[0]->getT() );
-	Tl = regwM( tW2L[0]->getT() );
+	//Tr = regwM( tW2R[0]->getT() );
+	Tr =  tW2R[0]->getT() ;
+	//Tl = regwM( tW2L[0]->getT() );
+	Tl = tW2L[0]->getT() ;
 
+	std::cout << " HARO LEGS :: main loop :: evaluation : " << std::endl;
+	
 	evaluate( Tr );
 	evaluate( Tl );
 	
 	clock_t time = clock();
 	for(int i=1;i<6;i++)
 	{
-		evaluate(tW2R[i]->getT());
+		//evaluate(tW2R[i]->getT());
+		
 		//Mat<EXP<float> > temp( regwM(tW2R[i]->getT()) );
 		Mat<EXP<float> > temp( tW2R[i]->getT() );
 		//Tr = product( regwM(Tr), temp );
@@ -85,13 +90,14 @@ void HAROLegsEXP::loop()
 	
 	rbr = ( mT) * rrb;
 	
-	evaluate( Tr);
+	//evaluate( Tr);
 	std::cout << "THE MULTIPLICATIONS TOOK : " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds." << std::endl;
 	time = clock();
 	
 	for(int i=1;i<6;i++)
 	{
-		evaluate(tW2L[i]->getT());
+		//evaluate(tW2L[i]->getT());
+		
 		//Mat<EXP<float> > temp( regwM(tW2L[i]->getT()) );
 		Mat<EXP<float> > temp( tW2L[i]->getT() );
 		//Tl = product( regwM(Tl), temp );
