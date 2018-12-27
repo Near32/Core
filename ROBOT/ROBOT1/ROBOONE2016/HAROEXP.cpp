@@ -76,56 +76,56 @@ void HAROEXP::loop()
                 	
                 	case SDLK_z:
                 	{
-                		std::cout << "COMMAND SENT." << std::endl;
+                		std::cout << "COMMAND UPVAR Right Leg SENT." << std::endl;
                 		harolegs->addCommand( (ICommand*)new ICommandUPVAR() ); 
                 	}
                 	break;
                 	
                 	case SDLK_s:
                 	{
-                		std::cout << "COMMAND SENT." << std::endl;
+                		std::cout << "COMMAND DOWNVAR Right Leg SENT." << std::endl;
                 		harolegs->addCommand( (ICommand*)new ICommandDOWNVAR() );
                 	}
                 	break;
                 	
                 	case SDLK_q :
                 	{
-                		std::cout << "COMMAND SENT." << std::endl;
+                		std::cout << "COMMAND PREVIOUSVAR Right Leg SENT." << std::endl;
                 		harolegs->addCommand( (ICommand*)new ICommandPREVIOUSVAR() );
                 	}
                 	break;
                 	
                 	case SDLK_d :
                 	{
-                		std::cout << "COMMAND SENT." << std::endl;
+                		std::cout << "COMMAND NEXTVAR Right Leg SENT." << std::endl;
                 		harolegs->addCommand( (ICommand*)new ICommandNEXTVAR() );
                 	}
                 	break;
                 	
                 	case SDLK_o:
                 	{
-                		std::cout << "COMMAND SENT." << std::endl;
+                		std::cout << "COMMAND UPVAR Left Leg SENT." << std::endl;
                 		harolegs->addCommand( (ICommand*)new ICommandUPVAR(SIDEleft) ); 
                 	}
                 	break;
                 	
                 	case SDLK_l:
                 	{
-                		std::cout << "COMMAND SENT." << std::endl;
+                		std::cout << "COMMAND DOWNVAR Left Leg SENT." << std::endl;
                 		harolegs->addCommand( (ICommand*)new ICommandDOWNVAR(SIDEleft) );
                 	}
                 	break;
                 	
                 	case SDLK_k :
                 	{
-                		std::cout << "COMMAND SENT." << std::endl;
+                		std::cout << "COMMAND PREVIOUSVAR Left Leg SENT." << std::endl;
                 		harolegs->addCommand( (ICommand*)new ICommandPREVIOUSVAR(SIDEleft) );
                 	}
                 	break;
                 	
                 	case SDLK_m :
                 	{
-                		std::cout << "COMMAND SENT." << std::endl;
+                		std::cout << "COMMAND NEXTVAR Left Leg SENT." << std::endl;
                 		harolegs->addCommand( (ICommand*)new ICommandNEXTVAR(SIDEleft) );
                 	}
                 	break;
